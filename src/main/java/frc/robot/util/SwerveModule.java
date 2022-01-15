@@ -108,13 +108,6 @@ public class SwerveModule {
 		translation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 
 		translation.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, RobotMap.SLOT_INDEX);
-
-	}
-
-	public void setPercentOutput(Vector translationvec) {
-		translation.set(ControlMode.PercentOutput, translationvec.getMagnitude());
-		rotation.set(ControlMode.Position, translationvec.getAngle() * (4096 / 360));
-
 	}
 
 	public SwerveModuleState getState() {

@@ -16,7 +16,6 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.util.SwerveModule;
 
-import frc.robot.util.Vector;
 import harkerrobolib.wrappers.HSFalcon;
 import harkerrobolib.wrappers.HSPigeon;
 import harkerrobolib.wrappers.HSTalon;
@@ -59,43 +58,22 @@ public class Drivetrain extends SubsystemBase {
     private Translation2d backLeftLocation;
     private Translation2d backRightLocation;
 
-    public static final double DT_WIDTH = 0.419;
-    public static final double DT_LENGTH = 0.523;
-    public static final double TALON_PEAK_LIMIT = 20;
-    public static final double TALON_PEAK_TIME = 0.750;
-    public static final double TALON_CONTINUOUS_LIMIT = 15;
+    public static final double DT_SIZE = 0.5461;
+
     public static final double VOLTAGE_COMP = 10;
 
-    public static final double MAX_DRIVE_VEL = 4;
-    public static final double MAX_ANGULAR_VEL = 2 * Math.PI;
+    public static final int GEAR_RATIO = 0;
+    public static final double WHEEL_DIAMETER = 0;
+    public static final double FEET_TO_METER = 0;
+    public static final double FEET_PER_METER = 0;
 
-    public static final double FEET_TO_METER=3.281;
-    public static final int WHEEL_DIAMETER=4;
-    public static final int GEAR_RATIO=6;
-    public static final double MIN_OUTPUT=10e-4;
-
-    public static final double AUTO_MAX_SPEED = 2;
-    public static final double AUTO_MAX_ANGULAR_VEL = Math.PI;
-
-    public static final double AUTO_MAX_SPEED_ACCELERATION = 1;
-    public static final double AUTO_MAX_ANGULAR_VEL_ACCELERATION = 0.5 * Math.PI;
-
-	public static final double MANUAL_HEADING_KP = 0.015;
-
-	public static final double MANUAL_HEADING_KI = 0;
-
-	public static final double MANUAL_HEADING_KD = 0.0;
-
-	public static final int DRIVE_VELOCITY_SLOT = 0;
-
-	public static final int ANGLE_POSITION_SLOT = 0;
-
-	public static final double FEET_PER_METER = 0.30488;
+    public static final double MIN_OUTPUT = 0.01;
+    public static final double MAX_DRIVE_VEL = 0;
+    public static final double MAX_ANGULAR_VEL = 0;
 
     private HSPigeon pigeon;
 
     private SwerveDriveKinematics kinematics;
-
     private SwerveDriveOdometry odometry;
 
     public Drivetrain() {
@@ -111,10 +89,10 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.PIGEON_ID);
         pigeon.setFusedHeading(0);
 
-        frontLeftLocation = new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2);
-        frontRightLocation = new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2);
-        backLeftLocation = new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2);
-        backRightLocation = new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2);
+        frontLeftLocation = new Translation2d(-DT_SIZE / 2, DT_SIZE / 2);
+        frontRightLocation = new Translation2d(DT_SIZE / 2, DT_SIZE / 2);
+        backLeftLocation = new Translation2d(-DT_SIZE / 2, -DT_SIZE / 2);
+        backRightLocation = new Translation2d(DT_SIZE / 2, -DT_SIZE / 2);
         
         kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getFusedHeading()), new Pose2d(0,0, new Rotation2d()));
@@ -140,16 +118,8 @@ public class Drivetrain extends SubsystemBase {
         return pigeon;
     }
 
-    public void setPercentOutput(Vector translation){
-        topLeft.setPercentOutput(translation);
-        topRight.setPercentOutput(translation);
-        bottomLeft.setPercentOutput(translation);
-        bottomRight.setPercentOutput(translation);
-    }
-
     public void setAngleAndDriveVelocity(SwerveModuleState[] states){
         topLeft.setSwerveManual(states[0]);
-        SmartDashboard.putNumber("TL VEL", states[0].speedMetersPerSecond);
         topRight.setSwerveManual(states[1]);
         bottomLeft.setSwerveManual(states[2]);
         bottomRight.setSwerveManual(states[3]);

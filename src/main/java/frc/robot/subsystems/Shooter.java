@@ -8,6 +8,11 @@ import harkerrobolib.wrappers.HSFalcon;
 
 public class Shooter extends SubsystemBase {
     private static Shooter shooter;
+
+
+    private static final boolean MASTER_INVERTED = false;
+    private static final boolean FOLLOWER_INVERTED = false;
+
     private HSFalcon master;
     private HSFalcon follower;
     
@@ -19,12 +24,17 @@ public class Shooter extends SubsystemBase {
 
     public void initMotors() {
         follower.follow(master);
+
+        master.setInverted(MASTER_INVERTED);
+        follower.setInverted(FOLLOWER_INVERTED);
     }
 
     public void setVelocity(double vel) {
         master.set(ControlMode.Velocity, vel);
     }
-    
+    public void setPercentOutput(double speed) {
+        master.set(ControlMode.PercentOutput, speed);
+    }
     public static Shooter getInstance() {
         if (shooter == null)
         {

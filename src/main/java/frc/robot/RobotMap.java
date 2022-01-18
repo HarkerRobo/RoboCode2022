@@ -21,5 +21,7 @@ public class RobotMap {
     public static final int SHOOTER_MASTER = 0;
     public static final int SHOOTER_FOLLOWER = 1;  // change
 
+    public static final double LOOP_TIME = 0.02; // 20ms
+
     public static final boolean IS_COMP = false;
 }

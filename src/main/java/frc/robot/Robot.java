@@ -9,6 +9,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.intake.IntakeManual;
@@ -34,9 +35,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     
     // default commands are commands that are always running on the robot
-    CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
-    CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
+    // CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
+    // CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
     CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
+    OI.getInstance();
+    SmartDashboard.putNumber("desired velocity", 0);
   }
 
   /**
@@ -50,6 +53,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 
   /**

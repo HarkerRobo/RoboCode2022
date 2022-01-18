@@ -6,6 +6,10 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class ShooterManual extends IndefiniteCommand {
     
+    public ShooterManual() {
+        addRequirements(Shooter.getInstance());
+    }
+
     public void execute() {
         Shooter.getInstance().setPercentOutput(OI.getInstance().getDriverGamepad().getRightTrigger());
     }

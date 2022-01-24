@@ -16,12 +16,12 @@ public class ShootWithVelocity extends IndefiniteCommand {
     
     public void execute() {
         vel = SmartDashboard.getNumber("desired velocity", 0);
-        Shooter.getInstance().setControllerTarget(vel);
-        Shooter.getInstance().updateController();
-        Shooter.getInstance().setPercentOutput(Shooter.getInstance().getControllerOutput());
+        Shooter.getInstance().getVelocitySystem().set(vel);
+        Shooter.getInstance().getVelocitySystem().update(Shooter.getInstance().getRawVelocity());
+        Shooter.getInstance().setPercentOutput(Shooter.getInstance().getVelocitySystem().getOutput());
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getRawVelocity());
-        SmartDashboard.putNumber("kalman output", Shooter.getInstance().getFilteredVelocity());
-        SmartDashboard.putNumber("current output", Shooter.getInstance().getControllerOutput());
+        SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
+        SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());
     }
 
     @Override

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Units;
+import frc.robot.util.SimpleVelocitySystem;
 import harkerrobolib.wrappers.HSFalcon;
 
 public class Shooter extends SubsystemBase {
@@ -34,10 +35,7 @@ public class Shooter extends SubsystemBase {
     private static final double MODEL_STANDARD_DEVIATION = 3;
     private static final double ENCODER_STANDARD_DEVIATION = 0.1;
 
-    private LinearSystem<N1, N1, N1> system = LinearSystemId.identifyVelocitySystem(kV, kA);
-    private LinearQuadraticRegulator<N1, N1, N1> regulator = new LinearQuadraticRegulator<N1,N1,N1>(system, VecBuilder.fill(0.05), VecBuilder.fill(MAX_CONTROL_EFFORT), RobotMap.LOOP_TIME);
-    private KalmanFilter<N1, N1, N1> filter = new KalmanFilter<N1, N1, N1>(Nat.N1(), Nat.N1(), system, VecBuilder.fill(MODEL_STANDARD_DEVIATION), VecBuilder.fill(ENCODER_STANDARD_DEVIATION), RobotMap.LOOP_TIME);
-    private LinearSystemLoop<N1, N1, N1> loop = new LinearSystemLoop<N1, N1, N1>(system, regulator, filter, MAX_CONTROL_EFFORT, RobotMap.LOOP_TIME);
+    private SimpleVelocitySystem velocitySystem;
     
     private HSFalcon master;
     private HSFalcon follower;
@@ -47,6 +45,7 @@ public class Shooter extends SubsystemBase {
         follower = new HSFalcon(RobotMap.SHOOTER_FOLLOWER);
     
         initMotors();
+        velocitySystem = new SimpleVelocitySystem(kS, kV, kA, MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
     }
 
     public void initMotors() {
@@ -66,37 +65,15 @@ public class Shooter extends SubsystemBase {
         master.set(ControlMode.PercentOutput, speed);
     }
 
-    public void setControllerTarget(double vel) {
-        loop.setNextR(VecBuilder.fill(vel)); // set output
-    }
-    
-    public void updateController() {
-        loop.correct(VecBuilder.fill(Shooter.getInstance().getRawVelocity()));
-        loop.predict(0.02);
-    }
-
-    // percent output
-    public double getControllerOutput() {
-        return (loop.getU(0) + kS) / MAX_CONTROL_EFFORT;
-    }
-
     // m/s, raw encoder value
     public double getRawVelocity() {
         return Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / Units.TICKS_PER_REVOLUTION * Units.FLYWHEEL_ROT_TO_METER;
     }
 
-    // m/s, kalman filtered
-    public double getFilteredVelocity() {
-        return loop.getXHat(0);
-    }
-    
-    public KalmanFilter<N1, N1, N1> getFilter() {
-        return filter;
+    public SimpleVelocitySystem getVelocitySystem() {
+        return velocitySystem;
     }
 
-    public LinearSystemLoop<N1, N1, N1> getLoop() {
-        return loop;
-    }
     public HSFalcon getMaster() {
         return master;
     }

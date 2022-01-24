@@ -58,7 +58,8 @@ public class Drivetrain extends SubsystemBase {
     private Translation2d backLeftLocation;
     private Translation2d backRightLocation;
 
-    public static final double DT_SIZE = 0.5461;
+    public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
+    public static final double DT_LENGTH = 0.5969; // 0.88265
 
     public static final double VOLTAGE_COMP = 10;
 
@@ -89,10 +90,10 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.PIGEON_ID);
         pigeon.setFusedHeading(0);
 
-        frontLeftLocation = new Translation2d(-DT_SIZE / 2, DT_SIZE / 2);
-        frontRightLocation = new Translation2d(DT_SIZE / 2, DT_SIZE / 2);
-        backLeftLocation = new Translation2d(-DT_SIZE / 2, -DT_SIZE / 2);
-        backRightLocation = new Translation2d(DT_SIZE / 2, -DT_SIZE / 2);
+        frontLeftLocation = new Translation2d(-DT_WIDTH / 2, DT_LENGTH / 2);
+        frontRightLocation = new Translation2d(DT_WIDTH / 2, DT_LENGTH / 2);
+        backLeftLocation = new Translation2d(-DT_WIDTH / 2, -DT_LENGTH / 2);
+        backRightLocation = new Translation2d(DT_WIDTH / 2, -DT_LENGTH / 2);
         
         kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getFusedHeading()), new Pose2d(0,0, new Rotation2d()));

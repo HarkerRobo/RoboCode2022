@@ -25,6 +25,7 @@ import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.SwerveModule;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -44,7 +45,8 @@ public class Robot extends TimedRobot {
     // default commands are commands that are always running on the robot
     // CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
     // CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
-    CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
+    Drivetrain.getInstance().readCANCoders();
+    // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
   }

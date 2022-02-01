@@ -8,24 +8,11 @@
 
 package frc.robot;
 
-import java.util.List;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.intake.IntakeManual;
-import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.SwerveModule;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -37,7 +24,8 @@ import frc.robot.util.SwerveModule;
 public class Robot extends TimedRobot {
   /**
    * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * used for any initialization code. It corrects the starting rotation motors
+   * using CAN coders but doesn't move the motors, only setting their sensor positions.
    */
   @Override
   public void robotInit() {

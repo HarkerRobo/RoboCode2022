@@ -16,6 +16,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import harkerrobolib.util.Conversions;
 
+/**
+ * Specifies a rotation and translation motor, using PID to correct the
+ * rotation motor and SimpleVelocitySystem to correct the translation motor.
+ */
 public class SwerveModule {
 	public HSFalcon rotation;
 	public HSFalcon translation;
@@ -39,7 +43,6 @@ public class SwerveModule {
 	private static final double ANGLE_I = 0;
 	private static final double ANGLE_D = 11;
 	private static final int ENCODER_TICKS = 2048;
-	private static final double EPSILON_OUTPUT = 1e-4;
 
 	private static final double DRIVE_KS = 0.578;
 	private static final double DRIVE_KV = 2.0473;

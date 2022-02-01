@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.function.Consumer;
-
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,9 +12,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.util.SwerveModule;
 
-import harkerrobolib.wrappers.HSFalcon;
 import harkerrobolib.wrappers.HSPigeon;
 
+/**
+ * Specifies a drivetrain with 4 swerve modules
+ */
 public class Drivetrain extends SubsystemBase {
     private static Drivetrain drivetrain;
 
@@ -31,10 +31,6 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
     public static final double DT_LENGTH = 0.5969; // 0.88265
-
-    private static final Translation2d[] LOCATIONS = {new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), 
-        new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), 
-        new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2)};
 
     public static final double VOLTAGE_COMP = 10;
 

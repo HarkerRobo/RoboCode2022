@@ -10,19 +10,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 import frc.robot.OI;
-import frc.robot.RobotMap;
 
+/**
+ * Command for SwerveModules that uses joystick inputs to drive with velocity.
+ * It also has pigeon PID, which prevents the robot heading from drifting.
+ */
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER= 1;
-    private static final double kP=0.03;
+    private static final double ANGLE_KP = 0.2;
 
-    private static double pigeonAngle=Drivetrain.getInstance().getPigeon().getFusedHeading();
+    private static double pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
 
-    private PIDController pid;
+    private PIDController anglePID;
 
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
-        pid = new PIDController(kP, 0, 0);
+        anglePID = new PIDController(ANGLE_KP, 0, 0);
     }
 
     @Override
@@ -36,9 +39,10 @@ public class SwerveManual extends IndefiniteCommand {
         if(chasisMagnitude < Drivetrain.MIN_OUTPUT){
             translationx=0;
             translationy=0;
-            if(Math.abs(angularVelocity) < Drivetrain.MIN_OUTPUT){
-                angularVelocity=0;
+            if (Math.abs(angularVelocity) > Drivetrain.MIN_OUTPUT) {
+                pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
             }
+            angularVelocity = -anglePID.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), pigeonAngle);
         }
     
         // if(OI.getInstance().getDriverGamepad().getButtonBumperRightState()){

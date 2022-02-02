@@ -31,9 +31,9 @@ public class OI {
         // driverGamepad.getButtonB().whenPressed(new InstantCommand(() -> {
         //     Intake.getInstance().toggle();
         // }, Intake.getInstance()));
-        driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
-        driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
-        driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
+        // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
+        // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
+        // driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
         // wrap non-commands in lambda but just regular instantiation for commands
         
 

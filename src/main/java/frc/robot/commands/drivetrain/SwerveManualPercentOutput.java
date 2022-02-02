@@ -17,8 +17,8 @@ import frc.robot.OI;
  */
 
 public class SwerveManualPercentOutput extends IndefiniteCommand {
-    private static final double OUTPUT_MULTIPLIER= 1;
-    private static final double ANGLE_KP = 0.2;
+    private static final double OUTPUT_MULTIPLIER= 0.3;
+    private static final double ANGLE_KP = 0;
 
     private static double pigeonAngle=Drivetrain.getInstance().getPigeon().getFusedHeading();
 
@@ -51,7 +51,7 @@ public class SwerveManualPercentOutput extends IndefiniteCommand {
         
         // if(OI.getInstance().getDriverGamepad().getButtonBState() || OI.getInstance().getOperatorGamepad().getButtonBState()){
         //     Shooter.getInstance().setAutoHoodAngle();
-        // }
+        // }    
 
         angularVelocity *= Drivetrain.MAX_ANGULAR_VEL;
         translationx *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
@@ -62,8 +62,8 @@ public class SwerveManualPercentOutput extends IndefiniteCommand {
             translationy *= 0.4;
         }
 
-        pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
-
+        // pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        System.out.println("a");
         ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getFusedHeading())));
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), true);
     }

@@ -22,10 +22,10 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveModule[] modules;
 
-    private static final boolean[] ROTATION_SENSOR_PHASE = {true, true, true, false};
-    private static final boolean[] TRANSLATION_SENSOR_PHASE = {true, true, true, false};
-    private static final boolean[] ROTATION_INVERT = {false, false, false, false};
-    private static final boolean[] TRANSLATION_INVERT = {false, false, false, false};
+    private static final boolean[] ROTATION_SENSOR_PHASE = {false, false, false, false};
+    private static final boolean[] TRANSLATION_SENSOR_PHASE = {false, false, false, false};
+    private static final boolean[] ROTATION_INVERT = {true, true, true, true};
+    private static final boolean[] TRANSLATION_INVERT = {true, true, true, true};
 
     public static final int[] OFFSETS = {0, 0, 0, 0};
 
@@ -48,7 +48,7 @@ public class Drivetrain extends SubsystemBase {
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
 
-    public Drivetrain() {
+    private Drivetrain() {
         modules = new SwerveModule[4];
         for(int i = 0; i < 4; i++){
             modules[i] = new SwerveModule(ROTATION_SENSOR_PHASE[i], TRANSLATION_SENSOR_PHASE[i], 
@@ -57,7 +57,7 @@ public class Drivetrain extends SubsystemBase {
         }
         
         pigeon = new HSPigeon(RobotMap.PIGEON_ID);
-        pigeon.addFusedHeading(-RobotMap.PIGEON_CONSTANT * Drivetrain.getInstance().getPigeon().getFusedHeading());
+        pigeon.addFusedHeading(-RobotMap.PIGEON_CONSTANT * pigeon.getFusedHeading());
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));

@@ -11,7 +11,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.drivetrain.SwerveManualPercentOutput;
+import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -31,11 +34,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     
     // default commands are commands that are always running on the robot
-    // CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
-    // CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
-    Drivetrain.getInstance().readCANCoders();
+    CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManualPercentOutput());
+    CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
+    // Drivetrain.getInstance().readCANCoders();
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
-    OI.getInstance();
+    // OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
   }
 
@@ -51,7 +54,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
+    // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 
   /**

@@ -7,18 +7,19 @@ import frc.robot.util.SimpleVelocitySystem;
 import harkerrobolib.wrappers.HSFalcon;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 public class Intake extends SubsystemBase {
     private static Intake intake;
     private HSFalcon motor;
     
-    private static final boolean MOTOR_INVERT = false;
+    private static final boolean MOTOR_INVERT = true;
     
-    private static final double MOTOR_KS = 0;
-    private static final double MOTOR_KV = 0;
-    private static final double MOTOR_KA = 0;
+    private static final double MOTOR_KS = 0.3;
+    private static final double MOTOR_KV = 0.5;
+    private static final double MOTOR_KA = 0.02;
     
     private static final double MAX_CONTROL_EFFORT = 12;
     private static final double MODEL_STANDARD_DEVIATION = 10;
@@ -34,12 +35,14 @@ public class Intake extends SubsystemBase {
     private Intake() {
         motor = new HSFalcon(RobotMap.INTAKE_ID);
         doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotMap.INTAKE_FORWARD, RobotMap.INTAKE_BACKWARD);
-        loop = new SimpleVelocitySystem(MOTOR_KS, MOTOR_KS, MOTOR_KA, MAX_CONTROL_EFFORT, 
+        loop = new SimpleVelocitySystem(MOTOR_KS, MOTOR_KV, MOTOR_KA, MAX_CONTROL_EFFORT, 
             MODEL_STANDARD_DEVIATION, MEASUREMENT_STANDARD_DEVIATION, LOOPTIME);
+        init();
     }
     
 
     public void init(){
+        motor.configFactoryDefault();
         motor.setInverted(MOTOR_INVERT);
         motor.configVelocityMeasurementWindow(1);
         motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
@@ -52,7 +55,8 @@ public class Intake extends SubsystemBase {
     public void setVelocity(double vel){
         loop.set(vel);
         loop.update(getCurrentRPM());
-        setPercentOutput(loop.getOutput());
+        // setPercentOutput(loop.getOutput());
+        setPercentOutput(vel);
     }
 
     public void toggle() {

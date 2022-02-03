@@ -8,7 +8,7 @@ import harkerrobolib.util.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 
 /**
@@ -32,19 +32,20 @@ public class SwerveManualPercentOutput extends IndefiniteCommand {
     @Override
     public void execute() {
         double angularVelocity = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
-        double translationy = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
-        double translationx = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
+        double translationx = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
+        double translationy = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
         double chasisMagnitude = Math.sqrt(Math.pow(translationx,2) + Math.pow(translationy,2));
         
-
-        if(chasisMagnitude < Drivetrain.MIN_OUTPUT){
+        
+        if(Math.abs(chasisMagnitude) < Drivetrain.MIN_OUTPUT){
             translationx = 0;
             translationy = 0;
             if (Math.abs(angularVelocity) > Drivetrain.MIN_OUTPUT) {
-                pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
-            }
-            angularVelocity = -anglePID.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), pigeonAngle);
+                pigeonAngle = 0;//Drivetrain.getInstance().getPigeon().getFusedHeading();
+            } else
+            angularVelocity = 0.001;//-anglePID.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), pigeonAngle);
         }
+        SmartDashboard.putNumber("trans X", translationx);
     
         // if(OI.getInstance().getDriverGamepad().getButtonBumperRightState()){
         //     angularVelocity = -pid.calculate(Limelight.getTx(), TX_SETPOINT);
@@ -61,10 +62,10 @@ public class SwerveManualPercentOutput extends IndefiniteCommand {
             translationx *= 0.4;
             translationy *= 0.4;
         }
-
         // pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
-        System.out.println("a");
-        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getFusedHeading())));
+        // System.out.println("a");
+        // ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getFusedHeading())));
+        ChassisSpeeds chassis = new ChassisSpeeds(translationx, translationy, -angularVelocity);
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), true);
     }
 }

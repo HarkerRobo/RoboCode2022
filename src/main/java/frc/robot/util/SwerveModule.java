@@ -14,6 +14,7 @@ import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import harkerrobolib.util.Conversions.SpeedUnit;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import harkerrobolib.util.Conversions;
 
 /**
@@ -39,10 +40,10 @@ public class SwerveModule {
 	// private static final double TRANSLATION_D = 5;
 	// private static final double TRANSLATION_F = 0.034;
 	
-	private static final double ANGLE_P = 1.1;
+	private static final double ANGLE_P = 0.5;
 	private static final double ANGLE_I = 0;
-	private static final double ANGLE_D = 11;
-	private static final int ENCODER_TICKS = 2048;
+	private static final double ANGLE_D = 5;
+	public static final int ENCODER_TICKS = 2048;
 
 	private static final double DRIVE_KS = 0.578;
 	private static final double DRIVE_KV = 2.0473;
@@ -96,7 +97,7 @@ public class SwerveModule {
 
 		rotation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 
-		rotation.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.SLOT_INDEX);
+		rotation.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, RobotMap.SLOT_INDEX);
 	}
 
 	private void translationMotorInit() {
@@ -161,7 +162,7 @@ public class SwerveModule {
 		else if(angle-currentAngle<-90){
 			angle += 180;
 		}
-		rotation.set(ControlMode.Position, Drivetrain.ROTATION_GEAR_RATIO * angle * (ENCODER_TICKS / 360));
+		rotation.set(ControlMode.Position, angle * (ENCODER_TICKS / 360) * Drivetrain.ROTATION_GEAR_RATIO);
 		double speed = state.speedMetersPerSecond;
 		if(isPercentOutput)
 			speed /= Drivetrain.MAX_DRIVE_VEL;

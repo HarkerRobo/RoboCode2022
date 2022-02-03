@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.util.SwerveModule;
@@ -27,7 +28,7 @@ public class Drivetrain extends SubsystemBase {
     private static final boolean[] ROTATION_INVERT = {true, true, true, true};
     private static final boolean[] TRANSLATION_INVERT = {true, true, true, true};
 
-    public static final int[] OFFSETS = {0, 0, 0, 0};
+    public static final double[] OFFSETS = {265.69, 108.105, 177.882, 37.79};
 
     public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
     public static final double DT_LENGTH = 0.5969; // 0.88265
@@ -40,8 +41,8 @@ public class Drivetrain extends SubsystemBase {
     public static final double FEET_TO_METER = 0.3048;
 
     public static final double MIN_OUTPUT = 0.01;
-    public static final double MAX_DRIVE_VEL = 0; // theoretical 4.1148 m / s
-    public static final double MAX_ANGULAR_VEL = 0; // 
+    public static final double MAX_DRIVE_VEL = 2; // theoretical 4.1148 m / s
+    public static final double MAX_ANGULAR_VEL = 1; // 
 
     private PigeonIMU pigeon;
 
@@ -59,13 +60,14 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.PIGEON_ID);
         pigeon.addFusedHeading(-RobotMap.PIGEON_CONSTANT * pigeon.getFusedHeading());
         
-        kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
-        new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
+        kinematics = new SwerveDriveKinematics(new Translation2d(-DT_WIDTH / 2, DT_LENGTH / 2), new Translation2d(DT_WIDTH / 2, DT_LENGTH / 2), 
+        new Translation2d(- DT_WIDTH / 2, -DT_LENGTH / 2), new Translation2d(DT_WIDTH / 2, -DT_LENGTH / 2));
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getFusedHeading()), new Pose2d(0, 0, new Rotation2d()));
     }
 
     public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
         for(int i = 0; i < 4; i++){
+            SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
     }
@@ -82,6 +84,22 @@ public class Drivetrain extends SubsystemBase {
         return kinematics;
     }
 
+    public SwerveModule getTopLeft() {
+        return modules[0];
+    }
+
+    public SwerveModule getTopRight() {
+        return modules[1];
+    }
+
+    public SwerveModule getBottomLeft() {
+        return modules[2];
+    }
+
+    public SwerveModule getBottomRight() {
+        return modules[3];
+    }
+
     public static Drivetrain getInstance() {
         if (drivetrain == null) {
             drivetrain = new Drivetrain();
@@ -92,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
     public void readCANCoders() {
         for(int i = 0; i < 4; i++){
             modules[i].getRotationMotor().setSelectedSensorPosition(
-                (modules[i].getCanCoder().getAbsolutePosition() - OFFSETS[i]) * 2048 / 360 * ROTATION_GEAR_RATIO);
+                (modules[i].getCanCoder().getAbsolutePosition() - OFFSETS[i]) * -SwerveModule.ENCODER_TICKS / 360 * ROTATION_GEAR_RATIO);
         }
     }
 }

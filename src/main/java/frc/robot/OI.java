@@ -35,8 +35,7 @@ public class OI {
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
         // driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
         // wrap non-commands in lambda but just regular instantiation for commands
-        
-
+        driverGamepad.getButtonB().whilePressed(new InstantCommand(()->Drivetrain.getInstance().readCANCoders()));
     }
 
     public HSGamepad getDriverGamepad(){

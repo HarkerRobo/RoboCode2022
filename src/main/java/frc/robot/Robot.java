@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -36,10 +37,11 @@ public class Robot extends TimedRobot {
     // default commands are commands that are always running on the robot
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManualPercentOutput());
     CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
-    // Drivetrain.getInstance().readCANCoders();
+    Drivetrain.getInstance().readCANCoders();
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
+    SmartDashboard.putNumber("desired angle", 0);
   }
 
   /**
@@ -54,6 +56,17 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
+    SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
+    SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
+    SmartDashboard.putNumber("br abs", Drivetrain.getInstance().getBottomRight().getCanCoder().getAbsolutePosition());
+
+    SmartDashboard.putNumber("tl angle", Drivetrain.getInstance().getTopLeft().getRotationAngle());
+    SmartDashboard.putNumber("tr angle", Drivetrain.getInstance().getTopRight().getRotationAngle());
+    SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
+    SmartDashboard.putNumber("br angle", Drivetrain.getInstance().getBottomRight().getRotationAngle());
+
+    SmartDashboard.putNumber("bottom left encoder tick", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getSelectedSensorPosition());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 

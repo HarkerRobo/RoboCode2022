@@ -34,7 +34,7 @@ public class Intake extends SubsystemBase {
 
     private Intake() {
         motor = new HSFalcon(RobotMap.INTAKE_ID);
-        doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotMap.INTAKE_FORWARD, RobotMap.INTAKE_BACKWARD);
+        // doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotMap.INTAKE_FORWARD, RobotMap.INTAKE_BACKWARD);
         loop = new SimpleVelocitySystem(MOTOR_KS, MOTOR_KV, MOTOR_KA, MAX_CONTROL_EFFORT, 
             MODEL_STANDARD_DEVIATION, MEASUREMENT_STANDARD_DEVIATION, LOOPTIME);
         init();

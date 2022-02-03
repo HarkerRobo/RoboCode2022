@@ -12,7 +12,7 @@ public class IntakeManual extends IndefiniteCommand {
     
     public IntakeManual() {
         addRequirements(Intake.getInstance());
-    }
+    }   
 
     public void execute() {
         if(OI.getInstance().getDriverGamepad().getButtonB().get())

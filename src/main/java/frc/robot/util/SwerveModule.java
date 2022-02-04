@@ -40,9 +40,9 @@ public class SwerveModule {
 	// private static final double TRANSLATION_D = 5;
 	// private static final double TRANSLATION_F = 0.034;
 	
-	private static final double ANGLE_P = 0.5;
+	private static final double ANGLE_P = 1.1;
 	private static final double ANGLE_I = 0;
-	private static final double ANGLE_D = 5;
+	private static final double ANGLE_D = 11;
 	public static final int ENCODER_TICKS = 2048;
 
 	private static final double DRIVE_KS = 0.578;
@@ -145,9 +145,10 @@ public class SwerveModule {
 		//state = optimize(state, getRotationAngle());
 		double angle = state.angle.getDegrees();
 		double currentAngle = getRotationAngle();
+		double speed = state.speedMetersPerSecond;
 		while(angle-currentAngle>180){
 			angle -= 360;
-			//delta = desiredState.angle.getDegrees() - currentAngle;
+			//delta = desiredState.angle.getDegrees() - currentAngle;	
 		}
 
 		while(angle-currentAngle<-180){
@@ -157,13 +158,14 @@ public class SwerveModule {
 
 		if(angle-currentAngle>90){
 			angle -= 180;
+			speed *= -1;
 		}
 
 		else if(angle-currentAngle<-90){
 			angle += 180;
+			speed *= -1;
 		}
-		rotation.set(ControlMode.Position, angle * (ENCODER_TICKS / 360) * Drivetrain.ROTATION_GEAR_RATIO);
-		double speed = state.speedMetersPerSecond;
+		rotation.set(ControlMode.Position, angle * ENCODER_TICKS / 360 * Drivetrain.ROTATION_GEAR_RATIO);
 		if(isPercentOutput)
 			speed /= Drivetrain.MAX_DRIVE_VEL;
 		setDriveOutput(speed, isPercentOutput);

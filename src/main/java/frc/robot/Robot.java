@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManualPercentOutput());
     CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
     Drivetrain.getInstance().readCANCoders();
+    new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
@@ -66,7 +67,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
     SmartDashboard.putNumber("br angle", Drivetrain.getInstance().getBottomRight().getRotationAngle());
 
-    SmartDashboard.putNumber("bottom left encoder tick", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getSelectedSensorPosition());
+    SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
+
+
+    SmartDashboard.putNumber("bottom left angle error", SmartDashboard.getNumber("Desired angle module 2",0) - Drivetrain.getInstance().getBottomLeft().getRotationAngle());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 

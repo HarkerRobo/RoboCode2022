@@ -44,6 +44,8 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_DRIVE_VEL = 3; // theoretical 4.1148 m / s
     public static final double MAX_ANGULAR_VEL = 1; // 
 
+    private boolean fieldCentric = true;
+
     private PigeonIMU pigeon;
 
     private SwerveDriveKinematics kinematics;
@@ -65,11 +67,22 @@ public class Drivetrain extends SubsystemBase {
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getFusedHeading()), new Pose2d(0, 0, new Rotation2d()));
     }
 
+    /**
+     * Set angle to given angle and set velocity to given velocity
+     */
     public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
         for(int i = 0; i < 4; i++){
             SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
+    }
+
+    public void toggleFieldCentric() {
+        fieldCentric = fieldCentric == false;
+    }
+
+    public boolean isFieldCentric() {
+        return false;
     }
 
     public PigeonIMU getPigeon(){
@@ -107,6 +120,10 @@ public class Drivetrain extends SubsystemBase {
         return drivetrain;
     }
 
+    /**
+     * we need to know where 0 is after turning off the robot --> set encoder position for rotation gear from
+     * Can Coder (absolute encoder) to offset
+     */
     public void readCANCoders() {
         for(int i = 0; i < 4; i++){
             modules[i].getRotationMotor().setSelectedSensorPosition(

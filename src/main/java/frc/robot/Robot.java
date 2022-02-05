@@ -36,13 +36,15 @@ public class Robot extends TimedRobot {
     
     // default commands are commands that are always running on the robot
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManualPercentOutput());
-    CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
     Drivetrain.getInstance().readCANCoders();
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
     SmartDashboard.putNumber("desired angle", 0);
+    SmartDashboard.putNumber("intake RPS", 0.1);
+    
+
   }
 
   /**
@@ -71,6 +73,10 @@ public class Robot extends TimedRobot {
 
 
     SmartDashboard.putNumber("bottom left angle error", SmartDashboard.getNumber("Desired angle module 2",0) - Drivetrain.getInstance().getBottomLeft().getRotationAngle());
+    SmartDashboard.putNumber("intake speed", Intake.getInstance().getCurrentRPS());
+    SmartDashboard.putNumber("target intake speed", SmartDashboard.getNumber("intake RPS", 0.1) * Intake.MAX_RPS);
+    SmartDashboard.putNumber("kalman intake speed", Intake.getInstance().getLoop().getVelocity());
+    SmartDashboard.putNumber("intake control effort", Intake.getInstance().getMotor().getMotorOutputPercent());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 

@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
     public static final double kV = 0.33337;
     public static final double kA = 0.060663;
     
-    private static final double MAX_CONTROL_EFFORT = 12; // volts 
+    private static final double MAX_CONTROL_EFFORT = 10; // volts 
     private static final double MODEL_STANDARD_DEVIATION = 3;
     private static final double ENCODER_STANDARD_DEVIATION = 0.1;
 
@@ -64,6 +64,13 @@ public class Shooter extends SubsystemBase {
 
     public SimpleVelocitySystem getVelocitySystem() {
         return velocitySystem;
+    }
+
+    public void setVelocity(double vel){
+        velocitySystem.set(vel);
+        velocitySystem.update(getRawVelocity());
+        // setPercentOutput(velocitySystem.getOutput());
+        setPercentOutput(vel);
     }
 
     public HSFalcon getMaster() {

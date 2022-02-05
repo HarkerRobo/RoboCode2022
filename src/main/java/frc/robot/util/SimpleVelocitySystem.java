@@ -10,6 +10,9 @@ import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import frc.robot.RobotMap;
 
+/**
+ * Defines a simple velocity system using a kalman filter and a linear quadratic regulator
+ */
 public class SimpleVelocitySystem {
     private double kS;
 

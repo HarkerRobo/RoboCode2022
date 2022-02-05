@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
 
+/**
+ * Shoots with a set velocity in m/s
+ */
 public class ShootWithVelocity extends IndefiniteCommand {
     private double vel;
     
@@ -14,9 +17,7 @@ public class ShootWithVelocity extends IndefiniteCommand {
     
     public void execute() {
         vel = SmartDashboard.getNumber("desired velocity", 0);
-        Shooter.getInstance().getVelocitySystem().set(vel);
-        Shooter.getInstance().getVelocitySystem().update(Shooter.getInstance().getRawVelocity());
-        Shooter.getInstance().setPercentOutput(Shooter.getInstance().getVelocitySystem().getOutput());
+        Shooter.getInstance().setVelocity(vel);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getRawVelocity());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
         SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());

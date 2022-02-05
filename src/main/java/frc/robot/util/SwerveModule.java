@@ -165,10 +165,10 @@ public class SwerveModule {
 			angle += 180;
 			speed *= -1;
 		}
-		rotation.set(ControlMode.Position, angle * ENCODER_TICKS / 360 * Drivetrain.ROTATION_GEAR_RATIO);
+		// rotation.set(ControlMode.Position, angle * ENCODER_TICKS / 360 * Drivetrain.ROTATION_GEAR_RATIO);
 		if(isPercentOutput)
 			speed /= Drivetrain.MAX_DRIVE_VEL;
-		setDriveOutput(speed, isPercentOutput);
+		// setDriveOutput(speed, isPercentOutput);
 	}
 
 	public void setDriveOutput(double output, boolean isPercentOutput) {

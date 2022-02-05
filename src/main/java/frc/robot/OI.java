@@ -2,6 +2,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.commands.intake.IntakeManual;
 import frc.robot.commands.shooter.ShootWithVelocity;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -9,7 +10,9 @@ import harkerrobolib.commands.CallMethodCommand;
 import harkerrobolib.wrappers.HSGamepad;
 import harkerrobolib.wrappers.XboxGamepad;
 
-
+/**
+ * Defines drive and operator gamepad and binds definite commands
+ */
 public class OI {
     private static OI oi;
 
@@ -34,6 +37,8 @@ public class OI {
         // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
         // driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
+        driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
+        driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
         // wrap non-commands in lambda but just regular instantiation for commands
     }
 

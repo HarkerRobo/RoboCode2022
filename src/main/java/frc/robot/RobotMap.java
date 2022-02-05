@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+/**
+ * Defines robot-wide constants
+ */
 public class RobotMap {
     public static final int LOOP_INDEX = 0;
 
@@ -21,6 +24,9 @@ public class RobotMap {
 
     public static final int SHOOTER_MASTER = 10;
     public static final int SHOOTER_FOLLOWER = 11;  // change
+
+    public static final int INDEXER_TOP = 0;
+    public static final int INDEXER_BOTTOM = 0;
 
     public static final double LOOP_TIME = 0.02; // 20ms
 

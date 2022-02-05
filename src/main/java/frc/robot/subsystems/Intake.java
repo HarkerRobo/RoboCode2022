@@ -11,19 +11,24 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+/**
+ * Defines an intake with a motor and a double solenoid
+ */
 public class Intake extends SubsystemBase {
     private static Intake intake;
     private HSFalcon motor;
     
     private static final boolean MOTOR_INVERT = true;
     
-    private static final double MOTOR_KS = 0.3;
-    private static final double MOTOR_KV = 0.5;
-    private static final double MOTOR_KA = 0.02;
+    public static final double MAX_RPS = 100;
+
+    private static final double MOTOR_KS = 0;//0.76176;
+    private static final double MOTOR_KV = 0.11562;
+    private static final double MOTOR_KA = 0.0079187;
     
-    private static final double MAX_CONTROL_EFFORT = 12;
-    private static final double MODEL_STANDARD_DEVIATION = 10;
-    private static final double MEASUREMENT_STANDARD_DEVIATION = 5;
+    private static final double MAX_CONTROL_EFFORT = 10;
+    private static final double MODEL_STANDARD_DEVIATION = 1;
+    private static final double MEASUREMENT_STANDARD_DEVIATION = 0.005;
     private static final double LOOPTIME = 0.02;
 
     public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kForward;
@@ -49,14 +54,16 @@ public class Intake extends SubsystemBase {
     }
    
     public void setPercentOutput(double output) {
-        motor.set(ControlMode.PercentOutput, output);
+        if (Math.abs(output) > 0.8)
+            output = 0.8;
+         motor.set(ControlMode.PercentOutput, output);
     }
 
     public void setVelocity(double vel){
         loop.set(vel);
-        loop.update(getCurrentRPM());
-        // setPercentOutput(loop.getOutput());
-        setPercentOutput(vel);
+        loop.update(getCurrentRPS());
+        setPercentOutput(loop.getOutput());
+        // setPercentOutput(vel);
     }
 
     public void toggle() {
@@ -68,8 +75,12 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    public double getCurrentRPM() {
-        return 600*motor.getSelectedSensorVelocity() / 2048;
+    public double getCurrentRPS() {
+        return 10*motor.getSelectedSensorVelocity() / 2048;
+    }
+
+    public SimpleVelocitySystem getLoop(){
+        return loop;
     }
 
     public HSFalcon getMotor(){

@@ -2,7 +2,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.intake.IntakeManual;
+import frc.robot.commands.intake.SetIntakeDown;
+import frc.robot.commands.intake.SetIntakeUp;
+import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.shooter.ShootWithVelocity;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -37,8 +41,13 @@ public class OI {
         // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
         // driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
-        driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
+        // driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
         driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
+        driverGamepad.getButtonY().whilePressed(new ToggleIntake());
+        // driverGamepad.getButtonA().whilePressed(new SetIntakeDown());
+        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {Drivetrain.getInstance().getPigeon().addFusedHeading(-63.9886 * Drivetrain.getInstance().getPigeon().getFusedHeading()); SwerveManual.pigeonAngle=0;}));
+
+        // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
     }
 

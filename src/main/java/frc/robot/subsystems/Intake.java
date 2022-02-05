@@ -31,15 +31,15 @@ public class Intake extends SubsystemBase {
     private static final double MEASUREMENT_STANDARD_DEVIATION = 0.005;
     private static final double LOOPTIME = 0.02;
 
-    public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kForward;
-    public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kReverse; 
+    public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kForward;
     
     private DoubleSolenoid doubleSolenoid;
     private SimpleVelocitySystem loop;
 
     private Intake() {
         motor = new HSFalcon(RobotMap.INTAKE_ID);
-        // doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotMap.INTAKE_FORWARD, RobotMap.INTAKE_BACKWARD);
+        doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotMap.INTAKE_FORWARD, RobotMap.INTAKE_BACKWARD);
         loop = new SimpleVelocitySystem(MOTOR_KS, MOTOR_KV, MOTOR_KA, MAX_CONTROL_EFFORT, 
             MODEL_STANDARD_DEVIATION, MEASUREMENT_STANDARD_DEVIATION, LOOPTIME);
         init();

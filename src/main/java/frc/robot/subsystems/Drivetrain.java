@@ -42,7 +42,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double MIN_OUTPUT = 0.01;
     public static final double MAX_DRIVE_VEL = 3; // theoretical 4.1148 m / s
-    public static final double MAX_ANGULAR_VEL = 1; // 
+    public static final double MAX_ANGULAR_VEL = 2*Math.PI; // 
 
     private boolean fieldCentric = true;
 
@@ -72,7 +72,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
         for(int i = 0; i < 4; i++){
-            SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
+            SmartDashboard.putNumber("Desired translation speed " + i, states[i].speedMetersPerSecond);
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
     }
@@ -82,7 +82,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public boolean isFieldCentric() {
-        return false;
+        return fieldCentric;
     }
 
     public PigeonIMU getPigeon(){

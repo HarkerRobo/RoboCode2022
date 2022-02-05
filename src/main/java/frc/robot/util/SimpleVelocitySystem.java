@@ -59,7 +59,7 @@ public class SimpleVelocitySystem {
      * @return The percent output that the controller should run at
      */
     public double getOutput() {
-        return (loop.getU(0) + kS) / maxControlEffort;
+        return (loop.getU(0) - kS*Math.signum(loop.getNextR(0))) / maxControlEffort;
     }
 
     /**

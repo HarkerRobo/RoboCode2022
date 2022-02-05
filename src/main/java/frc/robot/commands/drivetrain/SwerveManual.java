@@ -19,10 +19,10 @@ import frc.robot.OI;
  */
 
 public class SwerveManual extends IndefiniteCommand {
-    private static final double OUTPUT_MULTIPLIER= 0.3;
-    private static final double PIGEON_KP = 0.1;
+    private static final double OUTPUT_MULTIPLIER= 1;
+    private static final double PIGEON_KP = 0.0;
 
-    private static double pigeonAngle;
+    public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
     private Debouncer debouncer = new Debouncer(PIGEON_DELAY, DebounceType.kRising);
 
@@ -42,7 +42,7 @@ public class SwerveManual extends IndefiniteCommand {
             translationx = 0;
             translationy = 0;
             if (Math.abs(angularVelocity) < Drivetrain.MIN_OUTPUT) {
-                angularVelocity = 0;//Drivetrain.getInstance().getPigeon().getFusedHeading();
+                angularVelocity = 0.0001;//Drivetrain.getInstance().getPigeon().getFusedHeading();
             }
         }
     
@@ -59,7 +59,7 @@ public class SwerveManual extends IndefiniteCommand {
 
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
-            angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getPigeon().getFusedHeading());
+            angularVelocity = PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getPigeon().getFusedHeading());
             SmartDashboard.putBoolean("holding pigeon angle", true);
         }
         else {
@@ -71,7 +71,7 @@ public class SwerveManual extends IndefiniteCommand {
         
         ChassisSpeeds chassis;
         if(Drivetrain.getInstance().isFieldCentric())
-            chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getFusedHeading()));
+            chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()));
         else
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(0));
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);

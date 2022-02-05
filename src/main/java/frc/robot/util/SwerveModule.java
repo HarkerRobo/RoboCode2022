@@ -45,13 +45,13 @@ public class SwerveModule {
 	private static final double ANGLE_D = 11;
 	public static final int ENCODER_TICKS = 2048;
 
-	private static final double DRIVE_KS = 0.578;
-	private static final double DRIVE_KV = 2.0473;
-	private static final double DRIVE_KA = 0.13018;
+	private static final double DRIVE_KS = 0.59694;
+	private static final double DRIVE_KV = 2.2829;
+	private static final double DRIVE_KA = 0.1455;
 
 	private static final double MAX_CONTROL_EFFORT = 10; // volts 
-    private static final double MODEL_STANDARD_DEVIATION = 2;
-    private static final double ENCODER_STANDARD_DEVIATION = 0.08;
+    private static final double MODEL_STANDARD_DEVIATION = 0.4;
+    private static final double ENCODER_STANDARD_DEVIATION = 0.02;
 
 	private boolean ROTATION_SENSOR_PHASE;
 	private boolean TRANSLATION_SENSOR_PHASE;
@@ -123,6 +123,10 @@ public class SwerveModule {
 		return translation;
 	}
 
+	public SimpleVelocitySystem getTranslationLoop() {
+		return translationLoop;
+	}
+
 	public HSFalcon getRotationMotor() {
 		return rotation;
 	}
@@ -131,8 +135,8 @@ public class SwerveModule {
 		return rotation.getSelectedSensorPosition()*(360.0/ENCODER_TICKS) / Drivetrain.ROTATION_GEAR_RATIO;
 	}
 
-	private double getTranslationVelocity() {
-		return Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, translation.getSelectedSensorVelocity(), SpeedUnit.FEET_PER_SECOND, Drivetrain.WHEEL_DIAMETER, ENCODER_TICKS) / Drivetrain.FEET_TO_METER / Drivetrain.TRANSLATION_GEAR_RATIO;
+	public double getTranslationVelocity() {
+		return Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, translation.getSelectedSensorVelocity(), SpeedUnit.FEET_PER_SECOND, Drivetrain.WHEEL_DIAMETER, ENCODER_TICKS) * Drivetrain.FEET_TO_METER / Drivetrain.TRANSLATION_GEAR_RATIO;
 	}
 	
 	public SwerveModuleState getState() {
@@ -165,13 +169,16 @@ public class SwerveModule {
 			angle += 180;
 			speed *= -1;
 		}
-		// rotation.set(ControlMode.Position, angle * ENCODER_TICKS / 360 * Drivetrain.ROTATION_GEAR_RATIO);
+		rotation.set(ControlMode.Position, angle * ENCODER_TICKS / 360 * Drivetrain.ROTATION_GEAR_RATIO);
 		if(isPercentOutput)
 			speed /= Drivetrain.MAX_DRIVE_VEL;
-		// setDriveOutput(speed, isPercentOutput);
+		setDriveOutput(speed, isPercentOutput);
 	}
 
 	public void setDriveOutput(double output, boolean isPercentOutput) {
+		if(Math.abs(output) < Drivetrain.MIN_OUTPUT*5){
+			output = 0;
+		}
         if(!isPercentOutput) {
             translationLoop.set(output);
 			translationLoop.update(getTranslationVelocity());

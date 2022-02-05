@@ -8,10 +8,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.drivetrain.SwerveManualPercentOutput;
 import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
@@ -35,7 +38,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     
     // default commands are commands that are always running on the robot
-    CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManualPercentOutput());
+    CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
     Drivetrain.getInstance().readCANCoders();
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
@@ -43,8 +46,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired velocity", 0);
     SmartDashboard.putNumber("desired angle", 0);
     SmartDashboard.putNumber("intake RPS", 0.1);
-    
-
   }
 
   /**
@@ -58,7 +59,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
     SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
@@ -71,12 +71,12 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
-
+    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
     SmartDashboard.putNumber("bottom left angle error", SmartDashboard.getNumber("Desired angle module 2",0) - Drivetrain.getInstance().getBottomLeft().getRotationAngle());
-    SmartDashboard.putNumber("intake speed", Intake.getInstance().getCurrentRPS());
-    SmartDashboard.putNumber("target intake speed", SmartDashboard.getNumber("intake RPS", 0.1) * Intake.MAX_RPS);
-    SmartDashboard.putNumber("kalman intake speed", Intake.getInstance().getLoop().getVelocity());
-    SmartDashboard.putNumber("intake control effort", Intake.getInstance().getMotor().getMotorOutputPercent());
+    SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
+    SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
+    SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
+    SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 

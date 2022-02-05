@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,15 +18,29 @@ public class Indexer extends SubsystemBase {
     private static final boolean BOTTOM_INVERT = false;
 
     private Indexer() {
-        // top = new HSFalcon(RobotMap.INDEXER_TOP);
-        // bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM);
+        top = new HSFalcon(RobotMap.INDEXER_TOP);
+        bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM);
+        init();
     }
 
     private void init() {
         top.configFactoryDefault();
         top.setInverted(TOP_INVERT);
-        top.configVelocityMeasurementWindow(1);
-        top.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+        bottom.configFactoryDefault();
+        bottom.setInverted(BOTTOM_INVERT);
+    }
+
+    public void setPercentOutputBottom(double output) {
+        bottom.set(ControlMode.PercentOutput, output);
+    }
+
+    public void setPercentOutputTop(double output) {
+        top.set(ControlMode.PercentOutput, output);
+    }
+
+    public void setPercentOutputBoth(double output) {
+        setPercentOutputTop(output);
+        setPercentOutputBottom(output);
     }
 
     public static Indexer getInstance() {

@@ -19,8 +19,8 @@ public class RobotMap {
     public static final int PIGEON_ID = 0;
 
     public static final int INTAKE_ID = 8;
-    public static final int INTAKE_FORWARD = 0;
-    public static final int INTAKE_BACKWARD = 0;
+    public static final int INTAKE_FORWARD = 3;
+    public static final int INTAKE_BACKWARD = 7;
 
     public static final int SHOOTER_MASTER = 10;
     public static final int SHOOTER_FOLLOWER = 11;  // change

@@ -1,7 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 /**
  * Defines robot-wide constants
  */

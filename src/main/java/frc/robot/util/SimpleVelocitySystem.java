@@ -8,7 +8,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import frc.robot.RobotMap;
 
 /**
  * Defines a simple velocity system using a kalman filter and a linear quadratic regulator

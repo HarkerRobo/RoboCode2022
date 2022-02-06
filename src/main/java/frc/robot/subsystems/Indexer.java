@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
+import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import harkerrobolib.wrappers.HSFalcon;
@@ -17,9 +20,13 @@ public class Indexer extends SubsystemBase {
     private static final boolean TOP_INVERT = false;
     private static final boolean BOTTOM_INVERT = false;
 
+    private ColorSensorV3 colorSensor;
+    private DigitalInput topProximity;
+
     private Indexer() {
         top = new HSFalcon(RobotMap.INDEXER_TOP);
         bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM);
+        colorSensor = new ColorSensorV3(Port.kOnboard);
         init();
     }
 
@@ -30,17 +37,24 @@ public class Indexer extends SubsystemBase {
         bottom.setInverted(BOTTOM_INVERT);
     }
 
+    public boolean bottomOccupied() {
+        return colorSensor.getProximity() > 1024;
+    }
+
+    public boolean topOccupied() {
+        return !topProximity.get();
+    }
+
+    public Color getColor() {
+        return colorSensor.getColor();
+    }
+
     public void setPercentOutputBottom(double output) {
         bottom.set(ControlMode.PercentOutput, output);
     }
 
     public void setPercentOutputTop(double output) {
         top.set(ControlMode.PercentOutput, output);
-    }
-
-    public void setPercentOutputBoth(double output) {
-        setPercentOutputTop(output);
-        setPercentOutputBottom(output);
     }
 
     public static Indexer getInstance() {

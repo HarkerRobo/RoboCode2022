@@ -27,6 +27,8 @@ public class Shooter extends SubsystemBase {
     private static final double MODEL_STANDARD_DEVIATION = 3;
     private static final double ENCODER_STANDARD_DEVIATION = 0.1;
 
+    public static final double SHOOTER_REV_TIME = 1.0;
+
     private SimpleVelocitySystem velocitySystem;
     
     private HSFalcon master;

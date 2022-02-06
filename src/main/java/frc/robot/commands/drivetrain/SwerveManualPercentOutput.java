@@ -5,7 +5,6 @@ import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;

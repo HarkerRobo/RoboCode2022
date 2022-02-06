@@ -44,6 +44,21 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_DRIVE_VEL = 3; // theoretical 4.1148 m / s
     public static final double MAX_ANGULAR_VEL = 2*Math.PI; // 
 
+    public static final double MP_X_KP = 8;
+    public static final double MP_X_KI = 0;
+    public static final double MP_X_KD = 0;
+
+    public static final double MP_Y_KP = 8;
+    public static final double MP_Y_KI = 0;
+    public static final double MP_Y_KD = 0;
+
+    public static final double MP_THETA_KP = 7;
+    public static final double MP_THETA_KI = 0;
+    public static final double MP_THETA_KD = 0;
+
+    public static final double MP_MAX_DRIVE_VELOCITY = 3;
+    public static final double MP_MAX_DRIVE_ACCELERATION = 2;
+
     private boolean fieldCentric = true;
 
     private PigeonIMU pigeon;
@@ -75,6 +90,10 @@ public class Drivetrain extends SubsystemBase {
             SmartDashboard.putNumber("Desired translation speed " + i, states[i].speedMetersPerSecond);
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
+    }
+
+    public void setAngleAndDriveVelocity(SwerveModuleState[] states) {
+        setAngleAndDriveVelocity(states, false);
     }
 
     public void toggleFieldCentric() {

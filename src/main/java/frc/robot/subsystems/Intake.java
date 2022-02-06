@@ -7,8 +7,6 @@ import frc.robot.util.SimpleVelocitySystem;
 import harkerrobolib.wrappers.HSFalcon;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 /**
@@ -21,6 +19,7 @@ public class Intake extends SubsystemBase {
     private static final boolean MOTOR_INVERT = true;
     
     public static final double MAX_RPS = 100;
+    public static final double MIN_RUNNING_RPS = 1;
 
     private static final double MOTOR_KS = 0;//0.76176;
     private static final double MOTOR_KV = 0.11562;

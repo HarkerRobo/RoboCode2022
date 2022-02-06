@@ -8,18 +8,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.drivetrain.SwerveManualPercentOutput;
-import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,6 +25,7 @@ import frc.robot.subsystems.Shooter;
  * project.
  */
 public class Robot extends TimedRobot {
+  Field2d field;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -36,7 +33,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    
+    field = new Field2d();
+    SmartDashboard.putData(field);
     // default commands are commands that are always running on the robot
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
     Drivetrain.getInstance().readCANCoders();
@@ -59,6 +57,16 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    Drivetrain.getInstance().getOdometry().update(
+      Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getFusedHeading()), 
+      Drivetrain.getInstance().getTopLeft().getState(),
+      Drivetrain.getInstance().getTopRight().getState(), 
+      Drivetrain.getInstance().getBottomLeft().getState(), 
+      Drivetrain.getInstance().getBottomRight().getState()
+    );
+    field.setRobotPose(Drivetrain.getInstance().getOdometry().getPoseMeters());
+
     SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());

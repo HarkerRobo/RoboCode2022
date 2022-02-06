@@ -78,7 +78,7 @@ public class Trajectories {
         new Translation2d(6.21, 5.13), new Translation2d(5.51, 5.77), new Translation2d(5.63, 6.80), new Translation2d(4.63, 3.89)});
 
     public static final List<Trajectory> fiveBallAuto = generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(7.86,1.83), new Translation2d(7.76,0.90), new Translation2d(5.70,2.27), new Translation2d(2.69,1.55), new Translation2d(3.82,3.10)});
+        new Translation2d(1.83,-7.86), new Translation2d(0.90,-7.76), new Translation2d(2.27,-5.70), new Translation2d(1.55,-2.69), new Translation2d(3.10,-3.82)});
 
     public static List<Trajectory> generateDirectTrajectories(Translation2d[] input){
         List<Trajectory> out = new ArrayList<Trajectory>();

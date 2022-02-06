@@ -16,7 +16,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     private static PIDController xController = new PIDController(Drivetrain.MP_X_KP, Drivetrain.MP_X_KI, Drivetrain.MP_X_KD);
     private static PIDController yController = new PIDController(Drivetrain.MP_Y_KP, Drivetrain.MP_Y_KI, Drivetrain.MP_Y_KD);
     private static ProfiledPIDController thetaController = new ProfiledPIDController(Drivetrain.MP_THETA_KP, Drivetrain.MP_THETA_KI, Drivetrain.MP_X_KD, new Constraints(2 * Math.PI, 3 * Math.PI));
-    private static final double TURN_TIME = 0.3;
+    private static final double TURN_TIME = 0.6;
     
     private Rotation2d initHeading;
     Trajectory trajectory;

@@ -44,7 +44,7 @@ public class OI {
         driverGamepad.getButtonY().whilePressed(new ToggleIntake());
         // driverGamepad.getButtonA().whilePressed(new SetIntakeDown());
         driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {Drivetrain.getInstance().getPigeon().addFusedHeading(-63.9886 * Drivetrain.getInstance().getPigeon().getFusedHeading()); SwerveManual.pigeonAngle=0;}));
-        driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
+        // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
         driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new HSSwerveDriveController(Trajectories.fiveBallAuto.get(0),Rotation2d.fromDegrees(0),true),

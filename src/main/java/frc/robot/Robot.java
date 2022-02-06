@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -59,13 +60,14 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     Drivetrain.getInstance().getOdometry().update(
-      Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getFusedHeading()), 
+      Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()), 
       Drivetrain.getInstance().getTopLeft().getState(),
       Drivetrain.getInstance().getTopRight().getState(), 
       Drivetrain.getInstance().getBottomLeft().getState(), 
       Drivetrain.getInstance().getBottomRight().getState()
     );
-    field.setRobotPose(Drivetrain.getInstance().getOdometry().getPoseMeters());
+    Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
+    field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
 
     SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());

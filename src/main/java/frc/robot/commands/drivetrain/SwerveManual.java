@@ -19,7 +19,7 @@ import frc.robot.OI;
 
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER= 1;
-    private static final double PIGEON_KP = 0.0;
+    private static final double PIGEON_KP = -0.075;
 
     public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
@@ -41,7 +41,7 @@ public class SwerveManual extends IndefiniteCommand {
             translationx = 0;
             translationy = 0;
             if (Math.abs(angularVelocity) < Drivetrain.MIN_OUTPUT) {
-                angularVelocity = 0.0001;//Drivetrain.getInstance().getPigeon().getFusedHeading();
+                angularVelocity = 0.001;//Drivetrain.getInstance().getPigeon().getFusedHeading();
             }
         }
     
@@ -67,7 +67,7 @@ public class SwerveManual extends IndefiniteCommand {
         }
 
         // ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getFusedHeading())));
-        
+        SmartDashboard.putNumber("angular vel", angularVelocity);
         ChassisSpeeds chassis;
         if(Drivetrain.getInstance().isFieldCentric())
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()));

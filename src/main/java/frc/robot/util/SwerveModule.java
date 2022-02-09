@@ -41,7 +41,7 @@ public class SwerveModule {
 	
 	private static final double ANGLE_P = 0.23082;
 	private static final double ANGLE_I = 0;
-	private static final double ANGLE_D = 6.52;
+	private static final double ANGLE_D = 0;
 	public static final int ENCODER_TICKS = 2048;
 
 	private static final double DRIVE_KS = 0.59694;
@@ -84,10 +84,10 @@ public class SwerveModule {
 		rotation.setInverted(ROTATION_INVERT);
 		rotation.setSensorPhase(ROTATION_SENSOR_PHASE);
 		rotation.setNeutralMode(NeutralMode.Brake);
-		rotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, ANGLE_CURRENT_CONTINUOUS, ANGLE_CURRENT_PEAK, ANGLE_CURRENT_PEAK_DUR));
+		// rotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, ANGLE_CURRENT_CONTINUOUS, ANGLE_CURRENT_PEAK, ANGLE_CURRENT_PEAK_DUR));
 		rotation.configVoltageCompSaturation(VOLTAGE_COMP);
 		rotation.configForwardSoftLimitEnable(false);
-
+		rotation.configOpenloopRamp(0.1);
 		rotation.config_kP(RobotMap.SLOT_INDEX, ANGLE_P);
 		rotation.config_kI(RobotMap.SLOT_INDEX, ANGLE_I);
 		rotation.config_kD(RobotMap.SLOT_INDEX, ANGLE_D);

@@ -43,13 +43,14 @@ public class OI {
         driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
         driverGamepad.getButtonY().whilePressed(new ToggleIntake());
         // driverGamepad.getButtonA().whilePressed(new SetIntakeDown());
-        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {Drivetrain.getInstance().getPigeon().addFusedHeading(-63.9886 * Drivetrain.getInstance().getPigeon().getFusedHeading()); SwerveManual.pigeonAngle=0;}));
+        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {Drivetrain.getInstance().getPigeon().addFusedHeading(-RobotMap.PIGEON_CONSTANT * Drivetrain.getInstance().getPigeon().getFusedHeading()); SwerveManual.pigeonAngle=0;}));
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
-        driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new HSSwerveDriveController(Trajectories.fiveBallAuto.get(0),Rotation2d.fromDegrees(0),true),
-            new HSSwerveDriveController(Trajectories.fiveBallAuto.get(1),Rotation2d.fromDegrees(0)),new HSSwerveDriveController(Trajectories.fiveBallAuto.get(2),Rotation2d.fromDegrees(0)),
-            new HSSwerveDriveController(Trajectories.fiveBallAuto.get(3),Rotation2d.fromDegrees(0))));
+        driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new HSSwerveDriveController(Trajectories.fiveBallAuto.get(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0),true),
+           new HSSwerveDriveController(Trajectories.fiveBallAuto.get(1),Rotation2d.fromDegrees(-152)),new HSSwerveDriveController(Trajectories.fiveBallAuto.get(2),Rotation2d.fromDegrees(-220)),
+           new HSSwerveDriveController(Trajectories.fiveBallAuto.get(3),Rotation2d.fromDegrees(-220))));
+        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new HSSwerveDriveController(Trajectories.moveLeft.get(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180),true)));
     }
 
     public HSGamepad getDriverGamepad(){

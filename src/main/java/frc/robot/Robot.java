@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
-    SmartDashboard.putNumber("desired angle", 0);
+    SmartDashboard.putNumber("desired angle", 90);
     SmartDashboard.putNumber("intake RPS", 0.1);
   }
 
@@ -82,7 +82,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
     SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
-    SmartDashboard.putNumber("bottom left angle error", SmartDashboard.getNumber("Desired angle module 2",0) - Drivetrain.getInstance().getBottomLeft().getRotationAngle());
+    SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
+    SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
     SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
     SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
     SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));

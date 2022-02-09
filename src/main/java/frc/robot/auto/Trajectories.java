@@ -41,10 +41,9 @@ public class Trajectories {
         new Pose2d(2,0,Rotation2d.fromDegrees(0))
     ), config);
 
-    public static final Trajectory moveLeft = TrajectoryGenerator.generateTrajectory(List.of(
-        new Pose2d(0,0,Rotation2d.fromDegrees(180)),
-        new Pose2d(-2,0,Rotation2d.fromDegrees(180))
-    ), config);
+    public static final List<Trajectory> moveLeft = generateDirectTrajectories(new Translation2d[] {
+        new Translation2d(0,0), new Translation2d(0,2)
+    });
 
     public static final Trajectory clockwisecircle = TrajectoryGenerator.generateTrajectory(List.of(
         new Pose2d(8.3,1.5,Rotation2d.fromDegrees(180)),

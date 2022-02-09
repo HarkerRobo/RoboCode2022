@@ -15,32 +15,34 @@ import frc.robot.subsystems.Drivetrain;
 public class HSSwerveDriveController extends SwerveControllerCommand {
     private static PIDController xController = new PIDController(Drivetrain.MP_X_KP, Drivetrain.MP_X_KI, Drivetrain.MP_X_KD);
     private static PIDController yController = new PIDController(Drivetrain.MP_Y_KP, Drivetrain.MP_Y_KI, Drivetrain.MP_Y_KD);
-    private static ProfiledPIDController thetaController = new ProfiledPIDController(Drivetrain.MP_THETA_KP, Drivetrain.MP_THETA_KI, Drivetrain.MP_X_KD, new Constraints(2 * Math.PI, 3 * Math.PI));
+    private static ProfiledPIDController thetaController = new ProfiledPIDController(Drivetrain.MP_THETA_KP, Drivetrain.MP_THETA_KI, Drivetrain.MP_X_KD, new Constraints(Math.PI, Math.PI));
     private static final double TURN_TIME = 0.6;
     
     private Rotation2d initHeading;
     Trajectory trajectory;
     private double startTime;
     private boolean isFirst;
+    private Rotation2d finalHeading;
 
   
-    public HSSwerveDriveController(Trajectory trajectory, Rotation2d initHeading, boolean isFirst) {
+    public HSSwerveDriveController(Trajectory trajectory, Rotation2d initHeading, Rotation2d finalHeading, boolean isFirst) {
         super(trajectory, Drivetrain.getInstance().getOdometry()::getPoseMeters, 
-                Drivetrain.getInstance().getKinematics(), xController, yController, thetaController,() -> initHeading, 
+                Drivetrain.getInstance().getKinematics(), xController, yController, thetaController,() -> finalHeading, 
                 Drivetrain.getInstance()::setAngleAndDriveVelocity, Drivetrain.getInstance());
         this.trajectory = trajectory;
         this.initHeading = initHeading;
         this.isFirst = isFirst;
+        this.finalHeading = finalHeading;
     }
 
-    public HSSwerveDriveController(Trajectory trajectory, Rotation2d initHeading) {
-        this(trajectory, initHeading, false);
+    public HSSwerveDriveController(Trajectory trajectory, Rotation2d finalHeading) {
+        this(trajectory, null, finalHeading, false);
     }
     
     @Override
     public void initialize() {
         super.initialize();
-        if(isFirst) {
+        if(isFirst && initHeading != null) {
             Drivetrain.getInstance().getPigeon().addFusedHeading(-63.9886 * (Drivetrain.getInstance().getPigeon().getFusedHeading()+initHeading.getDegrees()));
             Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(),Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())),
                 Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()));
@@ -56,11 +58,13 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
             ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(pose.getX()*0.00001, pose.getY()*0.00001, 0, Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getFusedHeading()));
             Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
         }
-        else {
+        else {  
         super.execute();
         SmartDashboard.putNumber("mp x error", xController.getPositionError());
         SmartDashboard.putNumber("mp y error", yController.getPositionError());
         SmartDashboard.putNumber("mp theta error", thetaController.getPositionError());
+        SmartDashboard.putNumber("mp theta target position", thetaController.getSetpoint().position);
+        SmartDashboard.putNumber("mp theta target velocity", thetaController.getSetpoint().velocity);
         }
     }
 

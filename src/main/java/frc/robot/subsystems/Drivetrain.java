@@ -52,16 +52,16 @@ public class Drivetrain extends SubsystemBase {
     public static final double MP_Y_KI = 0;
     public static final double MP_Y_KD = 0;
 
-    public static final double MP_THETA_KP = 7;
+    public static final double MP_THETA_KP = 4;
     public static final double MP_THETA_KI = 0;
-    public static final double MP_THETA_KD = 0;
+    public static final double MP_THETA_KD = 7;
 
     public static final double MP_MAX_DRIVE_VELOCITY = 3;
     public static final double MP_MAX_DRIVE_ACCELERATION = 2;
 
     private boolean fieldCentric = true;
 
-    private PigeonIMU pigeon;
+    private HSPigeon pigeon;
 
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
@@ -75,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
         }
         
         pigeon = new HSPigeon(RobotMap.PIGEON_ID);
-        pigeon.addFusedHeading(-RobotMap.PIGEON_CONSTANT * pigeon.getFusedHeading());
+        pigeon.setFusedHeading(0);//-RobotMap.PIGEON_CONSTANT * pigeon.getFusedHeading());
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
@@ -87,7 +87,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
         for(int i = 0; i < 4; i++){
-            SmartDashboard.putNumber("Desired translation speed " + i, states[i].speedMetersPerSecond);
+            SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
     }

@@ -43,7 +43,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public void initialize() {
         super.initialize();
         if(isFirst && initHeading != null) {
-            Drivetrain.getInstance().getPigeon().addFusedHeading(-63.9886 * (Drivetrain.getInstance().getPigeon().getFusedHeading()+initHeading.getDegrees()));
+            Drivetrain.getInstance().getPigeon().setFusedHeading(initHeading.getDegrees());
             Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(),Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())),
                 Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()));
         }

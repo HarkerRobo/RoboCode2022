@@ -1,5 +1,6 @@
 package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.Trajectories;
@@ -47,10 +48,8 @@ public class OI {
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
-        driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new HSSwerveDriveController(Trajectories.fiveBallAuto.get(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0),true),
-           new HSSwerveDriveController(Trajectories.fiveBallAuto.get(1),Rotation2d.fromDegrees(-152)),new HSSwerveDriveController(Trajectories.fiveBallAuto.get(2),Rotation2d.fromDegrees(-220)),
-           new HSSwerveDriveController(Trajectories.fiveBallAuto.get(3),Rotation2d.fromDegrees(-220))));
-        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new HSSwerveDriveController(Trajectories.moveLeft.get(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(180),true)));
+        driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.fiveBallAuto.get(0),Trajectories.fiveBallAuto.get(1),Trajectories.fiveBallAuto.get(2),Trajectories.fiveBallAuto.get(3)));
+        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.threepoints.get(0),Trajectories.threepoints.get(1)));
     }
 
     public HSGamepad getDriverGamepad(){

@@ -41,14 +41,17 @@ public class OI {
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
         // driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
         // driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
-        driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
+        // driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
         driverGamepad.getButtonY().whilePressed(new ToggleIntake());
         // driverGamepad.getButtonA().whilePressed(new SetIntakeDown());
-        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {Drivetrain.getInstance().getPigeon().addFusedHeading(-RobotMap.PIGEON_CONSTANT * Drivetrain.getInstance().getPigeon().getFusedHeading()); SwerveManual.pigeonAngle=0;}));
+        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
+            Drivetrain.getInstance().getPigeon().zeroGyroBiasNow(); 
+            SwerveManual.pigeonAngle=0;
+        }));
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
-        driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.fiveBallAuto.get(0),Trajectories.fiveBallAuto.get(1),Trajectories.fiveBallAuto.get(2),Trajectories.fiveBallAuto.get(3)));
+        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.fiveBallAuto.get(0),Trajectories.fiveBallAuto.get(1),Trajectories.fiveBallAuto.get(2),Trajectories.fiveBallAuto.get(3)));
         // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.threepoints.get(0),Trajectories.threepoints.get(1)));
     }
 

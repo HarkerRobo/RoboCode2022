@@ -10,13 +10,20 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.indexer.IndexerManual;
+import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,8 +43,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     field = new Field2d();
     SmartDashboard.putData(field);
+    new Compressor(PneumaticsModuleType.REVPH).disable();
     // default commands are commands that are always running on the robot
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
+    CommandScheduler.getInstance().setDefaultCommand(Indexer.getInstance(), new IndexerManual());
+    CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
     Drivetrain.getInstance().readCANCoders();
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
@@ -60,7 +70,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     Drivetrain.getInstance().getOdometry().update(
-      Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()), 
+      Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getAngle()), 
       Drivetrain.getInstance().getTopLeft().getState(),
       Drivetrain.getInstance().getTopRight().getState(), 
       Drivetrain.getInstance().getBottomLeft().getState(), 
@@ -81,7 +91,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
-    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
+    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getPigeon().getAngle());
     SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
     SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
     SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));

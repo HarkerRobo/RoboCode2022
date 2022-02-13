@@ -5,14 +5,14 @@ import frc.robot.subsystems.Intake;
 import harkerrobolib.commands.IndefiniteCommand;
 
 public class IndexerManual extends IndefiniteCommand {
-    private double SPEED = 0;
+    private double SPEED = 0.4;
     
     public IndexerManual() {
         addRequirements(Indexer.getInstance());
     }
 
     public void execute() {
-        if(Intake.getInstance().getCurrentRPS() > Intake.MIN_RUNNING_RPS){
+        if(Intake.getInstance().state == 1){
             if(!Indexer.getInstance().topOccupied())
                 Indexer.getInstance().setPercentOutputTop(SPEED);
             else
@@ -21,6 +21,9 @@ public class IndexerManual extends IndefiniteCommand {
                 Indexer.getInstance().setPercentOutputBottom(0);
             else
                 Indexer.getInstance().setPercentOutputBottom(SPEED);
+        } else if(Intake.getInstance().state == -1){
+            Indexer.getInstance().setPercentOutputTop(-SPEED);
+            Indexer.getInstance().setPercentOutputBottom(-SPEED);
         }
         else {
             if(!Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) {

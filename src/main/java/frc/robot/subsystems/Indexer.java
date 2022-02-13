@@ -17,7 +17,7 @@ public class Indexer extends SubsystemBase {
     private HSFalcon top;
     private HSFalcon bottom;
 
-    private static final boolean TOP_INVERT = false;
+    private static final boolean TOP_INVERT = true;
     private static final boolean BOTTOM_INVERT = false;
 
     private ColorSensorV3 colorSensor;
@@ -26,7 +26,7 @@ public class Indexer extends SubsystemBase {
     private Indexer() {
         top = new HSFalcon(RobotMap.INDEXER_TOP);
         bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM);
-        colorSensor = new ColorSensorV3(Port.kOnboard);
+        // colorSensor = new ColorSensorV3(Port.kOnboard);
         init();
     }
 
@@ -38,11 +38,11 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean bottomOccupied() {
-        return colorSensor.getProximity() > 1024;
+        return false;//colorSensor.getProximity() > 1024;
     }
 
     public boolean topOccupied() {
-        return !topProximity.get();
+        return false;//!topProximity.get();
     }
 
     public Color getColor() {

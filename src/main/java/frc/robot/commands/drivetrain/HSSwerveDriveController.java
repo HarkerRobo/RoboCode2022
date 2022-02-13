@@ -43,9 +43,9 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public void initialize() {
         super.initialize();
         if(isFirst && initHeading != null) {
-            Drivetrain.getInstance().getPigeon().setFusedHeading(initHeading.getDegrees());
-            Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(),Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())),
-                Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading()));
+            // Drivetrain.getInstance().getPigeon().setFusedHeading(initHeading.getDegrees()); //TODO
+            Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(),Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getAngle())),
+                Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getAngle()));
         }
         startTime = Timer.getFPGATimestamp();
     }
@@ -55,7 +55,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         if(Timer.getFPGATimestamp() - startTime < TURN_TIME) {
             super.initialize();
             Pose2d pose = trajectory.getStates().get(0).poseMeters;
-            ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(pose.getX()*0.00001, pose.getY()*0.00001, 0, Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getFusedHeading()));
+            ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(pose.getX()*0.00001, pose.getY()*0.00001, 0, Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getAngle()));
             Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
         }
         else {  
@@ -71,7 +71,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     @Override
     public void end(boolean interrupted){
         super.end(interrupted);
-        SwerveManual.pigeonAngle = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        SwerveManual.pigeonAngle = Drivetrain.getInstance().getPigeon().getAngle();
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0))), true);
     }

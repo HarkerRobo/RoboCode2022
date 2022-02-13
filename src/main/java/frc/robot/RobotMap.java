@@ -20,11 +20,11 @@ public class RobotMap {
     public static final int INTAKE_FORWARD = 3;
     public static final int INTAKE_BACKWARD = 7;
 
-    public static final int SHOOTER_MASTER = 10;
-    public static final int SHOOTER_FOLLOWER = 11;  // change
+    public static final int SHOOTER_MASTER = 11;
+    public static final int SHOOTER_FOLLOWER = 12;  // change
 
-    public static final int INDEXER_TOP = 0;
-    public static final int INDEXER_BOTTOM = 0;
+    public static final int INDEXER_TOP = 10;
+    public static final int INDEXER_BOTTOM = 9;
 
     public static final double LOOP_TIME = 0.02; // 20ms
 

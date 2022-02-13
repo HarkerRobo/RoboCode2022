@@ -30,6 +30,8 @@ public class Intake extends SubsystemBase {
     private static final double MEASUREMENT_STANDARD_DEVIATION = 0.005;
     private static final double LOOPTIME = 0.02;
 
+    public int state = 0;
+
     public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kReverse;
     public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kForward;
     
@@ -54,7 +56,7 @@ public class Intake extends SubsystemBase {
    
     public void setPercentOutput(double output) {
         if (Math.abs(output) > 0.8)
-            output = 0.8;
+            output = 0.8 * Math.signum(output);
          motor.set(ControlMode.PercentOutput, output);
     }
 

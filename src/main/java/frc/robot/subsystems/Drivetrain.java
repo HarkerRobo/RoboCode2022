@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -61,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
 
     private boolean fieldCentric = true;
 
-    private HSPigeon pigeon;
+    private WPI_Pigeon2 pigeon;
 
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
@@ -74,12 +76,13 @@ public class Drivetrain extends SubsystemBase {
                 ROTATION_INVERT[i], TRANSLATION_INVERT[i]);
         }
         
-        pigeon = new HSPigeon(RobotMap.PIGEON_ID);
-        pigeon.setFusedHeading(0);//-RobotMap.PIGEON_CONSTANT * pigeon.getFusedHeading());
+        pigeon = new WPI_Pigeon2(RobotMap.PIGEON_ID);
+        pigeon.zeroGyroBiasNow();
+        // pigeon.setFusedHeading(0);//-RobotMap.PIGEON_CONSTANT * pigeon.getAngle());
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getFusedHeading()), new Pose2d(0, 0, new Rotation2d()));
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getAngle()), new Pose2d(0, 0, new Rotation2d()));
     }
 
     /**
@@ -104,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
         return fieldCentric;
     }
 
-    public PigeonIMU getPigeon(){
+    public WPI_Pigeon2 getPigeon(){
         return pigeon;
     }
 

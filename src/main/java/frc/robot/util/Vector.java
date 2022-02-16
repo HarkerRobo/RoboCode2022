@@ -21,7 +21,7 @@ public class Vector {
         return Math.sqrt((x * x) + (y * y));
     }
 
-    public double getAngle() {
+    public double getYaw() {
         return Math.toDegrees(Math.atan2(y, x));
     }
 

@@ -1,7 +1,6 @@
 package frc.robot.commands.intake;
 
 import harkerrobolib.commands.IndefiniteCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.subsystems.Intake;
 
@@ -26,7 +25,7 @@ public class IntakeManual extends IndefiniteCommand {
             Intake.getInstance().state = -1;
         }
         else {
-            Intake.getInstance().setPercentOutput(0); 
+            Intake.getInstance().setPercentOutput(0);
             Intake.getInstance().state = 0;
         }
 

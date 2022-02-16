@@ -64,6 +64,7 @@ public class Intake extends SubsystemBase {
         loop.set(vel);
         loop.update(getCurrentRPS());
         setPercentOutput(loop.getOutput());
+        // state = (int)Math.signum(vel);
         // setPercentOutput(vel);
     }
 

@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
-import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,8 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.util.SwerveModule;
-
-import harkerrobolib.wrappers.HSPigeon;
 
 /**
  * Specifies a drivetrain with 4 swerve modules
@@ -77,12 +73,12 @@ public class Drivetrain extends SubsystemBase {
         }
         
         pigeon = new WPI_Pigeon2(RobotMap.PIGEON_ID);
-        pigeon.zeroGyroBiasNow();
-        // pigeon.setFusedHeading(0);//-RobotMap.PIGEON_CONSTANT * pigeon.getAngle());
+        pigeon.setYaw(0);
+        // pigeon.setFusedHeading(0);//-RobotMap.PIGEON_CONSTANT * pigeon.getYaw());
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getAngle()), new Pose2d(0, 0, new Rotation2d()));
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(0, 0, new Rotation2d()));
     }
 
     /**

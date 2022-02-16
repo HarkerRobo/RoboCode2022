@@ -89,19 +89,19 @@ public class Trajectories {
     public static List<Trajectory> generateDirectTrajectories(Translation2d[] input){
         List<Trajectory> out = new ArrayList<Trajectory>();
         out.add(TrajectoryGenerator.generateTrajectory(List.of(
-            new Pose2d(input[0].getX(),input[0].getY(),getAngle(input[1].minus(input[0]))),
-            new Pose2d(input[1].getX(),input[1].getY(),getAngle(input[1].minus(input[0])))
+            new Pose2d(input[0].getX(),input[0].getY(),getYaw(input[1].minus(input[0]))),
+            new Pose2d(input[1].getX(),input[1].getY(),getYaw(input[1].minus(input[0])))
         ), config));
         for(int i=1;i<input.length-1;i++) {
             out.add(TrajectoryGenerator.generateTrajectory(List.of(
-                new Pose2d(input[i].getX(),input[i].getY(),getAngle(input[i+1].minus(input[i]))),
-                new Pose2d(input[i+1].getX(),input[i+1].getY(),getAngle(input[i+1].minus(input[i])))
+                new Pose2d(input[i].getX(),input[i].getY(),getYaw(input[i+1].minus(input[i]))),
+                new Pose2d(input[i+1].getX(),input[i+1].getY(),getYaw(input[i+1].minus(input[i])))
             ), config));
         }
         return out;
     }
 
-    public static Rotation2d getAngle(Translation2d subtracted) {
+    public static Rotation2d getYaw(Translation2d subtracted) {
         double angle = Math.toDegrees(Math.atan2(subtracted.getY(), subtracted.getX()));
         angle = (angle < 0) ? angle + 360 : angle;
         return Rotation2d.fromDegrees(angle);

@@ -1,6 +1,5 @@
 package frc.robot.commands.shooter;
 
-import frc.robot.OI;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -14,7 +13,7 @@ public class ShooterManual extends IndefiniteCommand {
     }
 
     public void execute() {
-        Shooter.getInstance().setPercentOutput(OI.getInstance().getDriverGamepad().getRightTrigger() * 0.8);
+        // Shooter.getInstance().setPercentOutput(OI.getInstance().getDriverGamepad().getRightTrigger() * 0.8);
     }
 
     public void end() {

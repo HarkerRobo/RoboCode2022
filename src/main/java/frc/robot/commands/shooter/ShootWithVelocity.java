@@ -18,7 +18,7 @@ public class ShootWithVelocity extends IndefiniteCommand {
     public void execute() {
         vel = SmartDashboard.getNumber("desired velocity", 0);
         Shooter.getInstance().setVelocity(vel);
-        SmartDashboard.putNumber("current vel", Shooter.getInstance().getRawVelocity());
+        SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
         SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());
     }

@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.indexer.IndexerManual;
@@ -24,6 +23,7 @@ import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     Drivetrain.getInstance().getOdometry().update(
-      Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getAngle()), 
+      Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getYaw()), 
       Drivetrain.getInstance().getTopLeft().getState(),
       Drivetrain.getInstance().getTopRight().getState(), 
       Drivetrain.getInstance().getBottomLeft().getState(), 
@@ -78,6 +78,8 @@ public class Robot extends TimedRobot {
     );
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
     field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
+
+    SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getEncoder().get());
 
     SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
@@ -91,7 +93,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
-    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getPigeon().getAngle());
+    SmartDashboard.putNumber("pigeon angle", -Drivetrain.getInstance().getPigeon().getYaw());
     SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
     SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
     SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));

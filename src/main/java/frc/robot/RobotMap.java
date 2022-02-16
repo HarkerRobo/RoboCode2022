@@ -10,7 +10,7 @@ public class RobotMap {
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
 
-    public static final int[] TRANSLATION_IDS = {0, 2, 4, 6}; // TL, TR, BL, BR
+    public static final int[] TRANSLATION_IDS = {13, 2, 4, 6}; // TL, TR, BL, BR
     public static final int[] ROTATION_IDS = {1, 3, 5, 7}; // TL, TR, BL, BR
     public static final int[] ROTATION_CANCODER_IDS = {0, 1, 2, 3}; //TL, TR, BL, BR
 
@@ -21,7 +21,14 @@ public class RobotMap {
     public static final int INTAKE_BACKWARD = 7;
 
     public static final int SHOOTER_MASTER = 11;
-    public static final int SHOOTER_FOLLOWER = 12;  // change
+    public static final int SHOOTER_FOLLOWER = 12;
+    public static final int SHOOTER_MASTER_ENCODER = 8;
+    public static final int SHOOTER_FOLLOWER_ENCODER = 9;
+
+    public static final int HOOD = 14;
+
+    public static final int CLIMBER_MASTER = 11;
+    public static final int CLIMBER_FOLLOWER = 12;  // change
 
     public static final int INDEXER_TOP = 10;
     public static final int INDEXER_BOTTOM = 9;

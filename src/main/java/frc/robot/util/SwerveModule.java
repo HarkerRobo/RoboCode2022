@@ -48,6 +48,7 @@ public class SwerveModule {
 	private static final double DRIVE_KV = 2.2829;
 	private static final double DRIVE_KA = 0.1455;
 
+	private static final double MAX_ERROR = 0.05;  
 	private static final double MAX_CONTROL_EFFORT = 10; // volts 
     private static final double MODEL_STANDARD_DEVIATION = 0.4;
     private static final double ENCODER_STANDARD_DEVIATION = 0.02;
@@ -75,7 +76,7 @@ public class SwerveModule {
 		rotationEncoder = new CANCoder(rotationEncoderID);
 		rotationMotorInit();
 		translationMotorInit();
-		translationLoop = new SimpleVelocitySystem(DRIVE_KS, DRIVE_KV, DRIVE_KA, MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
+		translationLoop = new SimpleVelocitySystem(DRIVE_KS, DRIVE_KV, DRIVE_KA, MAX_ERROR, MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
 		state = new SwerveModuleState();
 	}
 

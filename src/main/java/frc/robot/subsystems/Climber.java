@@ -12,6 +12,9 @@ public class Climber extends SubsystemBase {
     private static final boolean FOLLOWER_INVERTED = false;
 
     private static final double MAX_HEIGHT = 100000; //change
+    private static final double MIDDLE_HEIGHT = 0; //change
+    private static final double TOP_HEIGHT = 0; //change
+    private static final double TRAVERSAL_HEIGHT = 0; //change
 
     private HSFalcon master;
     private HSFalcon follower;

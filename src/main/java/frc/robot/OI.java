@@ -1,9 +1,15 @@
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.shooter.ShootWithVelocity;
+import frc.robot.commands.shooter.ZeroHood;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.HSGamepad;
 import harkerrobolib.wrappers.XboxGamepad;
 
@@ -42,6 +48,14 @@ public class OI {
             Drivetrain.getInstance().getPigeon().setYaw(0); 
             SwerveManual.pigeonAngle=0;
         }));
+
+        driverGamepad.getButtonB().whilePressed(new MoveBallsToShooter());
+
+        driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
+
+        driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> Shooter.getInstance().setHood(0.3)));
+        driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> Shooter.getInstance().setHood(0.6)));
+        driverGamepad.getUpDPadButton().whilePressed(new InstantCommand(() -> Shooter.getInstance().setHood(0.9)));
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands

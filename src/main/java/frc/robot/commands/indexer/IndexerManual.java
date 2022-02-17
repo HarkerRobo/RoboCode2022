@@ -5,7 +5,7 @@ import frc.robot.subsystems.Intake;
 import harkerrobolib.commands.IndefiniteCommand;
 
 public class IndexerManual extends IndefiniteCommand {
-    private double SPEED = 0.4;
+    private double SPEED = 0.6;
     
     public IndexerManual() {
         addRequirements(Indexer.getInstance());

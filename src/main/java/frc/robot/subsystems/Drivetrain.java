@@ -24,9 +24,9 @@ public class Drivetrain extends SubsystemBase {
     private static final boolean[] ROTATION_SENSOR_PHASE = {false, false, false, false};
     private static final boolean[] TRANSLATION_SENSOR_PHASE = {false, false, false, false};
     private static final boolean[] ROTATION_INVERT = {false, false, false, false};
-    private static final boolean[] TRANSLATION_INVERT = {false, false, false, false};
+    private static final boolean[] TRANSLATION_INVERT = {false, true, true, false};
 
-    public static final double[] OFFSETS = {263.935547, 109.951172, 178.330078, 32.255859};
+    public static final double[] OFFSETS = {263.935547, 178.330078, 109.951172, 32.255859};
 
     public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
     public static final double DT_LENGTH = 0.5969; // 0.88265

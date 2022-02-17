@@ -24,14 +24,14 @@ public class SimpleVelocitySystem {
     private KalmanFilter<N1, N1, N1> filter;
     private LinearSystemLoop<N1, N1, N1> loop;
 
-    public SimpleVelocitySystem(double kS, double kV, double kA, double maxcontroleffort, double modelstandarddev, double encoderstandarddev, double looptime) {
+    public SimpleVelocitySystem(double kS, double kV, double kA, double maxError, double maxcontroleffort, double modelstandarddev, double encoderstandarddev, double looptime) {
         this.kS = kS;
         maxControlEffort = maxcontroleffort;
         modelStandardDeviation = modelstandarddev;
         encoderStandardDeviation = encoderstandarddev;
         
         system = LinearSystemId.identifyVelocitySystem(kV, kA);
-        regulator = new LinearQuadraticRegulator<N1,N1,N1>(system, VecBuilder.fill(0.05), VecBuilder.fill(maxControlEffort), looptime);
+        regulator = new LinearQuadraticRegulator<N1,N1,N1>(system, VecBuilder.fill(maxError), VecBuilder.fill(maxControlEffort), looptime);
         filter = new KalmanFilter<N1, N1, N1>(Nat.N1(), Nat.N1(), system, VecBuilder.fill(modelStandardDeviation), VecBuilder.fill(encoderStandardDeviation), looptime);
         loop = new LinearSystemLoop<N1, N1, N1>(system, regulator, filter, maxControlEffort, looptime);
     }

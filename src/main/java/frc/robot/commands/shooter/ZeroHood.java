@@ -11,7 +11,7 @@ public class ZeroHood extends CommandBase {
     }
 
     public void execute(){
-        Shooter.getInstance().getHood().set(ControlMode.PercentOutput, -0.05);
+        Shooter.getInstance().getHood().set(ControlMode.PercentOutput, -0.08);
     }
 
     @Override

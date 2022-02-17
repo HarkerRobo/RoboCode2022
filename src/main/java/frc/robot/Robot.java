@@ -10,9 +10,11 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +36,7 @@ import frc.robot.subsystems.Shooter;
  */
 public class Robot extends TimedRobot {
   Field2d field;
+  private PowerDistribution pd;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -43,7 +46,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     field = new Field2d();
     SmartDashboard.putData(field);
-    new Compressor(PneumaticsModuleType.REVPH).disable();
+    // new Compressor(PneumaticsModuleType.REVPH).disable();
     // default commands are commands that are always running on the robot
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
     CommandScheduler.getInstance().setDefaultCommand(Indexer.getInstance(), new IndexerManual());
@@ -53,8 +56,11 @@ public class Robot extends TimedRobot {
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
     SmartDashboard.putNumber("desired velocity", 0);
+    SmartDashboard.putNumber("desired hood angle", 0.5);
     SmartDashboard.putNumber("desired angle", 90);
     SmartDashboard.putNumber("intake RPS", 0.1);
+    pd = new PowerDistribution();
+    NetworkTableInstance.getDefault().setUpdateRate(0.02);
   }
 
   /**
@@ -76,10 +82,11 @@ public class Robot extends TimedRobot {
       Drivetrain.getInstance().getBottomLeft().getState(), 
       Drivetrain.getInstance().getBottomRight().getState()
     );
+    pd.setSwitchableChannel(true);
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
     field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
 
-    SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getEncoder().get());
+    SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
 
     SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
@@ -100,6 +107,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
     SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
     SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
+    SmartDashboard.putNumber("cur hood pos", Shooter.getInstance().getHood().getSelectedSensorPosition());
+    SmartDashboard.putNumber("cur hood pid error", Shooter.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
   }
 

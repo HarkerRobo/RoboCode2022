@@ -41,6 +41,8 @@ public class SwerveManual extends IndefiniteCommand {
             translationx = 0;
             translationy = 0;
             if (Math.abs(angularVelocity) < Drivetrain.MIN_OUTPUT) {
+                // translationx = 0.01;
+                // angularVelocity = 0;
                 angularVelocity = 0.001;//Drivetrain.getInstance().getPigeon().getYaw();
             }
         }
@@ -58,11 +60,11 @@ public class SwerveManual extends IndefiniteCommand {
 
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
-            angularVelocity = PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getPigeon().getYaw());
+            angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getPigeon().getYaw());
             SmartDashboard.putBoolean("holding pigeon angle", true);
         }
         else {
-            pigeonAngle = -Drivetrain.getInstance().getPigeon().getYaw();
+            pigeonAngle = Drivetrain.getInstance().getPigeon().getYaw();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
 
@@ -70,7 +72,7 @@ public class SwerveManual extends IndefiniteCommand {
         SmartDashboard.putNumber("angular vel", angularVelocity);
         ChassisSpeeds chassis;
         if(Drivetrain.getInstance().isFieldCentric())
-            chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getYaw()));
+            chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
         else
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(0));
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);

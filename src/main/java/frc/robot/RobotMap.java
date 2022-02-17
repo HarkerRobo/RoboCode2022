@@ -10,9 +10,9 @@ public class RobotMap {
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
 
-    public static final int[] TRANSLATION_IDS = {13, 2, 4, 6}; // TL, TR, BL, BR
-    public static final int[] ROTATION_IDS = {1, 3, 5, 7}; // TL, TR, BL, BR
-    public static final int[] ROTATION_CANCODER_IDS = {0, 1, 2, 3}; //TL, TR, BL, BR
+    public static final int[] TRANSLATION_IDS = {13, 4, 2, 6}; // TL, TR, BL, BR
+    public static final int[] ROTATION_IDS = {1, 5, 3, 7}; // TL, TR, BL, BR
+    public static final int[] ROTATION_CANCODER_IDS = {0, 2, 1, 3}; //TL, TR, BL, BR
 
     public static final int PIGEON_ID = 0;
 

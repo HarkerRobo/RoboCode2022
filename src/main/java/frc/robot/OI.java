@@ -1,7 +1,5 @@
 package frc.robot;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.indexer.MoveBallsToShooter;

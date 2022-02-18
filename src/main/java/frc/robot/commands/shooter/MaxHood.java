@@ -5,13 +5,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ZeroHood extends CommandBase {
-    public ZeroHood(){
+public class MaxHood extends CommandBase {
+    public MaxHood(){
         addRequirements(Shooter.getInstance());
     }
 
     public void execute(){
-        Shooter.getInstance().getHood().set(ControlMode.PercentOutput, -0.08);
+        Shooter.getInstance().getHood().set(ControlMode.PercentOutput, 0.08);
     }
 
     @Override
@@ -22,6 +22,5 @@ public class ZeroHood extends CommandBase {
     public void end(boolean interrupted){
         Shooter.getInstance().getHood().set(ControlMode.PercentOutput, 0);
         Shooter.getInstance().setHoodOffset();
-        Shooter.getInstance().getHood().setSelectedSensorPosition(0);
     }
 }

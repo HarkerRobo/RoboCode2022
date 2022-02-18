@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.Units;
 import frc.robot.util.SwerveModule;
 
 /**
@@ -145,7 +146,7 @@ public class Drivetrain extends SubsystemBase {
     public void readCANCoders() {
         for(int i = 0; i < 4; i++){
             modules[i].getRotationMotor().setSelectedSensorPosition(
-                (modules[i].getCanCoder().getAbsolutePosition() - OFFSETS[i]) * SwerveModule.ENCODER_TICKS / 360 * ROTATION_GEAR_RATIO);
+                (modules[i].getCanCoder().getAbsolutePosition() - OFFSETS[i]) / Units.FALCON_ENCODER_TO_DEGREE * ROTATION_GEAR_RATIO);
         }
     }
 }

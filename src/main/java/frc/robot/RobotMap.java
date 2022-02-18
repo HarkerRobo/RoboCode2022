@@ -22,10 +22,11 @@ public class RobotMap {
 
     public static final int SHOOTER_MASTER = 11;
     public static final int SHOOTER_FOLLOWER = 12;
-    public static final int SHOOTER_MASTER_ENCODER = 8;
-    public static final int SHOOTER_FOLLOWER_ENCODER = 9;
+    public static final int SHOOTER_ENCODER_A = 8;
+    public static final int SHOOTER_ENCODER_B = 9;
 
     public static final int HOOD = 14;
+    public static final int HOOD_ENCODER = 7;
 
     public static final int CLIMBER_MASTER = 11;
     public static final int CLIMBER_FOLLOWER = 12;  // change

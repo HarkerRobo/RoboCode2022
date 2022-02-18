@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import frc.robot.RobotMap;
+import frc.robot.Units;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.HSFalcon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -11,10 +12,8 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
-import harkerrobolib.util.Conversions.SpeedUnit;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import harkerrobolib.util.Conversions;
 
 /**
  * Specifies a rotation and translation motor, using PID to correct the
@@ -42,7 +41,6 @@ public class SwerveModule {
 	private static final double ANGLE_P = 0.23082;
 	private static final double ANGLE_I = 0;
 	private static final double ANGLE_D = 0;
-	public static final int ENCODER_TICKS = 2048;
 
 	private static final double DRIVE_KS = 0.59694;
 	private static final double DRIVE_KV = 2.2829;
@@ -132,11 +130,11 @@ public class SwerveModule {
 	}
 
 	public double getRotationAngle() {
-		return rotation.getSelectedSensorPosition()*(360.0/ENCODER_TICKS) / Drivetrain.ROTATION_GEAR_RATIO;
+		return rotation.getSelectedSensorPosition()*(Units.FALCON_ENCODER_TO_DEGREE) / Drivetrain.ROTATION_GEAR_RATIO;
 	}
 
 	public double getTranslationVelocity() {
-		return Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, translation.getSelectedSensorVelocity(), SpeedUnit.FEET_PER_SECOND, Drivetrain.WHEEL_DIAMETER, ENCODER_TICKS) * Drivetrain.FEET_TO_METER / Drivetrain.TRANSLATION_GEAR_RATIO;
+		return translation.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / 10 / Units.WHEEL_ROT_TO_METER / Drivetrain.TRANSLATION_GEAR_RATIO;
 	}
 	
 	public SwerveModuleState getState() {
@@ -169,7 +167,7 @@ public class SwerveModule {
 			angle += 180;
 			speed *= -1;
 		}
-		rotation.set(ControlMode.Position, angle * ENCODER_TICKS / 360 * Drivetrain.ROTATION_GEAR_RATIO);
+		rotation.set(ControlMode.Position, angle / Units.FALCON_ENCODER_TO_DEGREE * Drivetrain.ROTATION_GEAR_RATIO);
 		if(isPercentOutput)
 			speed /= Drivetrain.MAX_DRIVE_VEL;
 		setDriveOutput(speed, isPercentOutput);

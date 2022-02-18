@@ -1,12 +1,18 @@
 package frc.robot;
 
+import java.time.Instant;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.hood.MaxHood;
+import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.shooter.ShootWithVelocity;
-import frc.robot.commands.shooter.ZeroHood;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.HSGamepad;
 import harkerrobolib.wrappers.XboxGamepad;
@@ -49,11 +55,13 @@ public class OI {
 
         driverGamepad.getButtonB().whilePressed(new MoveBallsToShooter());
 
+        // driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
         driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
+        // driverGamepad.getRightDPadButton().whenPressed(new MaxHood());
 
-        driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> Shooter.getInstance().setHood(0.3)));
-        driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> Shooter.getInstance().setHood(0.6)));
-        driverGamepad.getUpDPadButton().whilePressed(new InstantCommand(() -> Shooter.getInstance().setHood(0.9)));
+        driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.3)));
+        driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.6)));
+        driverGamepad.getUpDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.9)));
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands

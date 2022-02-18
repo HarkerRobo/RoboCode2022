@@ -18,12 +18,15 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
 import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -49,6 +52,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
     CommandScheduler.getInstance().setDefaultCommand(Indexer.getInstance(), new IndexerManual());
     CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
+    CommandScheduler.getInstance().setDefaultCommand(Hood.getInstance(), new HoodManual());
     Drivetrain.getInstance().readCANCoders();
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
@@ -57,6 +61,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired hood angle", 0.5);
     SmartDashboard.putNumber("desired angle", 90);
     SmartDashboard.putNumber("intake RPS", 0.1);
+    SmartDashboard.putNumber("desired hood pos", 0);
     pd = new PowerDistribution();
     NetworkTableInstance.getDefault().setUpdateRate(0.02);
   }
@@ -85,29 +90,33 @@ public class Robot extends TimedRobot {
     field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
 
     SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
+    SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
 
-    SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
-    SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
-    SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
-    SmartDashboard.putNumber("br abs", Drivetrain.getInstance().getBottomRight().getCanCoder().getAbsolutePosition());
+    // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
+    // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
+    // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
+    // SmartDashboard.putNumber("br abs", Drivetrain.getInstance().getBottomRight().getCanCoder().getAbsolutePosition());
 
-    SmartDashboard.putNumber("tl angle", Drivetrain.getInstance().getTopLeft().getRotationAngle());
-    SmartDashboard.putNumber("tr angle", Drivetrain.getInstance().getTopRight().getRotationAngle());
-    SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
-    SmartDashboard.putNumber("br angle", Drivetrain.getInstance().getBottomRight().getRotationAngle());
+    // SmartDashboard.putNumber("tl angle", Drivetrain.getInstance().getTopLeft().getRotationAngle());
+    // SmartDashboard.putNumber("tr angle", Drivetrain.getInstance().getTopRight().getRotationAngle());
+    // SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
+    // SmartDashboard.putNumber("br angle", Drivetrain.getInstance().getBottomRight().getRotationAngle());
 
-    SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
+    // SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
     SmartDashboard.putNumber("pigeon angle", -Drivetrain.getInstance().getPigeon().getYaw());
-    SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
-    SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
-    SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
-    SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
+    // SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
+    // SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
+    // SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
+    // SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
     SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
     SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
-    SmartDashboard.putNumber("cur hood pos", Shooter.getInstance().getHood().getSelectedSensorPosition());
-    SmartDashboard.putNumber("cur hood pid error", Shooter.getInstance().getHood().getClosedLoopError());
+    SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
+    SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
+    SmartDashboard.putNumber("hood pos pwm", Hood.getInstance().getHoodEncoderPos());
+    SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
+    SmartDashboard.putNumber("hood max", Hood.getInstance().getMaxHoodPos());
   }
 
   /**

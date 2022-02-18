@@ -44,10 +44,11 @@ public class Limelight {
     public static final int NO_SNAPSHOT = 0;
     public static final int SNAPSHOT = 1;
 
-    public static final int LIMELIGHT_ANGLE=18;
+    public static final int LIMELIGHT_ANGLE = 38;
     
     private static double[] nullArr;    
-    public static final double LIMELIGHT_HEIGHT=1.69;
+    public static final double LIMELIGHT_HEIGHT = 0.94;
+    public static final double TARGET_HEIGHT = 2.64;
 
 
     /**
@@ -298,5 +299,9 @@ public class Limelight {
 
     public static void setPipeline(int pipeline) {
         table.getEntry(PIPELINE_KEY).setNumber(pipeline);
+    }
+
+    public static double getDistance() {
+        return (TARGET_HEIGHT - LIMELIGHT_HEIGHT)/Math.tan(Math.toRadians(getTy() + LIMELIGHT_ANGLE));
     }
 }

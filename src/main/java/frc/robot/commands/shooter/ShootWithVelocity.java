@@ -1,6 +1,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -18,7 +19,7 @@ public class ShootWithVelocity extends IndefiniteCommand {
     public void execute() {
         vel = SmartDashboard.getNumber("desired velocity", 0);
         double angle = SmartDashboard.getNumber("desired hood angle", 0.5);
-        Shooter.getInstance().setHood(angle);
+        // Hood.getInstance().setHood(angle);
         Shooter.getInstance().setVelocity(vel);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());

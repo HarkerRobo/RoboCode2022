@@ -43,7 +43,7 @@ public class OI {
         // }, Intake.getInstance()));
         // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
-        driverGamepad.getButtonA().whilePressed(new ShootWithVelocity(15));
+        driverGamepad.getButtonA().whilePressed(new ShootWithVelocity());
         // driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
         // driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
         driverGamepad.getButtonY().whilePressed(new ToggleIntake());
@@ -57,7 +57,7 @@ public class OI {
 
         // driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
         driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
-        // driverGamepad.getRightDPadButton().whenPressed(new MaxHood());
+        driverGamepad.getRightDPadButton().whenPressed(new MaxHood());
 
         driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.3)));
         driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.6)));

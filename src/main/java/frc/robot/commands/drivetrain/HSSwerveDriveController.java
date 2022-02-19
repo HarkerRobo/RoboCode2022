@@ -42,8 +42,8 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         super.initialize();
         if(isFirst && initHeading != null) {
             Drivetrain.getInstance().getPigeon().setYaw(initHeading.getDegrees());
-            Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getYaw())),
-                Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getYaw()));
+            Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), Drivetrain.getInstance().getHeadingRotation()),
+            Drivetrain.getInstance().getHeadingRotation());
         }
         startTime = Timer.getFPGATimestamp();
     }
@@ -53,7 +53,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         if(Timer.getFPGATimestamp() - startTime < TURN_TIME) {
             super.initialize();
             Pose2d pose = trajectory.getStates().get(0).poseMeters;
-            ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(pose.getX()*0.00001, pose.getY()*0.00001, 0, Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getYaw()));
+            ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(pose.getX()*0.00001, pose.getY()*0.00001, 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getHeading()));
             Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
         }
         else {  
@@ -69,7 +69,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     @Override
     public void end(boolean interrupted){
         super.end(interrupted);
-        SwerveManual.pigeonAngle = -Drivetrain.getInstance().getPigeon().getYaw();
+        SwerveManual.pigeonAngle = Drivetrain.getInstance().getHeading();
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0))), true);
     }

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.Units;
+import frc.robot.util.InterpolatedTreeMap;
 import frc.robot.util.SimpleVelocitySystem;
 import harkerrobolib.wrappers.HSFalcon;
 
@@ -38,6 +39,7 @@ public class Shooter extends SubsystemBase {
     public static final double SHOOTER_REV_TIME = 1.0;
 
     private SimpleVelocitySystem velocitySystem;
+    public static InterpolatedTreeMap referencePoints;
     
     private HSFalcon master;
     private HSFalcon follower;
@@ -49,6 +51,18 @@ public class Shooter extends SubsystemBase {
         shooterEncoder = new Encoder(RobotMap.SHOOTER_ENCODER_A, RobotMap.SHOOTER_ENCODER_B);
         initMotors();
         velocitySystem = new SimpleVelocitySystem(kS, kV, kA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
+        referencePoints = new InterpolatedTreeMap();
+        referencePoints.put(0.17, 27.0);
+        referencePoints.put(0.7, 30.0);
+        referencePoints.put(1.0, 31.0);
+        referencePoints.put(1.3, 31.0);
+        referencePoints.put(1.75, 28.0);
+        referencePoints.put(1.98, 29.0);
+        referencePoints.put(2.38, 31.0);
+        referencePoints.put(2.8, 33.0);
+        referencePoints.put(3.24, 33.0);
+        referencePoints.put(3.7, 39.0);
+        referencePoints.put(4.1, 43.0);
     }
 
     public void initMotors() {

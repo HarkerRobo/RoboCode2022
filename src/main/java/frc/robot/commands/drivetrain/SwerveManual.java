@@ -3,6 +3,7 @@ package frc.robot.commands.drivetrain;
 import frc.robot.subsystems.Drivetrain;
 
 import harkerrobolib.commands.IndefiniteCommand;
+import harkerrobolib.util.Limelight;
 import harkerrobolib.util.MathUtil;
 
 import edu.wpi.first.math.filter.Debouncer;
@@ -20,6 +21,7 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER= 1;
     private static final double PIGEON_KP = 0.075;
+    private static final double LIMELIGHT_KP = 0.075;
 
     public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
@@ -60,12 +62,15 @@ public class SwerveManual extends IndefiniteCommand {
 
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
-            angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getPigeon().getYaw());
+            angularVelocity = PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
             SmartDashboard.putBoolean("holding pigeon angle", true);
         }
         else {
-            pigeonAngle = Drivetrain.getInstance().getPigeon().getYaw();
+            pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
+        }
+        if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
+            angularVelocity = LIMELIGHT_KP * Limelight.getTx();
         }
 
         // ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getYaw())));

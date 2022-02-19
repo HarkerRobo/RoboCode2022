@@ -6,7 +6,7 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class MoveBallsToShooter extends IndefiniteCommand {
     
-    public static final double SPEED = 0.6;
+    public static final double SPEED = 0.2;
     
     public MoveBallsToShooter() {
         addRequirements(Indexer.getInstance());

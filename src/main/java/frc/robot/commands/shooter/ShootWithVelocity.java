@@ -3,6 +3,8 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.InterpolatedTreeMap;
+import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 
 /**
@@ -11,15 +13,12 @@ import harkerrobolib.commands.IndefiniteCommand;
 public class ShootWithVelocity extends IndefiniteCommand {
     private double vel;
     
-    public ShootWithVelocity(double velocity) {
-        vel = velocity;
+    public ShootWithVelocity() {
+        vel = Shooter.referencePoints.get((Limelight.isTargetVisible()) ? Limelight.getDistance() : 0.17);
         addRequirements(Shooter.getInstance());
     }
     
     public void execute() {
-        vel = SmartDashboard.getNumber("desired velocity", 0);
-        double angle = SmartDashboard.getNumber("desired hood angle", 0.5);
-        // Hood.getInstance().setHood(angle);
         Shooter.getInstance().setVelocity(vel);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());

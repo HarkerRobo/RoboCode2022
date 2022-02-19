@@ -29,6 +29,8 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double[] OFFSETS = {263.935547, 178.330078, 109.951172, 32.255859};
 
+    public static final boolean isPigeonUp = true;
+
     public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
     public static final double DT_LENGTH = 0.5969; // 0.88265
 
@@ -106,6 +108,14 @@ public class Drivetrain extends SubsystemBase {
 
     public WPI_Pigeon2 getPigeon(){
         return pigeon;
+    }
+
+    public double getHeading(){
+        return (isPigeonUp) ? -pigeon.getYaw() : pigeon.getYaw();
+    }
+
+    public Rotation2d getHeadingRotation() {
+        return Rotation2d.fromDegrees(getHeading());
     }
 
     public SwerveDriveOdometry getOdometry() {

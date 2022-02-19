@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     Drivetrain.getInstance().getOdometry().update(
-      Rotation2d.fromDegrees(-Drivetrain.getInstance().getPigeon().getYaw()), 
+      Drivetrain.getInstance().getHeadingRotation(), 
       Drivetrain.getInstance().getTopLeft().getState(),
       Drivetrain.getInstance().getTopRight().getState(), 
       Drivetrain.getInstance().getBottomLeft().getState(), 
@@ -91,6 +91,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
+    SmartDashboard.putNumber("old limelight distance", Limelight.getOldDistance());
 
     // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
@@ -104,7 +105,7 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
-    SmartDashboard.putNumber("pigeon angle", -Drivetrain.getInstance().getPigeon().getYaw());
+    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getHeading());
     // SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
     // SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
     // SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));

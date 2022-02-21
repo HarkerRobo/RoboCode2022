@@ -11,15 +11,32 @@ import harkerrobolib.commands.IndefiniteCommand;
  * Shoots with a set velocity in m/s
  */
 public class ShootWithVelocity extends IndefiniteCommand {
-    private double vel;
+    private InterpolatedTreeMap referencePoints;
+
+    private double velocity;
     
     public ShootWithVelocity() {
-        vel = Shooter.referencePoints.get((Limelight.isTargetVisible()) ? Limelight.getDistance() : 0.17);
         addRequirements(Shooter.getInstance());
+
+        referencePoints.put(0.17, 27.0);
+        referencePoints.put(0.7, 30.0);
+        referencePoints.put(1.0, 31.0);
+        referencePoints.put(1.3, 31.0);
+        referencePoints.put(1.75, 28.0);
+        referencePoints.put(1.98, 29.0);
+        referencePoints.put(2.38, 31.0);
+        referencePoints.put(2.8, 33.0);
+        referencePoints.put(3.24, 33.0);
+        referencePoints.put(3.7, 39.0);
+        referencePoints.put(4.1, 43.0);
     }
     
     public void execute() {
-        Shooter.getInstance().setVelocity(vel);
+        if(Limelight.isTargetVisible()) {
+            velocity = referencePoints.get(Limelight.getDistance());
+        }
+
+        Shooter.getInstance().setVelocity(velocity);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
         SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());
@@ -28,6 +45,7 @@ public class ShootWithVelocity extends IndefiniteCommand {
 
     @Override
     public void end(boolean interrupted) {
+        velocity = 0;
         Shooter.getInstance().setPercentOutput(0);
     }
 }

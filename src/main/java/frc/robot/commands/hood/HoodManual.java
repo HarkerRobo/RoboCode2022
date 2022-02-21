@@ -11,19 +11,23 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    public static final double HOOD_KP = 4; //change
-    public static final double HOOD_KI = 0;//0.2; //change
-    public static final double HOOD_KD = 2;//0.4; //change
-    public static final double HOOD_IZONE = 100000; //change
-    public static final double HOOD_PID_TOLERANCE = 0.01; //change
-    private static PIDController hoodController;
-    private static InterpolatedTreeMap referencePoints;
+    private static final double HOOD_KP = 4; 
+    private static final double HOOD_KI = 0;
+    private static final double HOOD_KD = 2; 
+    private static final double HOOD_IZONE = 100000; 
+    private static final double GRAVITY_FF = 0.05;  
+    
+    private double hoodPosition;
 
+    private PIDController hoodController;
+    private InterpolatedTreeMap referencePoints;
     
     public HoodManual(){
         addRequirements(Hood.getInstance());
+
         hoodController = new PIDController(HOOD_KP, HOOD_KI, HOOD_KD);
         hoodController.setIntegratorRange(-HOOD_IZONE, HOOD_IZONE);
+
         referencePoints = new InterpolatedTreeMap();
         referencePoints.put(0.17, 0.1);
         referencePoints.put(0.7, 0.2655);
@@ -43,8 +47,12 @@ public class HoodManual extends IndefiniteCommand{
     
     public void execute() {
         if(!Hood.isZeroed) return;
-        double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), 
-        (Limelight.isTargetVisible()) ? referencePoints.get(Limelight.getDistance()) : 0.1) + 0.05;
+
+        if(Limelight.isTargetVisible()) {
+            hoodPosition = referencePoints.get(Limelight.getDistance());
+        }
+
+        double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition) + GRAVITY_FF;
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, controlEffort);
         SmartDashboard.putNumber("hood pid setpoint", hoodController.getSetpoint());
         SmartDashboard.putNumber("hood pid error", hoodController.getPositionError());
@@ -52,6 +60,7 @@ public class HoodManual extends IndefiniteCommand{
     }
 
     public void end(boolean interrupted) {
+        hoodPosition = 0;
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, 0);
     }
 }

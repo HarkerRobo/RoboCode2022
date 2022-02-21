@@ -91,7 +91,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
-    SmartDashboard.putNumber("old limelight distance", Limelight.getOldDistance());
 
     // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());

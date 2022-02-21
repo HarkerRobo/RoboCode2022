@@ -44,7 +44,7 @@ public class Hood extends SubsystemBase{
     }
 
     public double getHoodEncoderPos() {
-        return 1-(1e6 * hoodEncoder.getPeriod() / Units.MAG_CODER_ENCODER_TICKS);
+        return 1 - (1e6 * hoodEncoder.getPeriod() / Units.MAG_CODER_ENCODER_TICKS);
     }
 
     public void setHoodOffset() {

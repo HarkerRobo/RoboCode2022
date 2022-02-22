@@ -6,7 +6,7 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class MoveBallsToShooter extends IndefiniteCommand {
     
-    public static final double SPEED = 0.2;
+    public static final double SPEED = 0.3;
     
     public MoveBallsToShooter() {
         addRequirements(Indexer.getInstance());
@@ -14,7 +14,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     
     public void execute() {
         if(Math.abs(Shooter.getInstance().getWheelRPS() - 
-            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 5) {
+            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3) {
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

@@ -8,8 +8,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -71,6 +73,7 @@ public class SwerveModule {
 		rotation = new HSFalcon(rotationDriveId);
 		translation = new HSFalcon(translationDriveId);
 		rotationEncoder = new CANCoder(rotationEncoderID);
+		rotationEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 255);
 		rotationMotorInit();
 		translationMotorInit();
 		translationLoop = new SimpleVelocitySystem(DRIVE_KS, DRIVE_KV, DRIVE_KA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
@@ -103,7 +106,7 @@ public class SwerveModule {
 		translation.setNeutralMode(NeutralMode.Brake);
 		translation.setInverted(TRANSLATION_INVERT);
 
-		translation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DRIVE_CURRENT_CONTINUOUS, DRIVE_CURRENT_PEAK, DRIVE_CURRENT_PEAK_DUR));
+		translation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DRIVE_CURRENT_CONTINUOUS, DRIVE_CURRENT_PEAK, DRIVE_CURRENT_PEAK_DUR));
 
 		translation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 		translation.configVelocityMeasurementWindow(1);

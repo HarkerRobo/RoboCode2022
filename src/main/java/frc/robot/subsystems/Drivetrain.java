@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -77,6 +78,8 @@ public class Drivetrain extends SubsystemBase {
         
         pigeon = new WPI_Pigeon2(RobotMap.PIGEON_ID);
         pigeon.setYaw(0);
+        pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_6_SensorFusion, 255);
+        pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.RawStatus_4_Mag, 255);
         // pigeon.setFusedHeading(0);//-RobotMap.PIGEON_CONSTANT * pigeon.getYaw());
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
@@ -158,5 +161,10 @@ public class Drivetrain extends SubsystemBase {
             modules[i].getRotationMotor().setSelectedSensorPosition(
                 (modules[i].getCanCoder().getAbsolutePosition() - OFFSETS[i]) / Units.FALCON_ENCODER_TO_DEGREE * ROTATION_GEAR_RATIO);
         }
+    }
+
+    public void destroyCANCoders() {
+        for(int i=0; i < 4; i++)
+            modules[i].getCanCoder().DestroyObject();
     }
 }

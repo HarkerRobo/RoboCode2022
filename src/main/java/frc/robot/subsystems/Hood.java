@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,7 +17,7 @@ public class Hood extends SubsystemBase{
 
     private static double hoodMaxPos = 1.77;
     private static double hoodEncoderOffset = 0;
-    private static double setPoint = 0;
+    private static final double HOOD_RANGE_DEGREES = 23;
 
     private static final double HOOD_CURRENT_CONTINUOUS = 10;
     private static final double HOOD_CURRENT_PEAK = 10;
@@ -61,6 +62,10 @@ public class Hood extends SubsystemBase{
         while(falconPos - magPos > 0.5)
             magPos++;
         return magPos;
+    }
+
+    public double getHoodPosDegrees() {
+        return getHoodPos()/hoodMaxPos * HOOD_RANGE_DEGREES;
     }
 
     public double getMaxHoodPos() {

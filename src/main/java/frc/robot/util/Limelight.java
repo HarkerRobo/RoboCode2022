@@ -48,7 +48,7 @@ public class Limelight {
     public static final int LIMELIGHT_ANGLE = 43;
     
     private static double[] nullArr;    
-    private static MedianFilter distanceFilter;
+    private static MedianFilter distanceFilter = new MedianFilter(15);
     public static final double LIMELIGHT_HEIGHT = 0.94;
     public static final double TARGET_HEIGHT = 2.64;
 
@@ -59,8 +59,6 @@ public class Limelight {
     private Limelight() {
         table.getEntry(MODE_KEY).setNumber(VISION_MODE);
         table.getEntry(SNAP_KEY).setNumber(NO_SNAPSHOT);
-
-        distanceFilter = new MedianFilter(15);
     }
 
     /**
@@ -307,7 +305,7 @@ public class Limelight {
 
     public static double getDistance() {
         return distanceFilter.calculate(
-            (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(getTy() + LIMELIGHT_ANGLE))
-        );
+            (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / (Math.tan(Math.toRadians(getTy() + LIMELIGHT_ANGLE)) * Math.cos(Math.toRadians(getTx()))
+        ));
     }
 }

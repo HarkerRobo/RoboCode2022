@@ -3,7 +3,11 @@ package frc.robot.commands.hood;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Units;
 import frc.robot.subsystems.Hood;
 import frc.robot.util.InterpolatedTreeMap;
 import frc.robot.util.Limelight;
@@ -11,38 +15,37 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    private static final double HOOD_KP = 4; 
-    private static final double HOOD_KI = 0;
-    private static final double HOOD_KD = 2; 
+    private static final double HOOD_KP = 0.59974; 
+    private static final double HOOD_KI = 0.2;
+    private static final double HOOD_KD = 0.018539; 
     private static final double HOOD_IZONE = 100000; 
-    private static final double GRAVITY_FF = 0.05;  
+    private static final double HOOD_KS = 0.63651; 
+    private static final double HOOD_KV = 0.051961; 
     
     private double hoodPosition;
 
-    private PIDController hoodController;
+    private ProfiledPIDController hoodController;
     private InterpolatedTreeMap referencePoints;
+    private SimpleMotorFeedforward feedforward;
     
     public HoodManual(){
         addRequirements(Hood.getInstance());
 
-        hoodController = new PIDController(HOOD_KP, HOOD_KI, HOOD_KD);
+        hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(20, 20));
         hoodController.setIntegratorRange(-HOOD_IZONE, HOOD_IZONE);
+        feedforward = new SimpleMotorFeedforward(HOOD_KS, HOOD_KV);
 
         referencePoints = new InterpolatedTreeMap();
-        referencePoints.put(0.17, 0.1);
-        referencePoints.put(0.7, 0.2655);
-        referencePoints.put(1.0, 0.354);
-        referencePoints.put(1.3, 0.6195);
-        referencePoints.put(1.75, 1.062);
-        referencePoints.put(1.98, 1.1852);
-        referencePoints.put(2.38, 1.2213);
-        referencePoints.put(2.8, 1.3629);
-        referencePoints.put(3.24, 1.4514);
-        referencePoints.put(3.7, 1.48);
+        referencePoints.put(0.88, 10.0);
+        referencePoints.put(1.12, 14.0);
+        referencePoints.put(1.49, 16.0);
+        referencePoints.put(1.89, 18.0);
+        referencePoints.put(2.27, 21.0);
+        referencePoints.put(2.67, 23.0);
     }
 
     public void initialize() {
-        hoodController.reset();
+        hoodController.reset(Hood.getInstance().getHoodPosDegrees());
     }
     
     public void execute() {
@@ -51,10 +54,13 @@ public class HoodManual extends IndefiniteCommand{
         if(Limelight.isTargetVisible()) {
             hoodPosition = referencePoints.get(Limelight.getDistance());
         }
-
-        double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition) + GRAVITY_FF;
-        Hood.getInstance().getHood().set(ControlMode.PercentOutput, controlEffort);
-        SmartDashboard.putNumber("hood pid setpoint", hoodController.getSetpoint());
+        else
+            hoodPosition = 3;
+        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+        double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPosDegrees(), hoodPosition);
+        double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity);
+        Hood.getInstance().getHood().set(ControlMode.PercentOutput, (controlEffort + feedforwardAmount)/Units.MAX_CONTROL_EFFORT);
+        SmartDashboard.putNumber("hood pid setpoint", hoodController.getGoal().position);
         SmartDashboard.putNumber("hood pid error", hoodController.getPositionError());
         SmartDashboard.putNumber("hood pid control effort", controlEffort);
     }

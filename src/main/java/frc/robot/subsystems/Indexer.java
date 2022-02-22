@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -31,6 +33,10 @@ public class Indexer extends SubsystemBase {
         top.setInverted(TOP_INVERT);
         bottom.configFactoryDefault();
         bottom.setInverted(BOTTOM_INVERT);
+        top.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+        top.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255);
+        bottom.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+        bottom.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255);
     }
 
     public boolean bottomOccupied() {

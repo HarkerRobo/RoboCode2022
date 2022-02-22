@@ -17,25 +17,26 @@ public class ShootWithVelocity extends IndefiniteCommand {
     
     public ShootWithVelocity() {
         addRequirements(Shooter.getInstance());
-
-        referencePoints.put(0.17, 27.0);
-        referencePoints.put(0.7, 30.0);
-        referencePoints.put(1.0, 31.0);
-        referencePoints.put(1.3, 31.0);
-        referencePoints.put(1.75, 28.0);
-        referencePoints.put(1.98, 29.0);
-        referencePoints.put(2.38, 31.0);
-        referencePoints.put(2.8, 33.0);
-        referencePoints.put(3.24, 33.0);
-        referencePoints.put(3.7, 39.0);
-        referencePoints.put(4.1, 43.0);
+        referencePoints = new InterpolatedTreeMap();
+        referencePoints.put(0.88, 30.0);
+        referencePoints.put(1.12, 29.5);
+        referencePoints.put(1.49, 30.0);
+        referencePoints.put(1.89, 30.5);
+        referencePoints.put(2.27, 33.0);
+        referencePoints.put(2.67, 35.0);
+        referencePoints.put(3.20, 37.0);
+        referencePoints.put(3.54, 39.5);
+        referencePoints.put(3.95, 47.0);
+        referencePoints.put(4.32, 60.0);
     }
     
     public void execute() {
         if(Limelight.isTargetVisible()) {
             velocity = referencePoints.get(Limelight.getDistance());
         }
-
+        else
+            velocity = 32;
+        // velocity = SmartDashboard.getNumber("desired velocity", 0);
         Shooter.getInstance().setVelocity(velocity);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());

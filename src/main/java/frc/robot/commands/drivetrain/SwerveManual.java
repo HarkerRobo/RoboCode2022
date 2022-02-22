@@ -7,6 +7,7 @@ import harkerrobolib.util.Limelight;
 import harkerrobolib.util.MathUtil;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,8 +22,9 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER= 1;
     private static final double PIGEON_KP = 0.075;
-    private static final double LIMELIGHT_KP = 0.075;
-
+    private static final double LIMELIGHT_KP = 0.15;
+    private SlewRateLimiter limiter = new SlewRateLimiter(3);
+    
     public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
     private Debouncer debouncer = new Debouncer(PIGEON_DELAY, DebounceType.kRising);

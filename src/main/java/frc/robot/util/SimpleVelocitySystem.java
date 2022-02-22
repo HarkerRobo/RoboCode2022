@@ -18,6 +18,8 @@ public class SimpleVelocitySystem {
     private double maxControlEffort; // volts 
     private double modelStandardDeviation;
     private double encoderStandardDeviation;
+
+    private double filteredVelocity;
     
     private LinearSystem<N1, N1, N1> system;
     private LinearQuadraticRegulator<N1, N1, N1> regulator;
@@ -50,6 +52,7 @@ public class SimpleVelocitySystem {
      */
     public void update(double current) {
         loop.correct(VecBuilder.fill(current));
+        filteredVelocity = loop.getXHat(0);
         loop.predict(0.02);
     }
 
@@ -66,7 +69,7 @@ public class SimpleVelocitySystem {
      * 
      */
     public double getVelocity() {
-        return loop.getXHat(0);
+        return filteredVelocity;//loop.getXHat(0);
     }
 
     public LinearSystem<N1, N1, N1> getSystem() {

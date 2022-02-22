@@ -26,15 +26,15 @@ public class Shooter extends SubsystemBase {
     private static final boolean MASTER_INVERTED = true;
     private static final boolean FOLLOWER_INVERTED = false;
     
-    public static final double kS = 0;//0.67951;    
-    public static final double kV = 0.15808;
-    public static final double kA = 0.015239;
+    public static final double kS = 0.66342/2;    
+    public static final double kV = 0.15911;
+    public static final double kA = 0.019298;
 
     public static final double HOOD_STALLING_CURRENT = 10;
     
-    private static final double MAX_ERROR = 0.1; // volts 
-    private static final double MODEL_STANDARD_DEVIATION = 0.00625;
-    private static final double ENCODER_STANDARD_DEVIATION = 0.00025;
+    private static final double MAX_ERROR = 0.1; 
+    private static final double MODEL_STANDARD_DEVIATION = 0.1;
+    private static final double ENCODER_STANDARD_DEVIATION = 0.02;
 
     public static final double SHOOTER_REV_TIME = 1.0;
 

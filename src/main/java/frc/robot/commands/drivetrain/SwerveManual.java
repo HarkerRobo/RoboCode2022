@@ -20,7 +20,7 @@ import frc.robot.OI;
  */
 
 public class SwerveManual extends IndefiniteCommand {
-    private static final double OUTPUT_MULTIPLIER= 1;
+    private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.075;
     private static final double LIMELIGHT_KP = 0.15;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
@@ -45,9 +45,7 @@ public class SwerveManual extends IndefiniteCommand {
             translationx = 0;
             translationy = 0;
             if (Math.abs(angularVelocity) < Drivetrain.MIN_OUTPUT) {
-                // translationx = 0.01;
-                // angularVelocity = 0;
-                angularVelocity = 0.001;//Drivetrain.getInstance().getPigeon().getYaw();
+                angularVelocity = 0.001;
             }
         }
     
@@ -56,11 +54,6 @@ public class SwerveManual extends IndefiniteCommand {
         angularVelocity *= Drivetrain.MAX_ANGULAR_VEL * OUTPUT_MULTIPLIER;
         translationx *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
         translationy *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
-
-        // if (OI.getInstance().getDriverGamepad().getButtonBumperLeftState()) {
-        //     translationx *= 0.4;
-        //     translationy *= 0.4;
-        // }
 
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
@@ -73,9 +66,10 @@ public class SwerveManual extends IndefiniteCommand {
         }
         if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
             angularVelocity = LIMELIGHT_KP * Limelight.getTx();
+            pigeonAngle = Drivetrain.getInstance().getHeading();
+            SmartDashboard.putBoolean("holding pigeon angle", false);
         }
 
-        // ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getYaw())));
         SmartDashboard.putNumber("angular vel", angularVelocity);
         ChassisSpeeds chassis;
         if(Drivetrain.getInstance().isFieldCentric())

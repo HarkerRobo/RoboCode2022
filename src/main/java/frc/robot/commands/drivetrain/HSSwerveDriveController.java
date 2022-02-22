@@ -13,9 +13,28 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.subsystems.Drivetrain;
 
 public class HSSwerveDriveController extends SwerveControllerCommand {
-    private static PIDController xController = new PIDController(Drivetrain.MP_X_KP, Drivetrain.MP_X_KI, Drivetrain.MP_X_KD);
-    private static PIDController yController = new PIDController(Drivetrain.MP_Y_KP, Drivetrain.MP_Y_KI, Drivetrain.MP_Y_KD);
-    private static ProfiledPIDController thetaController = new ProfiledPIDController(Drivetrain.MP_THETA_KP, Drivetrain.MP_THETA_KI, Drivetrain.MP_X_KD, new Constraints(Math.PI, Math.PI));
+    public static final double X_KP = 8;
+    public static final double X_KI = 0;
+    public static final double X_KD = 0;
+
+    public static final double Y_KP = 8;
+    public static final double Y_KI = 0;
+    public static final double Y_KD = 0;
+
+    public static final double THETA_KP = 4;
+    public static final double THETA_KI = 0;
+    public static final double THETA_KD = 7;
+
+    public static final double MAX_DRIVE_VELOCITY = 3;
+    public static final double MAX_DRIVE_ACCELERATION = 2;
+
+    public static final double MAX_ANGLE_VELOCITY = Math.PI;
+    public static final double MAX_ANGLE_ACCELERATION = Math.PI;
+
+    private static PIDController xController = new PIDController(X_KP, X_KI, X_KD);
+    private static PIDController yController = new PIDController(Y_KP, Y_KI, Y_KD);
+    private static ProfiledPIDController thetaController = 
+        new ProfiledPIDController(THETA_KP, THETA_KI, THETA_KD, new Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION));
     private static final double TURN_TIME = 0.6;
     
     private Rotation2d initHeading;

@@ -22,7 +22,6 @@ public class ZeroHood extends CommandBase {
 
     public void end(boolean interrupted){
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, 0);
-        Hood.getInstance().setHoodOffset();
         Hood.getInstance().getHood().setSelectedSensorPosition(0);
         Hood.isZeroed = true;
     }

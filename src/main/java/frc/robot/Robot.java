@@ -9,7 +9,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -114,9 +113,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
     SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
-    SmartDashboard.putNumber("hood pos pwm", Hood.getInstance().getHoodEncoderPos());
     SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
-    SmartDashboard.putNumber("hood max", Hood.getInstance().getMaxHoodPos());
   }
 
   /**

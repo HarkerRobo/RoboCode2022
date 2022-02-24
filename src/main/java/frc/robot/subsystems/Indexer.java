@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.StatusFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.util.PicoColorSensor;
+import frc.robot.util.PicoColorSensor.RawColor;
 import harkerrobolib.wrappers.HSFalcon;
 
 public class Indexer extends SubsystemBase {
@@ -17,13 +19,16 @@ public class Indexer extends SubsystemBase {
     private static final boolean TOP_INVERT = true;
     private static final boolean BOTTOM_INVERT = false;
 
-    // private ColorSensorV3 colorSensor;
-    // private DigitalInput topProximity;
+    private static final boolean BOTTOM_SENSOR_IS_0 = true;
+    private static final int[][] RED_COLOR_RANGE = {{170,255},{0,0},{0,0}};
+    private static final int[][] BLUE_COLOR_RANGE = {{0,0},{0,0},{170,255}};
+
+    private PicoColorSensor sensor;
 
     private Indexer() {
         top = new HSFalcon(RobotMap.INDEXER_TOP);
         bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM);
-        // colorSensor = new ColorSensorV3(Port.kOnboard);
+        sensor = new PicoColorSensor();
         init();
     }
 
@@ -39,16 +44,50 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean bottomOccupied() {
-        return false;//colorSensor.getProximity() > 1024;
+        if(BOTTOM_SENSOR_IS_0)
+            return sensor.getProximity0() > 1024;
+        return sensor.getProximity1() > 1024;
     }
 
     public boolean topOccupied() {
-        return false;//!topProximity.get();
+        if(BOTTOM_SENSOR_IS_0)
+            return sensor.getProximity1() > 1024;
+        return sensor.getProximity0() > 1024;
     }
 
-    // public Color getColor() {
-    //     return colorSensor.getColor();
-    // }
+    public boolean bottomHasRed() {
+        return isRed(getColor());
+    }
+
+    public boolean bottomHasBlue() {
+        return isRed(getColor());
+    }
+
+    public RawColor getColor() {
+        if(BOTTOM_SENSOR_IS_0)
+            return sensor.getRawColor0();
+        return sensor.getRawColor1();
+    }
+
+    private boolean isRed(RawColor col) {
+        if(col.red < RED_COLOR_RANGE[0][0] || col.red > RED_COLOR_RANGE[0][1])
+            return false;
+        if(col.blue < RED_COLOR_RANGE[1][0] || col.blue > RED_COLOR_RANGE[1][1])
+            return false;
+        if(col.green < RED_COLOR_RANGE[2][0] || col.green > RED_COLOR_RANGE[2][1])
+            return false;
+        return true;
+    }
+
+    private boolean isBlue(RawColor col) {
+        if(col.red < BLUE_COLOR_RANGE[0][0] || col.red > BLUE_COLOR_RANGE[0][1])
+            return false;
+        if(col.blue < BLUE_COLOR_RANGE[1][0] || col.blue > BLUE_COLOR_RANGE[1][1])
+            return false;
+        if(col.green < BLUE_COLOR_RANGE[2][0] || col.green > BLUE_COLOR_RANGE[2][1])
+            return false;
+        return true;
+    }
 
     public void setPercentOutputBottom(double output) {
         bottom.set(ControlMode.PercentOutput, output);

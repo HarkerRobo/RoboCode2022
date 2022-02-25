@@ -20,6 +20,7 @@ import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
 import frc.robot.commands.intake.IntakeManual;
+import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
@@ -90,7 +91,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
-
     // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
@@ -114,6 +114,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
     SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
+    SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);
+    SmartDashboard.putNumber("bottom g", Indexer.getInstance().getColor().green);
+    SmartDashboard.putNumber("bottom b", Indexer.getInstance().getColor().blue);
+    SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
   }
 
   /**
@@ -130,6 +134,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+    // if(Math.random() < 1.0/3000)
+    //   CommandScheduler.getInstance().schedule(new ToggleIntake());
   }
 
   /**

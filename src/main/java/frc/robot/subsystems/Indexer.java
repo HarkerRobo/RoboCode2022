@@ -45,14 +45,14 @@ public class Indexer extends SubsystemBase {
 
     public boolean bottomOccupied() {
         if(BOTTOM_SENSOR_IS_0)
-            return sensor.getProximity0() > 1024;
-        return sensor.getProximity1() > 1024;
+            return sensor.getProximity0() > 500;
+        return sensor.getProximity1() > 500;
     }
 
     public boolean topOccupied() {
         if(BOTTOM_SENSOR_IS_0)
-            return sensor.getProximity1() > 1024;
-        return sensor.getProximity0() > 1024;
+            return sensor.getProximity1() > 500;
+        return sensor.getProximity0() > 500;
     }
 
     public boolean bottomHasRed() {
@@ -67,6 +67,12 @@ public class Indexer extends SubsystemBase {
         if(BOTTOM_SENSOR_IS_0)
             return sensor.getRawColor0();
         return sensor.getRawColor1();
+    }
+
+    public int getProximity() {
+        if(BOTTOM_SENSOR_IS_0)
+        return sensor.getProximity0();
+    return sensor.getProximity1();
     }
 
     private boolean isRed(RawColor col) {

@@ -20,7 +20,7 @@ public class OI {
     private HSGamepad driverGamepad;
     private HSGamepad operatorGamepad;
 
-    public static final double DEADBAND = 0.1;
+    public static final double DEADBAND = 0.15;
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
@@ -47,14 +47,14 @@ public class OI {
             SwerveManual.pigeonAngle=0;
         }));
 
-        driverGamepad.getButtonB().whilePressed(new MoveBallsToShooter());
+        // driverGamepad.getButtonB().whilePressed(new MoveBallsToShooter());
 
         // driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
         driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
 
-        driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.3)));
-        driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.6)));
-        driverGamepad.getUpDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",0.9)));
+        driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos", 2)));
+        driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",14)));
+        driverGamepad.getUpDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos", 21)));
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands

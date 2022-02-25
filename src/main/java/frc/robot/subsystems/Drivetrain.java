@@ -44,7 +44,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double MIN_OUTPUT = 0.01;
     public static final double MAX_DRIVE_VEL = 3; // theoretical 4.1148 m / s
-    public static final double MAX_ANGULAR_VEL = 2*Math.PI; // 
+    public static final double MAX_ANGULAR_VEL = 1*Math.PI; // 
 
     private boolean fieldCentric = true;
 

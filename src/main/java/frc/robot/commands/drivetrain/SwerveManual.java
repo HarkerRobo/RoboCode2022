@@ -55,6 +55,18 @@ public class SwerveManual extends IndefiniteCommand {
         translationx *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
         translationy *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
 
+        double mag = Math.sqrt(translationx * translationx + translationy * translationy);
+        double limitedMag = limiter.calculate(mag);
+        if(Math.abs(mag) > 1e-3) {
+            translationx = translationx / mag * limitedMag;
+            translationy = translationy / mag * limitedMag;
+        }
+
+        if(OI.getInstance().getDriverGamepad().getButtonBState()) {
+            translationy *= 0.6;
+            translationx *= 0.6;
+        }
+
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
             angularVelocity = PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());

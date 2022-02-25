@@ -14,8 +14,8 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    private static final double HOOD_KP = 0.59974; 
-    private static final double HOOD_KI = 0.2;
+    private static final double HOOD_KP = 1.0; 
+    private static final double HOOD_KI = 0.8;
     private static final double HOOD_KD = 0.018539; 
     private static final double HOOD_IZONE = 100000; 
     private static final double HOOD_KS = 0.63651; 
@@ -30,7 +30,7 @@ public class HoodManual extends IndefiniteCommand{
     public HoodManual(){
         addRequirements(Hood.getInstance());
 
-        hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(20, 20));
+        hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(30, 15));
         hoodController.setIntegratorRange(-HOOD_IZONE, HOOD_IZONE);
         feedforward = new SimpleMotorFeedforward(HOOD_KS, HOOD_KV);
 
@@ -55,11 +55,12 @@ public class HoodManual extends IndefiniteCommand{
         }
         else
             hoodPosition = 3;
-        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+        hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity);
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, (controlEffort + feedforwardAmount)/Units.MAX_CONTROL_EFFORT);
-        SmartDashboard.putNumber("hood pid setpoint", hoodController.getGoal().position);
+        SmartDashboard.putNumber("hood pid goal", hoodController.getGoal().position);
+        SmartDashboard.putNumber("hood pid setpoint", hoodController.getSetpoint().position);
         SmartDashboard.putNumber("hood pid error", hoodController.getPositionError());
         SmartDashboard.putNumber("hood pid control effort", controlEffort);
     }

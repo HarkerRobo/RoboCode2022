@@ -23,14 +23,14 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveModule[] modules;
 
-    private static final boolean[] ROTATION_SENSOR_PHASE = {false, false, false, false};
-    private static final boolean[] TRANSLATION_SENSOR_PHASE = {false, false, false, false};
-    private static final boolean[] ROTATION_INVERT = {false, false, false, false};
-    private static final boolean[] TRANSLATION_INVERT = {false, true, true, false};
+    private static final boolean[] ROTATION_SENSOR_PHASE = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false,false,false,false};
+    private static final boolean[] TRANSLATION_SENSOR_PHASE = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false,false,false,false};
+    private static final boolean[] ROTATION_INVERT = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false,false,false,false};
+    private static final boolean[] TRANSLATION_INVERT =(RobotMap.IS_COMP) ? new boolean[]{false, true, true, false} : new boolean[]{false,false,false,false};
 
-    public static final double[] OFFSETS = {263.935547, 178.330078, 109.951172, 32.255859};
+    public static final double[] OFFSETS = (RobotMap.IS_COMP) ? new double[]{263.935547, 178.330078, 109.951172, 32.255859} : new double[]{0,0,0,0};
 
-    public static final boolean isPigeonUp = true;
+    public static final boolean IS_PIGEON_UP = (RobotMap.IS_COMP) ? true : false;
 
     public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
     public static final double DT_LENGTH = 0.5969; // 0.88265
@@ -99,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getHeading(){
-        return (isPigeonUp) ? -pigeon.getYaw() : pigeon.getYaw();
+        return (IS_PIGEON_UP) ? -pigeon.getYaw() : pigeon.getYaw();
     }
 
     public Rotation2d getHeadingRotation() {

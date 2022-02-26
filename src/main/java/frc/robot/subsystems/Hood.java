@@ -8,7 +8,7 @@ import frc.robot.Units;
 import harkerrobolib.wrappers.HSFalcon;
 
 public class Hood extends SubsystemBase{
-    private static final boolean HOOD_INVERTED = true;
+    private static final boolean HOOD_INVERTED = (RobotMap.IS_COMP) ? true : false;
     public static boolean isZeroed = false;
     
     public static final double HOOD_GEAR_RATIO = 180;

@@ -26,18 +26,9 @@ public class SwerveModule {
 
 	private static final double VOLTAGE_COMP = 10;
 
-	private static final double DRIVE_CURRENT_CONTINUOUS = 40;
-    private static final double DRIVE_CURRENT_PEAK = 60;
-    private static final double DRIVE_CURRENT_PEAK_DUR = 0.4;
-
-    private static final double ANGLE_CURRENT_CONTINUOUS = 15;
-    private static final double ANGLE_CURRENT_PEAK = 20;
-    private static final double ANGLE_CURRENT_PEAK_DUR = 0.02;
-
-	// private static final double TRANSLATION_P = 0.5;
-	// private static final double TRANSLATION_I = 0.0;
-	// private static final double TRANSLATION_D = 5;
-	// private static final double TRANSLATION_F = 0.034;
+	private static final double MOTOR_CURRENT_CONTINUOUS = 40;
+    private static final double MOTOR_CURRENT_PEAK = 60;
+    private static final double MOTOR_CURRENT_PEAK_DUR = 0.4;
 	
 	private static final double ANGLE_P = 0.23082;
 	private static final double ANGLE_I = 0;
@@ -93,6 +84,7 @@ public class SwerveModule {
 		rotation.config_kD(RobotMap.SLOT_INDEX, ANGLE_D);
 		rotation.configVelocityMeasurementWindow(16);
 		rotation.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_25Ms);
+		rotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, MOTOR_CURRENT_CONTINUOUS, MOTOR_CURRENT_PEAK, MOTOR_CURRENT_PEAK_DUR));
 
 		rotation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 
@@ -105,8 +97,9 @@ public class SwerveModule {
 		translation.setNeutralMode(NeutralMode.Brake);
 		translation.setInverted(TRANSLATION_INVERT);
 
-		translation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DRIVE_CURRENT_CONTINUOUS, DRIVE_CURRENT_PEAK, DRIVE_CURRENT_PEAK_DUR));
+		translation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, MOTOR_CURRENT_CONTINUOUS, MOTOR_CURRENT_PEAK, MOTOR_CURRENT_PEAK_DUR));
 
+		translation.configOpenloopRamp(0.3);
 		translation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 		translation.configVelocityMeasurementWindow(1);
 		translation.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);

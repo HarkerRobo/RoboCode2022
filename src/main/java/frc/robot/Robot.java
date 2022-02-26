@@ -20,7 +20,6 @@ import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
 import frc.robot.commands.intake.IntakeManual;
-import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
@@ -78,6 +77,8 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    Limelight.updateTx();
+
     Drivetrain.getInstance().getOdometry().update(
       Drivetrain.getInstance().getHeadingRotation(), 
       Drivetrain.getInstance().getTopLeft().getState(),
@@ -85,7 +86,7 @@ public class Robot extends TimedRobot {
       Drivetrain.getInstance().getBottomLeft().getState(), 
       Drivetrain.getInstance().getBottomRight().getState()
     );
-    pd.setSwitchableChannel(true);
+    // pd.setSwitchableChannel(true);
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
     field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
 
@@ -103,15 +104,15 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
 
-    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getHeading());
+    // SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getHeading());
     // SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
     // SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
     // SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
     // SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
-    SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
-    SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
-    SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
-    SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
+    // SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
+    // SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
+    // SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
+    // SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
     SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
     SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);

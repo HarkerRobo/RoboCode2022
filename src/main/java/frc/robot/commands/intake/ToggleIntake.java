@@ -11,6 +11,6 @@ public class ToggleIntake extends InstantCommand {
     }
 
     public void initialize() {
-        Intake.getInstance().toggle();
+        Intake.getInstance().getSolenoid().toggle();
     }
 }

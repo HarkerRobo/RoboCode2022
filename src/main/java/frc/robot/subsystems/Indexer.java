@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,12 +17,15 @@ public class Indexer extends SubsystemBase {
     private HSFalcon top;
     private HSFalcon bottom;
 
-    private static final boolean TOP_INVERT = true;
-    private static final boolean BOTTOM_INVERT = false;
+    private static final boolean TOP_INVERT = (RobotMap.IS_COMP) ? true : false;
+    private static final boolean BOTTOM_INVERT = (RobotMap.IS_COMP) ? false : false;
 
-    private static final boolean BOTTOM_SENSOR_IS_0 = true;
+    private static final boolean BOTTOM_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : false;
     private static final int[][] RED_COLOR_RANGE = {{170,255},{0,0},{0,0}};
-    private static final int[][] BLUE_COLOR_RANGE = {{0,0},{0,0},{170,255}};
+
+    private static final double INDEXER_CURRENT_CONTINUOUS = 20;
+    private static final double INDEXER_CURRENT_PEAK = 20;
+    private static final double INDEXER_CURRENT_PEAK_DUR = 0.05;
 
     private PicoColorSensor sensor;
 
@@ -37,6 +41,10 @@ public class Indexer extends SubsystemBase {
         top.setInverted(TOP_INVERT);
         bottom.configFactoryDefault();
         bottom.setInverted(BOTTOM_INVERT);
+
+        top.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, INDEXER_CURRENT_CONTINUOUS, INDEXER_CURRENT_PEAK, INDEXER_CURRENT_PEAK_DUR));
+        bottom.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, INDEXER_CURRENT_CONTINUOUS, INDEXER_CURRENT_PEAK, INDEXER_CURRENT_PEAK_DUR));
+
         top.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         top.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255);
         bottom.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
@@ -81,16 +89,6 @@ public class Indexer extends SubsystemBase {
         if(col.blue < RED_COLOR_RANGE[1][0] || col.blue > RED_COLOR_RANGE[1][1])
             return false;
         if(col.green < RED_COLOR_RANGE[2][0] || col.green > RED_COLOR_RANGE[2][1])
-            return false;
-        return true;
-    }
-
-    private boolean isBlue(RawColor col) {
-        if(col.red < BLUE_COLOR_RANGE[0][0] || col.red > BLUE_COLOR_RANGE[0][1])
-            return false;
-        if(col.blue < BLUE_COLOR_RANGE[1][0] || col.blue > BLUE_COLOR_RANGE[1][1])
-            return false;
-        if(col.green < BLUE_COLOR_RANGE[2][0] || col.green > BLUE_COLOR_RANGE[2][1])
             return false;
         return true;
     }

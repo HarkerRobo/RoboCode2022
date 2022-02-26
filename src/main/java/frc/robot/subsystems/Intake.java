@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
     private static Intake intake;
     private HSFalcon motor;
     
-    private static final boolean MOTOR_INVERT = true;
+    private static final boolean MOTOR_INVERT = (RobotMap.IS_COMP) ? true : false;
     
     public static final double MAX_RPS = 100;
     public static final double MIN_RUNNING_RPS = 1;
@@ -67,15 +67,6 @@ public class Intake extends SubsystemBase {
         setPercentOutput(loop.getOutput());
         // state = (int)Math.signum(vel);
         // setPercentOutput(vel);
-    }
-
-    public void toggle() {
-        if (doubleSolenoid.get() == DoubleSolenoid.Value.kForward) {
-            doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-        }
-        else {
-            doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-        }
     }
 
     public double getCurrentRPS() {

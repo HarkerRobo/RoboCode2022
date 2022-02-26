@@ -2,6 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
@@ -37,7 +40,7 @@ public class OI {
         // }, Intake.getInstance()));
         // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
-        driverGamepad.getButtonA().whilePressed(new ShootWithVelocity());
+        driverGamepad.getButtonA().whilePressed(new ParallelCommandGroup(new ShootWithVelocity(), new MoveBallsToShooter()));
         // driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
         // driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
         driverGamepad.getButtonY().whilePressed(new ToggleIntake());

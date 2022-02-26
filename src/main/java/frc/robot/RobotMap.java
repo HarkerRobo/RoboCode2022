@@ -4,6 +4,8 @@ package frc.robot;
  * Defines robot-wide constants
  */
 public class RobotMap {
+    public static final boolean IS_COMP = false;
+
     public static final int LOOP_INDEX = 0;
 
     public static final int SLOT_INDEX = 0;
@@ -28,14 +30,13 @@ public class RobotMap {
     public static final int HOOD = 14;
     public static final int HOOD_ENCODER = 7;
 
-    public static final int CLIMBER_MASTER = 11;
-    public static final int CLIMBER_FOLLOWER = 12;  // change
+    public static final int CLIMBER_MASTER = 15;
+    public static final int CLIMBER_FOLLOWER = 16;  // change
+    public static final int CLIMBER_FORWARD = 0; //change
+    public static final int CLIMBER_BACKWARD = 0; //change
 
     public static final int INDEXER_TOP = 10;
     public static final int INDEXER_BOTTOM = 9;
 
     public static final double LOOP_TIME = 0.02; // 20ms
-
-    public static final boolean IS_COMP = false;
-    public static final double PIGEON_CONSTANT = 63.9886;
 }

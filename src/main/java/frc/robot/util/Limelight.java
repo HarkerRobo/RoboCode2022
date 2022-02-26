@@ -49,6 +49,8 @@ public class Limelight {
     
     private static double[] nullArr;    
     private static MedianFilter distanceFilter = new MedianFilter(15);
+    private static MedianFilter txFilter = new MedianFilter(15);
+    private static double currentTx;
     public static final double LIMELIGHT_HEIGHT = 0.94;
     public static final double TARGET_HEIGHT = 2.64;
 
@@ -77,7 +79,11 @@ public class Limelight {
      * @return the horizontal angular distance to the target, in degrees
      */
     public static double getTx() {
-        return table.getEntry(TX_KEY).getDouble(0.0);
+        return currentTx;
+    }
+
+    public static void updateTx() {
+        currentTx = txFilter.calculate(table.getEntry(TX_KEY).getDouble(0.0));
     }
 
     /**

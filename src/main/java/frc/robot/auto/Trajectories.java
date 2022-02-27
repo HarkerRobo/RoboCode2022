@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import frc.robot.commands.drivetrain.HSSwerveDriveController;
 import frc.robot.subsystems.Drivetrain;
 
@@ -25,7 +26,8 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Trajectories {
     public static TrajectoryConfig config = new TrajectoryConfig(HSSwerveDriveController.MAX_DRIVE_VELOCITY,
-            HSSwerveDriveController.MAX_DRIVE_ACCELERATION).setKinematics(Drivetrain.getInstance().getKinematics());
+            HSSwerveDriveController.MAX_DRIVE_ACCELERATION).setKinematics(Drivetrain.getInstance().getKinematics())
+                                                            .addConstraint(new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), HSSwerveDriveController.MAX_DRIVE_VELOCITY));
     
     public static final Trajectory moveForward = TrajectoryGenerator.generateTrajectory(List.of(
         new Pose2d(0,0,Rotation2d.fromDegrees(90)),
@@ -49,6 +51,11 @@ public class Trajectories {
     public static final List<HSSwerveDriveController> threepoints = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
         new Translation2d(0,0), new Translation2d(0,-2), new Translation2d(2,-2)}), Rotation2d.fromDegrees(0),
         List.of(Rotation2d.fromDegrees(180), Rotation2d.fromDegrees(270)));
+    
+    public static final List<HSSwerveDriveController> square = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+        new Translation2d(5,5), new Translation2d(7,5), new Translation2d(7,3), new Translation2d(5, 3), new Translation2d(5,5)}), Rotation2d.fromDegrees(0),
+        List.of(Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)));
+        
 
     public static final Trajectory clockwisecircle = TrajectoryGenerator.generateTrajectory(List.of(
         new Pose2d(8.3,1.5,Rotation2d.fromDegrees(180)),
@@ -75,6 +82,10 @@ public class Trajectories {
     public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
         new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70), new Translation2d(1.86, -5.76)}), Rotation2d.fromDegrees(180), 
         List.of(Rotation2d.fromDegrees(180),Rotation2d.fromDegrees(74.37)));
+
+    public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+        new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70)}), Rotation2d.fromDegrees(180), 
+        List.of(Rotation2d.fromDegrees(180)));
 
     // public static final List<HSSwerveDriveController> twoBallAutoTop = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
     //     new Translation2d(5.18, -6.22), new Translation2d(5.81, -5.49)}), null, null);

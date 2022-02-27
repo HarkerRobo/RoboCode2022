@@ -15,7 +15,12 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.auto.Autons;
+import frc.robot.auto.Trajectories;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
@@ -35,8 +40,10 @@ import frc.robot.util.Limelight;
  * project.
  */
 public class Robot extends TimedRobot {
-  Field2d field;
+  public static Field2d field;
   private PowerDistribution pd;
+  private Command auto = new WaitCommand(0);
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -63,6 +70,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired hood pos", 0);
     pd = new PowerDistribution();
     NetworkTableInstance.getDefault().setUpdateRate(0.02);
+    
+    Trajectories.config = Trajectories.config;
   }
 
   /**
@@ -77,7 +86,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    Limelight.updateTx();
+    Limelight.update();
 
     Drivetrain.getInstance().getOdometry().update(
       Drivetrain.getInstance().getHeadingRotation(), 
@@ -86,11 +95,9 @@ public class Robot extends TimedRobot {
       Drivetrain.getInstance().getBottomLeft().getState(), 
       Drivetrain.getInstance().getBottomRight().getState()
     );
-    pd.setSwitchableChannel(true);
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
-    field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
+    // field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
 
-    SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
     SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
     SmartDashboard.putNumber("odometry y", Drivetrain.getInstance().getOdometry().getPoseMeters().getY());
@@ -109,7 +116,7 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getHeading());
     // SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
-    SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
+    // SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
     SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
     SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
     SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
@@ -118,15 +125,22 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
     SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
-    SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);
-    SmartDashboard.putNumber("bottom g", Indexer.getInstance().getColor().green);
-    SmartDashboard.putNumber("bottom b", Indexer.getInstance().getColor().blue);
-    SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
-    SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
+    // SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);
+    // SmartDashboard.putNumber("bottom g", Indexer.getInstance().getColor().green);
+    // SmartDashboard.putNumber("bottom b", Indexer.getInstance().getColor().blue);
+    // SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
+    // SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
     SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
     SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
-    SmartDashboard.putNumber("ll tx", Limelight.getTx());
-    SmartDashboard.putNumber("ll ty", Limelight.getTy());
+  }
+
+  @Override
+  public void autonomousInit() {
+    Limelight.setLEDS(true);
+    pd.setSwitchableChannel(true);
+
+    auto = Autons.TWO_BALL;
+    auto.schedule();
   }
 
   /**
@@ -134,7 +148,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-   
+    Limelight.setLEDS(true);
+    pd.setSwitchableChannel(true);
+    auto.cancel();
   }
 
   /**
@@ -152,6 +168,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    Limelight.setLEDS(false);
+    pd.setSwitchableChannel(false);
+
+    auto.cancel();
   }
 
   /**
@@ -159,6 +179,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledPeriodic() {
+    Limelight.setLEDS(false);
+    pd.setSwitchableChannel(false);
   }
 
   /**

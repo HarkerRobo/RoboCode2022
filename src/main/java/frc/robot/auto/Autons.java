@@ -43,11 +43,24 @@ public class Autons {
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
         new SetIntakeDown(),
         Trajectories.threeBallAuto.get(0).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()),
+        new AlignWithLimelight().deadlineWith(new RevShooter()).raceWith(new WaitCommand(2)),
         new WaitCommand(2).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()),
         Trajectories.threeBallAuto.get(1).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()),
+        new AlignWithLimelight().deadlineWith(new RevShooter()).raceWith(new WaitCommand(2)),
         new WaitCommand(5).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()));
+
+    public static final SequentialCommandGroup TWO_BALL = new SequentialCommandGroup(
+        new SetIntakeDown(),
+        Trajectories.twoBallAuto.get(0).deadlineWith(new RunIntake()),
+        new AlignWithLimelight().deadlineWith(new RevShooter()).raceWith(new WaitCommand(2)),
+        new WaitCommand(5).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()));
+
+    public static final SequentialCommandGroup square = new SequentialCommandGroup(
+        Trajectories.square.get(0),
+        Trajectories.square.get(1),
+        Trajectories.square.get(2),
+        Trajectories.square.get(3)
+    );
 
     // public static final SequentialCommandGroup TWO_BALL_AUTO = new SequentialCommandGroup(
     //     new SetIntakeDown(),

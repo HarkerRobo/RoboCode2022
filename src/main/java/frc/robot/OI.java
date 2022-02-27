@@ -62,7 +62,7 @@ public class OI {
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
-        driverGamepad.getButtonA().whenPressed(Autons.THREE_BALL_AUTO);
+        // driverGamepad.getButtonA().whenPressed(Autons.THREE_BALL_AUTO);
         // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.threepoints.get(0),Trajectories.threepoints.get(1)));
     }
 

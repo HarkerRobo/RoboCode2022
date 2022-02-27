@@ -75,16 +75,16 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Set angle to given angle and set velocity to given velocity
      */
-    public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
+    public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput,  boolean isDirection){
         for(int i = 0; i < 4; i++){
             SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
             SmartDashboard.putNumber("Desired translation speed " + i, states[i].speedMetersPerSecond);
-            modules[i].setSwerveManual(states[i], isPercentOutput);
+            modules[i].setSwerveManual(states[i], isPercentOutput, isDirection);
         }
     }
 
     public void setAngleAndDriveVelocity(SwerveModuleState[] states) {
-        setAngleAndDriveVelocity(states, false);
+        setAngleAndDriveVelocity(states, false, false);
     }
 
     public void toggleFieldCentric() {

@@ -30,7 +30,7 @@ public class SwerveModule {
     private static final double MOTOR_CURRENT_PEAK = 60;
     private static final double MOTOR_CURRENT_PEAK_DUR = 0.4;
 	
-	private static final double ANGLE_P = 0.23082;
+	private static final double ANGLE_P = 0.13082;
 	private static final double ANGLE_I = 0;
 	private static final double ANGLE_D = 0;
 
@@ -38,7 +38,7 @@ public class SwerveModule {
 	private static final double DRIVE_KV = 2.2819;
 	private static final double DRIVE_KA = 0.3621;
 
-	private static final double MAX_ERROR = 0.05;  
+	private static final double MAX_ERROR = 0.1;  
     private static final double MODEL_STANDARD_DEVIATION = 0.5;
     private static final double ENCODER_STANDARD_DEVIATION = 0.05;
 
@@ -138,7 +138,7 @@ public class SwerveModule {
 		return state;
 	}
 
-	public void setSwerveManual(SwerveModuleState state, boolean isPercentOutput){
+	public void setSwerveManual(SwerveModuleState state, boolean isPercentOutput, boolean isDirection) {
 		//state = optimize(state, getRotationAngle());
 		double angle = state.angle.getDegrees();
 		double currentAngle = getRotationAngle();
@@ -161,6 +161,9 @@ public class SwerveModule {
 		else if(angle-currentAngle<-90){
 			angle += 180;
 			speed *= -1;
+		}
+		if(!isDirection && Math.abs(speed) < Drivetrain.MIN_OUTPUT * 5) {
+			return;
 		}
 		rotation.set(ControlMode.Position, angle / Units.FALCON_ENCODER_TO_DEGREE * Drivetrain.ROTATION_GEAR_RATIO);
 		if(isPercentOutput)

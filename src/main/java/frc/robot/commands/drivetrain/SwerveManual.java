@@ -76,6 +76,7 @@ public class SwerveManual extends IndefiniteCommand {
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
+
         if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
             angularVelocity = LIMELIGHT_KP * Limelight.getTx();
             pigeonAngle = Drivetrain.getInstance().getHeading();
@@ -88,6 +89,6 @@ public class SwerveManual extends IndefiniteCommand {
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
         else
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(0));
-        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
+        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false, false);
     }
 }

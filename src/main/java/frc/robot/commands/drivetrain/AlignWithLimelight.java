@@ -16,7 +16,7 @@ public class AlignWithLimelight extends IndefiniteCommand{
     public void execute() {
         double angularVelocity = SwerveManual.LIMELIGHT_KP * Limelight.getTx();
         ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
-        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
+        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false, false);
     }
 
     public boolean isFinished(){
@@ -24,7 +24,7 @@ public class AlignWithLimelight extends IndefiniteCommand{
     }
 
     public void end(boolean isFinished){
-        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
-        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
+        ChassisSpeeds chassis = new ChassisSpeeds(0, 0, 0);
+        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false, false);
     }
 }

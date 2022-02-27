@@ -48,9 +48,10 @@ public class Limelight {
     public static final int LIMELIGHT_ANGLE = 43;
     
     private static double[] nullArr;    
-    private static MedianFilter distanceFilter = new MedianFilter(15);
+    private static MedianFilter tyFilter = new MedianFilter(15);
     private static MedianFilter txFilter = new MedianFilter(15);
     private static double currentTx;
+    private static double currentTy;
     public static final double LIMELIGHT_HEIGHT = 0.94;
     public static final double TARGET_HEIGHT = 2.64;
 
@@ -82,8 +83,9 @@ public class Limelight {
         return currentTx;
     }
 
-    public static void updateTx() {
+    public static void update() {
         currentTx = txFilter.calculate(table.getEntry(TX_KEY).getDouble(0.0));
+        currentTy = tyFilter.calculate(table.getEntry(TY_KEY).getDouble(0.0));
     }
 
     /**
@@ -128,7 +130,7 @@ public class Limelight {
      * @return the vertical, angular distance to the target, in degrees
      */
     public static double getTy() {
-        return table.getEntry(TY_KEY).getDouble(0.0);
+        return currentTy;
     }
 
     /**
@@ -310,8 +312,6 @@ public class Limelight {
     }
 
     public static double getDistance() {
-        return distanceFilter.calculate(
-            (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / (Math.tan(Math.toRadians(getTy() + LIMELIGHT_ANGLE)) * Math.cos(Math.toRadians(getTx()))
-        ));
+        return (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / (Math.tan(Math.toRadians(getTy() + LIMELIGHT_ANGLE)) * Math.cos(Math.toRadians(getTx())));
     }
 }

@@ -62,7 +62,8 @@ public class SwerveManual extends IndefiniteCommand {
             translationy = translationy / mag * limitedMag;
         }
 
-        if(OI.getInstance().getDriverGamepad().getButtonBState()) {
+        if(OI.getInstance().getDriverGamepad().getButtonBumperLeftState() && 
+            OI.getInstance().getDriverGamepad().getButtonBumperRightState()) {
             translationy *= 0.6;
             translationx *= 0.6;
         }

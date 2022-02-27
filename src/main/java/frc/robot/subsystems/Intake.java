@@ -8,6 +8,7 @@ import frc.robot.util.SimpleVelocitySystem;
 import harkerrobolib.wrappers.HSFalcon;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 /**
@@ -19,12 +20,17 @@ public class Intake extends SubsystemBase {
     
     private static final boolean MOTOR_INVERT = (RobotMap.IS_COMP) ? true : false;
     
-    public static final double MAX_RPS = 100;
+    public static final double MAX_RPS = 60;
     public static final double MIN_RUNNING_RPS = 1;
+    public static final double INTAKE_GEAR_RATIO = 0.6;
 
-    private static final double MOTOR_KS = 0;//0.76176;
-    private static final double MOTOR_KV = 0.11562;
-    private static final double MOTOR_KA = 0.0079187;
+    private static final double MOTOR_KS = 0.69616;
+    private static final double MOTOR_KV = 0.18026;
+    private static final double MOTOR_KA = 0.0083494;
+
+    private static final double CONTINUOUS_CURRENT_LIMIT = 30;
+    private static final double PEAK_CURRENT = 40;
+    private static final double PEAK_DUR = 0.1;
     
     private static final double MAX_ERROR = 0.05;
     private static final double MODEL_STANDARD_DEVIATION = 1;
@@ -40,7 +46,7 @@ public class Intake extends SubsystemBase {
     private SimpleVelocitySystem loop;
 
     private Intake() {
-        motor = new HSFalcon(RobotMap.INTAKE_ID);
+        motor = new HSFalcon(RobotMap.INTAKE_ID, RobotMap.CANIVORE);
         doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotMap.INTAKE_FORWARD, RobotMap.INTAKE_BACKWARD);
         loop = new SimpleVelocitySystem(MOTOR_KS, MOTOR_KV, MOTOR_KA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, 
             MODEL_STANDARD_DEVIATION, MEASUREMENT_STANDARD_DEVIATION, LOOPTIME);
@@ -53,6 +59,7 @@ public class Intake extends SubsystemBase {
         motor.setInverted(MOTOR_INVERT);
         motor.configVelocityMeasurementWindow(1);
         motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+        motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, CONTINUOUS_CURRENT_LIMIT, PEAK_CURRENT, PEAK_DUR));
     }
    
     public void setPercentOutput(double output) {
@@ -70,7 +77,7 @@ public class Intake extends SubsystemBase {
     }
 
     public double getCurrentRPS() {
-        return 10*motor.getSelectedSensorVelocity() / 2048;
+        return 10*motor.getSelectedSensorVelocity() / 2048 * INTAKE_GEAR_RATIO;
     }
 
     public SimpleVelocitySystem getLoop(){

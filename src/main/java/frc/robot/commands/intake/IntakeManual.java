@@ -8,7 +8,7 @@ import frc.robot.subsystems.Intake;
  * Command to intake with a set velocity
  */
 public class IntakeManual extends IndefiniteCommand {    
-    private double speed = 0.4;
+    private static final double SPEED = 0.6;
 
     public IntakeManual() {
         addRequirements(Intake.getInstance());
@@ -17,11 +17,11 @@ public class IntakeManual extends IndefiniteCommand {
     public void execute() {
         // speed = SmartDashboard.getNumber("intake RPS", 0.1);
         if(OI.getInstance().getDriverGamepad().getRightTrigger() > 0.5) {
-            Intake.getInstance().setVelocity(speed * Intake.MAX_RPS); 
+            Intake.getInstance().setVelocity(SPEED * Intake.MAX_RPS); 
             Intake.getInstance().state = 1;
         }
         else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > 0.5) {
-            Intake.getInstance().setVelocity(-speed * Intake.MAX_RPS); 
+            Intake.getInstance().setVelocity(-SPEED * Intake.MAX_RPS); 
             Intake.getInstance().state = -1;
         }
         else {

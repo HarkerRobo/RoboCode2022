@@ -66,25 +66,26 @@ public class Trajectories {
         new Pose2d(8.3,1.5,Rotation2d.fromDegrees(180))
     ), config);
 
-    public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(1.92, -7.64), new Translation2d(0.92, -7.66)}), null, null);
+    // public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+    //     new Translation2d(1.92, -7.64), new Translation2d(0.92, -7.66)}), null, null);
     
-    public static final List<HSSwerveDriveController> twoBallAutoMiddle = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(2.51, -6.72), new Translation2d(2.03, -5.72)}), null, null);
+    // public static final List<HSSwerveDriveController> twoBallAutoMiddle = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+    //     new Translation2d(2.51, -6.72), new Translation2d(2.03, -5.72)}), null, null);
     
     public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70), new Translation2d(1.86, -5.76)}), null, null);
+        new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70), new Translation2d(1.86, -5.76)}), Rotation2d.fromDegrees(180), 
+        List.of(Rotation2d.fromDegrees(180),Rotation2d.fromDegrees(74.37)));
 
-    public static final List<HSSwerveDriveController> twoBallAutoTop = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(5.18, -6.22), new Translation2d(5.81, -5.49)}), null, null);
+    // public static final List<HSSwerveDriveController> twoBallAutoTop = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+    //     new Translation2d(5.18, -6.22), new Translation2d(5.81, -5.49)}), null, null);
     
-    public static final List<HSSwerveDriveController> twoBallAutoStealAndYeet = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(5.13, -6.21), new Translation2d(5.77, -5.51), new Translation2d(6.80, -5.63), new Translation2d(3.89, -4.63)}),
-        null, null);
+    // public static final List<HSSwerveDriveController> twoBallAutoStealAndYeet = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+    //     new Translation2d(5.13, -6.21), new Translation2d(5.77, -5.51), new Translation2d(6.80, -5.63), new Translation2d(3.89, -4.63)}),
+    //     null, null);
 
-    public static final List<HSSwerveDriveController> fiveBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(1.83,-7.86), new Translation2d(0.90,-7.76), new Translation2d(2.27,-5.70), new Translation2d(1.55,-2.69), new Translation2d(3.10,-3.82)}),
-        Rotation2d.fromDegrees(0), List.of(Rotation2d.fromDegrees(0),Rotation2d.fromDegrees(62),Rotation2d.fromDegrees(131),Rotation2d.fromDegrees(131)));
+    // public static final List<HSSwerveDriveController> fiveBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+    //     new Translation2d(1.83,-7.86), new Translation2d(0.90,-7.76), new Translation2d(2.27,-5.70), new Translation2d(1.55,-2.69), new Translation2d(3.10,-3.82)}),
+    //     Rotation2d.fromDegrees(180), List.of(Rotation2d.fromDegrees(180),Rotation2d.fromDegrees(242),Rotation2d.fromDegrees(311),Rotation2d.fromDegrees(311)));
 
     public static List<Trajectory> generateDirectTrajectories(Translation2d[] input){
         List<Trajectory> out = new ArrayList<Trajectory>();

@@ -34,17 +34,18 @@ public class SwerveModule {
 	private static final double ANGLE_I = 0;
 	private static final double ANGLE_D = 0;
 
-	private static final double DRIVE_KS = 0.59694;
-	private static final double DRIVE_KV = 2.2829;
-	private static final double DRIVE_KA = 0.1455;
+	private static final double DRIVE_KS = 0;//-0.62769/2;
+	private static final double DRIVE_KV = 2.2819;
+	private static final double DRIVE_KA = 0.3621;
 
 	private static final double MAX_ERROR = 0.05;  
-    private static final double MODEL_STANDARD_DEVIATION = 0.4;
-    private static final double ENCODER_STANDARD_DEVIATION = 0.02;
+    private static final double MODEL_STANDARD_DEVIATION = 0.5;
+    private static final double ENCODER_STANDARD_DEVIATION = 0.05;
 
 	private boolean ROTATION_SENSOR_PHASE;
 	private boolean TRANSLATION_SENSOR_PHASE;
 	
+
 	private boolean ROTATION_INVERT;
 	private boolean TRANSLATION_INVERT;
 
@@ -60,9 +61,9 @@ public class SwerveModule {
 		ROTATION_INVERT = rotationInverted;
 		TRANSLATION_INVERT = translationInverted;
 
-		rotation = new HSFalcon(rotationDriveId);
-		translation = new HSFalcon(translationDriveId);
-		rotationEncoder = new CANCoder(rotationEncoderID);
+		rotation = new HSFalcon(rotationDriveId, RobotMap.CANIVORE);
+		translation = new HSFalcon(translationDriveId, RobotMap.CANIVORE);
+		rotationEncoder = new CANCoder(rotationEncoderID, RobotMap.CANIVORE);
 		rotationEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 255);
 		rotationMotorInit();
 		translationMotorInit();
@@ -101,8 +102,8 @@ public class SwerveModule {
 
 		translation.configOpenloopRamp(0.3);
 		translation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
-		translation.configVelocityMeasurementWindow(1);
-		translation.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+		translation.configVelocityMeasurementWindow(4);
+		translation.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_25Ms);
 		
 		translation.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, RobotMap.SLOT_INDEX);
 	}
@@ -128,7 +129,7 @@ public class SwerveModule {
 	}
 
 	public double getTranslationVelocity() {
-		return translation.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / 10 / Units.WHEEL_ROT_TO_METER / Drivetrain.TRANSLATION_GEAR_RATIO;
+		return translation.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS * 10 * Units.WHEEL_ROT_TO_METER / Drivetrain.TRANSLATION_GEAR_RATIO;
 	}
 	
 	public SwerveModuleState getState() {

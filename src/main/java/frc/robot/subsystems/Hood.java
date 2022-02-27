@@ -24,7 +24,7 @@ public class Hood extends SubsystemBase{
     private static Hood instance;
     
     private Hood() {
-        hood = new HSFalcon(RobotMap.HOOD);
+        hood = new HSFalcon(RobotMap.HOOD, RobotMap.CANIVORE);
         initMotors();
     }
     

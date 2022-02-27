@@ -38,8 +38,8 @@ public class Shooter extends SubsystemBase {
     private Encoder shooterEncoder;    
     
     private Shooter() {
-        master = new HSFalcon(RobotMap.SHOOTER_MASTER);
-        follower = new HSFalcon(RobotMap.SHOOTER_FOLLOWER);
+        master = new HSFalcon(RobotMap.SHOOTER_MASTER, RobotMap.CANIVORE);
+        follower = new HSFalcon(RobotMap.SHOOTER_FOLLOWER, RobotMap.CANIVORE);
         shooterEncoder = new Encoder(RobotMap.SHOOTER_ENCODER_A, RobotMap.SHOOTER_ENCODER_B);
         velocitySystem = new SimpleVelocitySystem(kS, kV, kA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
         

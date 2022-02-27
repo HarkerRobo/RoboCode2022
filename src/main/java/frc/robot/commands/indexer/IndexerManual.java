@@ -5,7 +5,8 @@ import frc.robot.subsystems.Intake;
 import harkerrobolib.commands.IndefiniteCommand;
 
 public class IndexerManual extends IndefiniteCommand {
-    private double SPEED = 0.3;
+    private double INTAKE_SPEED = 0.35;
+    private double OUTTAKE_SPEED = -0.7;
     
     public IndexerManual() {
         addRequirements(Indexer.getInstance());
@@ -14,26 +15,26 @@ public class IndexerManual extends IndefiniteCommand {
     public void execute() {
         if(Intake.getInstance().state == 1){
             if(!Indexer.getInstance().topOccupied())
-                Indexer.getInstance().setPercentOutputTop(SPEED);
+                Indexer.getInstance().setPercentOutputTop(INTAKE_SPEED);
             else
                 Indexer.getInstance().setPercentOutputTop(0);
             if(Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied())
                 Indexer.getInstance().setPercentOutputBottom(0);
             else
-                Indexer.getInstance().setPercentOutputBottom(SPEED);
+                Indexer.getInstance().setPercentOutputBottom(INTAKE_SPEED);
         } else if(Intake.getInstance().state == -1){
-            Indexer.getInstance().setPercentOutputTop(-SPEED);
-            Indexer.getInstance().setPercentOutputBottom(-SPEED);
+            Indexer.getInstance().setPercentOutputTop(OUTTAKE_SPEED);
+            Indexer.getInstance().setPercentOutputBottom(OUTTAKE_SPEED);
         }
         else {
-            if(!Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) {
-                Indexer.getInstance().setPercentOutputBottom(SPEED);
-                Indexer.getInstance().setPercentOutputTop(SPEED);
-            }
-            else {
+            // if(!Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) {
+            //     Indexer.getInstance().setPercentOutputBottom(SPEED);
+            //     Indexer.getInstance().setPercentOutputTop(SPEED);
+            // }
+            // else {
                 Indexer.getInstance().setPercentOutputBottom(0);
                 Indexer.getInstance().setPercentOutputTop(0);
-            }
+            // }
         }
     }
 }

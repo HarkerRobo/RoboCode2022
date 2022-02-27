@@ -44,7 +44,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double MIN_OUTPUT = 0.01;
     public static final double MAX_DRIVE_VEL = 3; // theoretical 4.1148 m / s
-    public static final double MAX_ANGULAR_VEL = 1*Math.PI; // 
+    public static final double MAX_ANGULAR_VEL = Math.PI; // 
 
     private boolean fieldCentric = true;
 
@@ -61,7 +61,7 @@ public class Drivetrain extends SubsystemBase {
                 ROTATION_INVERT[i], TRANSLATION_INVERT[i]);
         }
         
-        pigeon = new WPI_Pigeon2(RobotMap.PIGEON_ID);
+        pigeon = new WPI_Pigeon2(RobotMap.PIGEON_ID, RobotMap.CANIVORE);
         pigeon.setYaw(0);
         pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_6_SensorFusion, 255);
         pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.RawStatus_4_Mag, 255);
@@ -78,6 +78,7 @@ public class Drivetrain extends SubsystemBase {
     public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
         for(int i = 0; i < 4; i++){
             SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
+            SmartDashboard.putNumber("Desired translation speed " + i, states[i].speedMetersPerSecond);
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
     }
@@ -99,7 +100,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public double getHeading(){
-        return (IS_PIGEON_UP) ? -pigeon.getYaw() : pigeon.getYaw();
+        return (!IS_PIGEON_UP) ? -pigeon.getYaw() : pigeon.getYaw();
     }
 
     public Rotation2d getHeadingRotation() {

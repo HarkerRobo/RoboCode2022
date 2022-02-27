@@ -4,10 +4,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.climber.SetClimberPosition;
+import frc.robot.auto.Autons;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
+import frc.robot.commands.intake.SetIntakeUp;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.shooter.ShootWithVelocity;
 import frc.robot.subsystems.Drivetrain;
@@ -40,10 +41,10 @@ public class OI {
         // }, Intake.getInstance()));
         // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
         // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
-        driverGamepad.getButtonA().whilePressed(new ParallelCommandGroup(new ShootWithVelocity(), new MoveBallsToShooter()));
+        // driverGamepad.getButtonA().whilePressed(new ParallelCommandGroup(new ShootWithVelocity(), new MoveBallsToShooter()));
         // driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
         // driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
-        driverGamepad.getButtonY().whilePressed(new ToggleIntake());
+        driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         // driverGamepad.getButtonA().whilePressed(new SetIntakeDown());
         driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0); 
@@ -61,7 +62,7 @@ public class OI {
         // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
         // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
         // wrap non-commands in lambda but just regular instantiation for commands
-        // driverGamepad.getButtonA().whenPressed(Autons.FIVE_BALL_AUTO);
+        driverGamepad.getButtonA().whenPressed(Autons.THREE_BALL_AUTO);
         // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.threepoints.get(0),Trajectories.threepoints.get(1)));
     }
 

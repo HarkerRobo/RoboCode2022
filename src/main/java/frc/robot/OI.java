@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.Autons;
+import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
@@ -36,34 +37,16 @@ public class OI {
     }
 
     public void initBindings() {
-        // driverGamepad.getButtonB().whenPressed(new InstantCommand(() -> {
-        //     Intake.getInstance().toggle();
-        // }, Intake.getInstance()));
-        // driverGamepad.getButtonX().whilePressed(new ShootWithVelocity(20));
-        // driverGamepad.getButtonY().whilePressed(new ShootWithVelocity(10));
-        // driverGamepad.getButtonA().whilePressed(new ParallelCommandGroup(new ShootWithVelocity(), new MoveBallsToShooter()));
-        // driverGamepad.getButtonA().whilePressed(new InstantCommand(Drivetrain.getInstance()::toggleFieldCentric));
-        // driverGamepad.getButtonB().whilePressed(new IntakeManual(0.3));
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ShootWithVelocity());
+        operatorGamepad.getButtonBumperRight().whilePressed(new MoveBallsToShooter());
+        operatorGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
-        // driverGamepad.getButtonA().whilePressed(new SetIntakeDown());
         driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
-            Drivetrain.getInstance().getPigeon().setYaw(0); 
-            SwerveManual.pigeonAngle=0;
+            Drivetrain.getInstance().getPigeon().setYaw(0);
+            SwerveManual.pigeonAngle = 0;
         }));
-
-        // driverGamepad.getButtonB().whilePressed(new MoveBallsToShooter());
-
-        // driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
-        driverGamepad.getLeftDPadButton().whenPressed(new ZeroHood());
-
-        driverGamepad.getDownDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos", 2)));
-        driverGamepad.getRightDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos",14)));
-        driverGamepad.getUpDPadButton().whilePressed(new InstantCommand(() -> SmartDashboard.putNumber("desired hood pos", 21)));
-        // driverGamepad.getButtonBumperLeft().whenHeld(new MoveBallsToShooter());
-        // driverGamepad.getButtonX().whilePressed(new SetIntakeUp());
-        // wrap non-commands in lambda but just regular instantiation for commands
-        driverGamepad.getButtonA().whenPressed(Autons.THREE_BALL_AUTO);
-        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(Trajectories.threepoints.get(0),Trajectories.threepoints.get(1)));
+        driverGamepad.getButtonA().whenPressed(new ZeroHood());
+        // operatorGamepad.getButtonX().whenPressed(Autons.TWO_BALL_AUTO);
     }
 
     public HSGamepad getDriverGamepad(){

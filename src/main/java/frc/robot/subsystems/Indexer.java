@@ -25,8 +25,8 @@ public class Indexer extends SubsystemBase {
     private static final int TOP_THRESHOLD = 172;
     private static final int BOTTOM_THRESHOLD = 150;
 
-    private static final double INDEXER_CURRENT_CONTINUOUS = 20;
-    private static final double INDEXER_CURRENT_PEAK = 20;
+    private static final double INDEXER_CURRENT_CONTINUOUS = 30;
+    private static final double INDEXER_CURRENT_PEAK = 30;
     private static final double INDEXER_CURRENT_PEAK_DUR = 0.05;
 
     private PicoColorSensor sensor;

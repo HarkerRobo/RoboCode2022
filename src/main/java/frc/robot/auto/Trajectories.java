@@ -34,7 +34,7 @@ public class Trajectories {
 
     public static final Trajectory moveBackward = TrajectoryGenerator.generateTrajectory(List.of(
         new Pose2d(0,0,Rotation2d.fromDegrees(270)),
-        new Pose2d(0,-2,Rotation2d.fromDegrees(270))
+        new Pose2d(0,-1.5,Rotation2d.fromDegrees(270))
     ), config);
 
     public static final Trajectory moveRight = TrajectoryGenerator.generateTrajectory(List.of(

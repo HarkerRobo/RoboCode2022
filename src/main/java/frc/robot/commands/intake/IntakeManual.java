@@ -20,7 +20,7 @@ public class IntakeManual extends IndefiniteCommand {
             Intake.getInstance().setVelocity(SPEED * Intake.MAX_RPS); 
             Intake.getInstance().state = 1;
         }
-        else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > 0.5) {
+        else if(Math.max(OI.getInstance().getDriverGamepad().getLeftTrigger(), OI.getInstance().getOperatorGamepad().getLeftTrigger()) > 0.5) {
             Intake.getInstance().setVelocity(-SPEED * Intake.MAX_RPS); 
             Intake.getInstance().state = -1;
         }

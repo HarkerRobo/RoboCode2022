@@ -55,7 +55,7 @@ public class HoodManual extends IndefiniteCommand{
         }
         else
             hoodPosition = 3;
-        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+        hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity);
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, (controlEffort + feedforwardAmount)/Units.MAX_CONTROL_EFFORT);

@@ -16,7 +16,6 @@ import frc.robot.commands.drivetrain.AlignWithLimelight;
  * @since February 13, 2020
  */
 public class Autons {
-    private static final Command limelightAlign = new AlignWithLimelight().raceWith(new WaitCommand(2));
     // public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
     //     new SetIntakeDown(),
     //     Trajectories.fiveBallAuto.get(0).deadlineWith(new RunIntake()),
@@ -39,13 +38,13 @@ public class Autons {
 
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
         Trajectories.threeBallAuto.get(0),
-        limelightAlign,
+        new AlignWithLimelight(2),
         Trajectories.threeBallAuto.get(1),
-        limelightAlign);
+        new AlignWithLimelight(2));
 
     public static final SequentialCommandGroup TWO_BALL = new SequentialCommandGroup(
         Trajectories.twoBallAuto.get(0),
-        limelightAlign);
+        new AlignWithLimelight(2));
 
     public static final SequentialCommandGroup square = new SequentialCommandGroup(
         Trajectories.square.get(0),

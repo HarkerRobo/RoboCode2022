@@ -9,28 +9,15 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.Autons;
 import frc.robot.auto.Trajectories;
-import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.hood.HoodManual;
-import frc.robot.commands.indexer.IndexerManual;
-import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.util.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -41,7 +28,6 @@ import frc.robot.util.Limelight;
  */
 public class Robot extends TimedRobot {
   public static Field2d field;
-  private PowerDistribution pd;
   private Command auto = new WaitCommand(0);
 
   /**
@@ -53,23 +39,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     field = new Field2d();
     SmartDashboard.putData(field);
-    // new Compressor(PneumaticsModuleType.REVPH).disable();
-    // default commands are commands that are always running on the robot
-    CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
-    CommandScheduler.getInstance().setDefaultCommand(Indexer.getInstance(), new IndexerManual());
-    CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
-    CommandScheduler.getInstance().setDefaultCommand(Hood.getInstance(), new HoodManual());
-    Drivetrain.getInstance().readCANCoders();
-    new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
-    // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
-    // OI.getInstance();
-    SmartDashboard.putNumber("desired velocity", 0);
-    SmartDashboard.putNumber("desired hood angle", 0.5);
-    SmartDashboard.putNumber("desired angle", 90);
-    SmartDashboard.putNumber("intake RPS", 0.1);
-    SmartDashboard.putNumber("desired hood pos", 0);
-    pd = new PowerDistribution();
-    NetworkTableInstance.getDefault().setUpdateRate(0.02);
     
     Trajectories.config = Trajectories.config;
   }
@@ -86,59 +55,12 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    Limelight.update();
-
-    Drivetrain.getInstance().getOdometry().update(
-      Drivetrain.getInstance().getHeadingRotation(), 
-      Drivetrain.getInstance().getTopLeft().getState(),
-      Drivetrain.getInstance().getTopRight().getState(), 
-      Drivetrain.getInstance().getBottomLeft().getState(), 
-      Drivetrain.getInstance().getBottomRight().getState()
-    );
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
-    // field.setRobotPose(new Pose2d(-robotPose.getY(), robotPose.getX(), robotPose.getRotation()));
-
-    SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
-    SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
-    SmartDashboard.putNumber("odometry y", Drivetrain.getInstance().getOdometry().getPoseMeters().getY());
-    SmartDashboard.putNumber("odometry theta", Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
-    // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
-    // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
-    // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
-    // SmartDashboard.putNumber("br abs", Drivetrain.getInstance().getBottomRight().getCanCoder().getAbsolutePosition());
-
-    // SmartDashboard.putNumber("tl angle", Drivetrain.getInstance().getTopLeft().getRotationAngle());
-    // SmartDashboard.putNumber("tr angle", Drivetrain.getInstance().getTopRight().getRotationAngle());
-    // SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
-    // SmartDashboard.putNumber("br angle", Drivetrain.getInstance().getBottomRight().getRotationAngle());
-
-    // SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
-
-    // SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getHeading());
-    // SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
-    // SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
-    SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
-    SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
-    SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
-    SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
-    // SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
-    // SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
-    // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
-    SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
-    // SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);
-    // SmartDashboard.putNumber("bottom g", Indexer.getInstance().getColor().green);
-    // SmartDashboard.putNumber("bottom b", Indexer.getInstance().getColor().blue);
-    // SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
-    // SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
-    SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
-    SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
+    field.setRobotPose(robotPose);
   }
 
   @Override
   public void autonomousInit() {
-    Limelight.setLEDS(true);
-    pd.setSwitchableChannel(true);
-
     auto = Autons.TWO_BALL;
     auto.schedule();
   }
@@ -148,8 +70,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    Limelight.setLEDS(true);
-    pd.setSwitchableChannel(true);
     auto.cancel();
   }
 
@@ -168,10 +88,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    Limelight.setLEDS(false);
-    pd.setSwitchableChannel(false);
-
-    auto.cancel();
   }
 
   /**
@@ -179,8 +95,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledPeriodic() {
-    Limelight.setLEDS(false);
-    pd.setSwitchableChannel(false);
   }
 
   /**

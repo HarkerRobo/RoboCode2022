@@ -1,13 +1,9 @@
 package frc.robot.auto;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
-import frc.robot.commands.indexer.MoveBallsToShooter;
-import frc.robot.commands.intake.RunIntake;
-import frc.robot.commands.intake.SetIntakeDown;
-import frc.robot.commands.shooter.RevShooter;
-import frc.robot.commands.shooter.ShootWithVelocity;
 
 /**
  * Stores and selects an autonomous routine to run.
@@ -20,6 +16,7 @@ import frc.robot.commands.shooter.ShootWithVelocity;
  * @since February 13, 2020
  */
 public class Autons {
+    private static final Command limelightAlign = new AlignWithLimelight().raceWith(new WaitCommand(2));
     // public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
     //     new SetIntakeDown(),
     //     Trajectories.fiveBallAuto.get(0).deadlineWith(new RunIntake()),
@@ -41,19 +38,14 @@ public class Autons {
     //     new WaitCommand(2).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()));
 
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
-        new SetIntakeDown(),
-        Trajectories.threeBallAuto.get(0).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()).raceWith(new WaitCommand(2)),
-        new WaitCommand(2).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()),
-        Trajectories.threeBallAuto.get(1).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()).raceWith(new WaitCommand(2)),
-        new WaitCommand(5).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()));
+        Trajectories.threeBallAuto.get(0),
+        limelightAlign,
+        Trajectories.threeBallAuto.get(1),
+        limelightAlign);
 
     public static final SequentialCommandGroup TWO_BALL = new SequentialCommandGroup(
-        new SetIntakeDown(),
-        Trajectories.twoBallAuto.get(0).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()).raceWith(new WaitCommand(2)),
-        new WaitCommand(5).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()));
+        Trajectories.twoBallAuto.get(0),
+        limelightAlign);
 
     public static final SequentialCommandGroup square = new SequentialCommandGroup(
         Trajectories.square.get(0),

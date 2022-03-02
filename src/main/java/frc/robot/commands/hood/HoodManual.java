@@ -21,7 +21,7 @@ public class HoodManual extends IndefiniteCommand{
     private static final double HOOD_KS = 0.63651; 
     private static final double HOOD_KV = 0.051961; 
     
-    private double hoodPosition;
+    private static double hoodPosition = 1;
 
     private ProfiledPIDController hoodController;
     private InterpolatedTreeMap referencePoints;
@@ -53,9 +53,7 @@ public class HoodManual extends IndefiniteCommand{
         if(Limelight.isTargetVisible()) {
             hoodPosition = referencePoints.get(Limelight.getDistance());
         }
-        else
-            hoodPosition = 3;
-        hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity);
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, (controlEffort + feedforwardAmount)/Units.MAX_CONTROL_EFFORT);

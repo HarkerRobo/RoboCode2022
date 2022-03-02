@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Units;
@@ -35,6 +36,7 @@ public class Shooter extends SubsystemBase {
 
     private SimpleVelocitySystem velocitySystem;
     public boolean fallbackOnEncoder;
+    private Timer fallbackTimer;
     
     private HSFalcon master;
     private HSFalcon follower;
@@ -46,6 +48,7 @@ public class Shooter extends SubsystemBase {
         shooterEncoder = new Encoder(RobotMap.SHOOTER_ENCODER_A, RobotMap.SHOOTER_ENCODER_B);
         velocitySystem = new SimpleVelocitySystem(kS, kV, kA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
         fallbackOnEncoder = false;
+        fallbackTimer = new Timer();
         initMotors();
     }
 
@@ -77,9 +80,15 @@ public class Shooter extends SubsystemBase {
     public double getWheelRPS() {
         double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO;
         double encoderVel = shooterEncoder.getRate() / 1024;
-        if(Math.abs(integratedVel - encoderVel) > 7)
+        if(Math.abs(integratedVel - encoderVel) > 7) {
             fallbackOnEncoder = true;
-        else fallbackOnEncoder = false;
+            fallbackTimer.start();
+        }
+        else 
+        {
+            fallbackOnEncoder = false;
+            fallbackTimer.stop();
+        }
         return (fallbackOnEncoder) ? integratedVel : encoderVel;
     }
 
@@ -91,6 +100,10 @@ public class Shooter extends SubsystemBase {
         velocitySystem.set(vel);
         velocitySystem.update(getWheelRPS());
         setPercentOutput(velocitySystem.getOutput());
+    }
+
+    public Timer getFallbackTimer() {
+        return fallbackTimer;
     }
 
     public HSFalcon getMaster() {

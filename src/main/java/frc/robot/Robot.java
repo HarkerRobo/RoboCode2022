@@ -102,6 +102,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
     SmartDashboard.putNumber("odometry y", Drivetrain.getInstance().getOdometry().getPoseMeters().getY());
     SmartDashboard.putNumber("odometry theta", Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
+    SmartDashboard.putNumber("shooter encoder fallback time", Shooter.getInstance().getFallbackTimer().get());
     // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());

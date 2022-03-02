@@ -10,7 +10,9 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -66,6 +68,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired angle", 90);
     SmartDashboard.putNumber("intake RPS", 0.1);
     SmartDashboard.putNumber("desired hood pos", 0);
+    DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 10);
+    pressure.set(DoubleSolenoid.Value.kForward);
     // NetworkTableInstance.getDefault().setUpdateRate(0.02);
   }
 

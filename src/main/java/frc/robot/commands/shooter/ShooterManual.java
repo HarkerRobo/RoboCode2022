@@ -13,7 +13,7 @@ public class ShooterManual extends IndefiniteCommand {
     }
 
     public void execute() {
-        // Shooter.getInstance().setPercentOutput(OI.getInstance().getDriverGamepad().getRightTrigger() * 0.8);
+        
     }
 
     public void end() {

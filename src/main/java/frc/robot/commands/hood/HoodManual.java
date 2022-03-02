@@ -54,7 +54,7 @@ public class HoodManual extends IndefiniteCommand{
         if(Limelight.isTargetVisible()) {
             hoodPosition = referencePoints.get(Limelight.getDistance());
         }
-        else if(OI.getInstance().getOperatorGamepad().getButtonBState())
+        else // if(OI.getInstance().getOperatorGamepad().getButtonBState())
             hoodPosition = 3;
         // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);

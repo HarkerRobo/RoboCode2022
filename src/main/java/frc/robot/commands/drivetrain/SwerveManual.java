@@ -22,7 +22,7 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.06;
+    public static final double LIMELIGHT_KP = 0.075;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
     
     public static double pigeonAngle;

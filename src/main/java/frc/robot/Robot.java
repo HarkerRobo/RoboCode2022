@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired angle", 90);
     SmartDashboard.putNumber("intake RPS", 0.1);
     SmartDashboard.putNumber("desired hood pos", 0);
-    DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 10);
+    DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     pressure.set(DoubleSolenoid.Value.kForward);
     // NetworkTableInstance.getDefault().setUpdateRate(0.02);
   }

@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.OI;
 import frc.robot.Units;
 import frc.robot.subsystems.Hood;
 import frc.robot.util.InterpolatedTreeMap;
@@ -53,9 +54,9 @@ public class HoodManual extends IndefiniteCommand{
         if(Limelight.isTargetVisible()) {
             hoodPosition = referencePoints.get(Limelight.getDistance());
         }
-        else
+        else if(OI.getInstance().getOperatorGamepad().getButtonBState())
             hoodPosition = 3;
-        hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity);
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, (controlEffort + feedforwardAmount)/Units.MAX_CONTROL_EFFORT);

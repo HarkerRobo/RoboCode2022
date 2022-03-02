@@ -38,9 +38,6 @@ public class Intake extends SubsystemBase {
     private static final double LOOPTIME = 0.02;
 
     public int state = 0;
-
-    public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kReverse;
-    public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kForward;
     
     private DoubleSolenoid doubleSolenoid;
     private SimpleVelocitySystem loop;

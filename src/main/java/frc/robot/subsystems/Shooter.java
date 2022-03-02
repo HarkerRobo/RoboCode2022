@@ -29,9 +29,12 @@ public class Shooter extends SubsystemBase {
     private static final double MODEL_STANDARD_DEVIATION = 0.1;
     private static final double ENCODER_STANDARD_DEVIATION = 0.02;
 
+    private static final double SHOOTER_GEAR_RATIO = 1.5;
+
     public static final double SHOOTER_REV_TIME = 1.0;
 
     private SimpleVelocitySystem velocitySystem;
+    public boolean fallbackOnEncoder;
     
     private HSFalcon master;
     private HSFalcon follower;
@@ -42,7 +45,7 @@ public class Shooter extends SubsystemBase {
         follower = new HSFalcon(RobotMap.SHOOTER_FOLLOWER, RobotMap.CANIVORE);
         shooterEncoder = new Encoder(RobotMap.SHOOTER_ENCODER_A, RobotMap.SHOOTER_ENCODER_B);
         velocitySystem = new SimpleVelocitySystem(kS, kV, kA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
-        
+        fallbackOnEncoder = false;
         initMotors();
     }
 
@@ -56,7 +59,7 @@ public class Shooter extends SubsystemBase {
         follower.setInverted(FOLLOWER_INVERTED);
 
         master.configVelocityMeasurementWindow(1);
-        master.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+        master.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_50Ms);
 
         master.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
         follower.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
@@ -72,7 +75,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getWheelRPS() {
-        return shooterEncoder.getRate() / 1024;
+        double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO;
+        double encoderVel = shooterEncoder.getRate() / 1024;
+        if(Math.abs(integratedVel - encoderVel) > 7)
+            fallbackOnEncoder = true;
+        else fallbackOnEncoder = false;
+        return (fallbackOnEncoder) ? integratedVel : encoderVel;
     }
 
     public SimpleVelocitySystem getVelocitySystem() {

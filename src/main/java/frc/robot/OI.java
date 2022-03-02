@@ -11,7 +11,7 @@ import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.SetIntakeUp;
 import frc.robot.commands.intake.ToggleIntake;
-import frc.robot.commands.shooter.ShootWithVelocity;
+import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.HSGamepad;
 import harkerrobolib.wrappers.XboxGamepad;
@@ -37,7 +37,6 @@ public class OI {
     }
 
     public void initBindings() {
-        operatorGamepad.getButtonBumperLeft().whilePressed(new ShootWithVelocity());
         operatorGamepad.getButtonBumperRight().whilePressed(new MoveBallsToShooter());
         operatorGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());

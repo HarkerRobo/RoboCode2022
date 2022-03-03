@@ -17,7 +17,7 @@ import harkerrobolib.wrappers.HSFalcon;
 public class Shooter extends SubsystemBase {
     private static Shooter shooter;
 
-    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? true : false;
+    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? true : true;
     private static final boolean FOLLOWER_INVERTED = (RobotMap.IS_COMP) ? false : false;
     
     public static final double kS = 0.66342/2;    

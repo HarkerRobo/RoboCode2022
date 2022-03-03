@@ -17,7 +17,7 @@ public class Indexer extends SubsystemBase {
     private HSFalcon top;
     private HSFalcon bottom;
 
-    private static final boolean TOP_INVERT = (RobotMap.IS_COMP) ? true : false;
+    private static final boolean TOP_INVERT = (RobotMap.IS_COMP) ? true : true;
     private static final boolean BOTTOM_INVERT = (RobotMap.IS_COMP) ? false : false;
 
     private static final boolean BOTTOM_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : false;

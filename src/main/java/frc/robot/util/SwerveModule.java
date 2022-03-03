@@ -41,9 +41,6 @@ public class SwerveModule {
 	private static final double MAX_ERROR = 0.05;  
     private static final double MODEL_STANDARD_DEVIATION = 0.5;
     private static final double ENCODER_STANDARD_DEVIATION = 0.05;
-
-	private boolean ROTATION_SENSOR_PHASE;
-	private boolean TRANSLATION_SENSOR_PHASE;
 	
 
 	private boolean ROTATION_INVERT;
@@ -53,18 +50,15 @@ public class SwerveModule {
 	private SwerveModuleState state;
 	private CANCoder rotationEncoder;
 
-	public SwerveModule(boolean rotationSensorPhase, boolean translationSensorPhase, int rotationDriveId, int rotationEncoderID,
+	public SwerveModule(int rotationDriveId, int rotationEncoderID,
 			int translationDriveId, boolean rotationInverted, boolean translationInverted) {
-		ROTATION_SENSOR_PHASE = rotationSensorPhase;
-		TRANSLATION_SENSOR_PHASE = translationSensorPhase;
-
 		ROTATION_INVERT = rotationInverted;
 		TRANSLATION_INVERT = translationInverted;
 
 		rotation = new HSFalcon(rotationDriveId, RobotMap.CANIVORE);
 		translation = new HSFalcon(translationDriveId, RobotMap.CANIVORE);
 		rotationEncoder = new CANCoder(rotationEncoderID, RobotMap.CANIVORE);
-		rotationEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 255);
+		rotationEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 50);
 		rotationMotorInit();
 		translationMotorInit();
 		translationLoop = new SimpleVelocitySystem(DRIVE_KS, DRIVE_KV, DRIVE_KA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
@@ -74,7 +68,6 @@ public class SwerveModule {
 	private void rotationMotorInit() {
 		rotation.configFactoryDefault();
 		rotation.setInverted(ROTATION_INVERT);
-		rotation.setSensorPhase(ROTATION_SENSOR_PHASE);
 		rotation.setNeutralMode(NeutralMode.Brake);
 		// rotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, ANGLE_CURRENT_CONTINUOUS, ANGLE_CURRENT_PEAK, ANGLE_CURRENT_PEAK_DUR));
 		rotation.configVoltageCompSaturation(VOLTAGE_COMP);
@@ -94,7 +87,6 @@ public class SwerveModule {
 
 	private void translationMotorInit() {
 		translation.configFactoryDefault();
-		translation.setSensorPhase(TRANSLATION_SENSOR_PHASE);
 		translation.setNeutralMode(NeutralMode.Brake);
 		translation.setInverted(TRANSLATION_INVERT);
 

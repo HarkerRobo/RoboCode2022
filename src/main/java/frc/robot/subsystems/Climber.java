@@ -20,9 +20,10 @@ public class Climber extends SubsystemBase {
     // private static final double CLIMBER_KI = 0;
     // private static final double CLIMBER_KD = 0;
 
-    public static final double MAX_HEIGHT = 115000; //change
+    public static final double MAX_HEIGHT = 112000; //change
     public static final double DOWN_HEIGHT = 10000; //change
     public static final double ZERO_HEIGHT = 0; //change
+    public boolean isZeroed;
 
     private HSFalcon master;
     private HSFalcon follower;
@@ -33,6 +34,7 @@ public class Climber extends SubsystemBase {
         follower = new HSFalcon(RobotMap.CLIMBER_FOLLOWER, RobotMap.CANIVORE);
         piston = new DoubleSolenoid(PneumaticsModuleType.REVPH ,RobotMap.CLIMBER_FORWARD, RobotMap.CLIMBER_BACKWARD);
         init();
+        isZeroed = false;
     }
 
     public void init() {
@@ -45,10 +47,10 @@ public class Climber extends SubsystemBase {
         master.setNeutralMode(NeutralMode.Brake);
         follower.setNeutralMode(NeutralMode.Brake);
         master.configForwardSoftLimitThreshold(MAX_HEIGHT);
-        master.configForwardSoftLimitEnable(false);
+        master.configForwardSoftLimitEnable(true);
         master.setSelectedSensorPosition(0);
-        follower.configReverseSoftLimitEnable(false);
-        follower.configReverseSoftLimitThreshold(0);
+        master.configReverseSoftLimitThreshold(2000);
+        master.configReverseSoftLimitEnable(false);
 
         master.configOpenloopRamp(0.3);
         // master.config_kP(RobotMap.SLOT_INDEX, CLIMBER_KP);

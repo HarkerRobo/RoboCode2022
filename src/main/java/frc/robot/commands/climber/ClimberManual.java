@@ -15,6 +15,6 @@ public class ClimberManual extends IndefiniteCommand{
         else if (OI.getInstance().getDriverGamepad().getUpDPadButton().get())
             Climber.getInstance().setClimberOutput(0.7);
         else 
-            Climber.getInstance().setClimberOutput(-0);
+            Climber.getInstance().setClimberOutput(-0.06);
     }
 }

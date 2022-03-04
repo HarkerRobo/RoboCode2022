@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.Autons;
+import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.climber.ToggleClimber;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
@@ -47,7 +48,14 @@ public class OI {
             SwerveManual.pigeonAngle = 0;
         }));
         driverGamepad.getButtonA().whenPressed(new ZeroHood());
-        driverGamepad.getLeftDPadButton().whenPressed(new InstantCommand(() -> Climber.getInstance().getClimberMaster().setSelectedSensorPosition(0)));
+        driverGamepad.getLeftDPadButton().whenPressed(new InstantCommand(() -> 
+            {
+                Climber.getInstance().getClimberMaster().setSelectedSensorPosition(0);
+                Climber.getInstance().isZeroed = true;
+                Climber.getInstance().getClimberMaster().configReverseSoftLimitEnable(true);
+            }));
+        driverGamepad.getButtonStart().whenPressed(new SetClimberPosition(100000));
+        driverGamepad.getButtonSelect().whenPressed(new SetClimberPosition(5000));
         // operatorGamepad.getButtonX().whenPressed(Autons.TWO_BALL_AUTO);
     }
 

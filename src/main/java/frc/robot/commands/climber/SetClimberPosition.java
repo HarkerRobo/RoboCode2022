@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class SetClimberPosition extends CommandBase {
-    private static final double OUTPUT_MAGNITUDE = 1;
-    private double MAX_ERROR = 1000;
+    private static final double OUTPUT_MAGNITUDE_FORWARD = 0.5;
+    private static final double OUTPUT_MAGNITUDE_BACKWARD = -0.7;
+    private double MAX_ERROR = 1500;
     private double position;
 
     public SetClimberPosition(double pos) {
@@ -16,8 +17,12 @@ public class SetClimberPosition extends CommandBase {
     }
 
     public void execute() {
+        if(!Climber.getInstance().isZeroed) return;
         double direction = Math.signum(position - Climber.getInstance().getPosition());
-        Climber.getInstance().setClimberOutput(direction * OUTPUT_MAGNITUDE);
+        if(direction > 0)
+            Climber.getInstance().setClimberOutput(OUTPUT_MAGNITUDE_FORWARD);
+        else if(direction < 0)
+            Climber.getInstance().setClimberOutput(OUTPUT_MAGNITUDE_BACKWARD);
     }
 
     @Override

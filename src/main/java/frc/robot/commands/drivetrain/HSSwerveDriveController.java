@@ -21,7 +21,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
-    public static final double THETA_KP = 4;
+    public static final double THETA_KP = 10;
     public static final double THETA_KI = 0;
     public static final double THETA_KD = 7;
 

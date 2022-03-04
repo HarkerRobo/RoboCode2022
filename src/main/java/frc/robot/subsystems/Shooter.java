@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Units;
@@ -16,7 +17,7 @@ import harkerrobolib.wrappers.HSFalcon;
 public class Shooter extends SubsystemBase {
     private static Shooter shooter;
 
-    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? true : false;
+    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? true : true;
     private static final boolean FOLLOWER_INVERTED = (RobotMap.IS_COMP) ? false : false;
     
     public static final double kS = 0.66342/2;    
@@ -29,9 +30,13 @@ public class Shooter extends SubsystemBase {
     private static final double MODEL_STANDARD_DEVIATION = 0.1;
     private static final double ENCODER_STANDARD_DEVIATION = 0.02;
 
+    private static final double SHOOTER_GEAR_RATIO = 1.5;
+
     public static final double SHOOTER_REV_TIME = 1.0;
 
     private SimpleVelocitySystem velocitySystem;
+    public boolean fallbackOnEncoder;
+    private Timer fallbackTimer;
     
     private HSFalcon master;
     private HSFalcon follower;
@@ -42,7 +47,8 @@ public class Shooter extends SubsystemBase {
         follower = new HSFalcon(RobotMap.SHOOTER_FOLLOWER, RobotMap.CANIVORE);
         shooterEncoder = new Encoder(RobotMap.SHOOTER_ENCODER_A, RobotMap.SHOOTER_ENCODER_B);
         velocitySystem = new SimpleVelocitySystem(kS, kV, kA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);
-        
+        fallbackOnEncoder = false;
+        fallbackTimer = new Timer();
         initMotors();
     }
 
@@ -56,7 +62,7 @@ public class Shooter extends SubsystemBase {
         follower.setInverted(FOLLOWER_INVERTED);
 
         master.configVelocityMeasurementWindow(1);
-        master.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+        master.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_50Ms);
 
         master.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
         follower.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
@@ -72,7 +78,18 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getWheelRPS() {
-        return shooterEncoder.getRate() / 1024;
+        double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO;
+        double encoderVel = shooterEncoder.getRate() / 1024;
+        if(Math.abs(integratedVel - encoderVel) > 7) {
+            fallbackOnEncoder = true;
+            fallbackTimer.start();
+        }
+        else 
+        {
+            fallbackOnEncoder = false;
+            fallbackTimer.stop();
+        }
+        return (fallbackOnEncoder) ? integratedVel : encoderVel;
     }
 
     public SimpleVelocitySystem getVelocitySystem() {
@@ -83,6 +100,10 @@ public class Shooter extends SubsystemBase {
         velocitySystem.set(vel);
         velocitySystem.update(getWheelRPS());
         setPercentOutput(velocitySystem.getOutput());
+    }
+
+    public Timer getFallbackTimer() {
+        return fallbackTimer;
     }
 
     public HSFalcon getMaster() {

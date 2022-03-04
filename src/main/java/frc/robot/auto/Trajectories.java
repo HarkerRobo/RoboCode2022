@@ -34,7 +34,7 @@ public class Trajectories {
 
     public static final Trajectory moveBackward = TrajectoryGenerator.generateTrajectory(List.of(
         new Pose2d(0,0,Rotation2d.fromDegrees(270)),
-        new Pose2d(0,-2,Rotation2d.fromDegrees(270))
+        new Pose2d(0,-1.5,Rotation2d.fromDegrees(270))
     ), config);
 
     public static final Trajectory moveRight = TrajectoryGenerator.generateTrajectory(List.of(
@@ -72,9 +72,19 @@ public class Trajectories {
     // public static final List<HSSwerveDriveController> twoBallAutoMiddle = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
     //     new Translation2d(2.51, -6.72), new Translation2d(2.03, -5.72)}), null, null);
     
-    public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
-        new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70), new Translation2d(1.86, -5.76)}), Rotation2d.fromDegrees(180), 
-        List.of(Rotation2d.fromDegrees(180),Rotation2d.fromDegrees(74.37)));
+    public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(
+        new Translation2d[] {
+            new Translation2d(7.70, 1.89), 
+            new Translation2d(7.70, 0.96), 
+            new Translation2d(5.76, 1.86)}), 
+        Rotation2d.fromDegrees(270), 
+        List.of(
+            Rotation2d.fromDegrees(270),
+            Rotation2d.fromDegrees(166)));
+
+    public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
+        new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70)}), Rotation2d.fromDegrees(180), 
+        List.of(Rotation2d.fromDegrees(180)));
 
     // public static final List<HSSwerveDriveController> twoBallAutoTop = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
     //     new Translation2d(5.18, -6.22), new Translation2d(5.81, -5.49)}), null, null);

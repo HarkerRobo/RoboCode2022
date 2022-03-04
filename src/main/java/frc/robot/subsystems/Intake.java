@@ -10,6 +10,7 @@ import harkerrobolib.wrappers.HSFalcon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.FloatDeserializer;
 
 /**
  * Defines an intake with a motor and a double solenoid
@@ -18,7 +19,7 @@ public class Intake extends SubsystemBase {
     private static Intake intake;
     private HSFalcon motor;
     
-    private static final boolean MOTOR_INVERT = (RobotMap.IS_COMP) ? true : false;
+    private static final boolean MOTOR_INVERT = (RobotMap.IS_COMP) ? true : true;
     
     public static final double MAX_RPS = 60;
     public static final double MIN_RUNNING_RPS = 1;
@@ -38,9 +39,6 @@ public class Intake extends SubsystemBase {
     private static final double LOOPTIME = 0.02;
 
     public int state = 0;
-
-    public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kReverse;
-    public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kForward;
     
     private DoubleSolenoid doubleSolenoid;
     private SimpleVelocitySystem loop;
@@ -59,7 +57,7 @@ public class Intake extends SubsystemBase {
         motor.setInverted(MOTOR_INVERT);
         motor.configVelocityMeasurementWindow(1);
         motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
-        motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, CONTINUOUS_CURRENT_LIMIT, PEAK_CURRENT, PEAK_DUR));
+        motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, CONTINUOUS_CURRENT_LIMIT, PEAK_CURRENT, PEAK_DUR));
     }
    
     public void setPercentOutput(double output) {

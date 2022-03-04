@@ -23,12 +23,10 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveModule[] modules;
 
-    private static final boolean[] ROTATION_SENSOR_PHASE = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false,false,false,false};
-    private static final boolean[] TRANSLATION_SENSOR_PHASE = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false,false,false,false};
-    private static final boolean[] ROTATION_INVERT = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false,false,false,false};
-    private static final boolean[] TRANSLATION_INVERT =(RobotMap.IS_COMP) ? new boolean[]{false, true, true, false} : new boolean[]{false,false,false,false};
+    private static final boolean[] ROTATION_INVERT = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false, false, false, false};
+    private static final boolean[] TRANSLATION_INVERT =(RobotMap.IS_COMP) ? new boolean[]{false, true, true, false} : new boolean[]{true, true, true, true};
 
-    public static final double[] OFFSETS = (RobotMap.IS_COMP) ? new double[]{263.935547, 178.330078, 109.951172, 32.255859} : new double[]{0,0,0,0};
+    public static final double[] OFFSETS = (RobotMap.IS_COMP) ? new double[]{263.935547, 178.330078, 109.951172, 32.255859} : new double[]{270.175781,285.468750,281.074219,322.822266};
 
     public static final boolean IS_PIGEON_UP = (RobotMap.IS_COMP) ? true : false;
 
@@ -38,7 +36,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double VOLTAGE_COMP = 10;
 
     public static final double TRANSLATION_GEAR_RATIO = 6.75;
-    public static final double ROTATION_GEAR_RATIO = 12.8;//12.75;//12.8; // 12.8 rotations of motor = 1 rotation of wheel
+    public static final double ROTATION_GEAR_RATIO = 12.8; // 12.8 rotations of motor = 1 rotation of wheel
     public static final double WHEEL_DIAMETER = 4; //inches
     public static final double FEET_TO_METER = 0.3048;
 
@@ -56,8 +54,7 @@ public class Drivetrain extends SubsystemBase {
     private Drivetrain() {
         modules = new SwerveModule[4];
         for(int i = 0; i < 4; i++){
-            modules[i] = new SwerveModule(ROTATION_SENSOR_PHASE[i], TRANSLATION_SENSOR_PHASE[i], 
-                RobotMap.ROTATION_IDS[i], RobotMap.ROTATION_CANCODER_IDS[i], RobotMap.TRANSLATION_IDS[i], 
+            modules[i] = new SwerveModule(RobotMap.ROTATION_IDS[i], RobotMap.ROTATION_CANCODER_IDS[i], RobotMap.TRANSLATION_IDS[i], 
                 ROTATION_INVERT[i], TRANSLATION_INVERT[i]);
         }
         

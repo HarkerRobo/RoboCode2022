@@ -22,7 +22,7 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.06;
+    public static final double LIMELIGHT_KP = 0.075;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
     
     public static double pigeonAngle;
@@ -62,21 +62,21 @@ public class SwerveManual extends IndefiniteCommand {
             translationy = translationy / mag * limitedMag;
         }
 
-        if(OI.getInstance().getDriverGamepad().getButtonBState()) {
+        if(OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
             translationy *= 0.6;
             translationx *= 0.6;
         }
 
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
-            angularVelocity = PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
+            angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
             SmartDashboard.putBoolean("holding pigeon angle", true);
         }
         else {
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
-        if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
+        if(OI.getInstance().getDriverGamepad().getButtonBState() && Limelight.isTargetVisible()) {
             angularVelocity = LIMELIGHT_KP * Limelight.getTx();
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);

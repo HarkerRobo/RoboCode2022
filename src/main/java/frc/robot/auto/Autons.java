@@ -38,9 +38,7 @@ public class Autons {
 
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
         Trajectories.threeBallAuto.get(0),
-        new AlignWithLimelight(2),
-        Trajectories.threeBallAuto.get(1),
-        new AlignWithLimelight(2));
+        Trajectories.threeBallAuto.get(1));
 
     public static final SequentialCommandGroup TWO_BALL = new SequentialCommandGroup(
         Trajectories.twoBallAuto.get(0),

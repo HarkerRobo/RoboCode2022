@@ -21,7 +21,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
-    public static final double THETA_KP = 2;
+    public static final double THETA_KP = 6;
     public static final double THETA_KI = 0;
     public static final double THETA_KD = 0;
 
@@ -50,6 +50,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         this.trajectory = trajectory;
         this.initHeading = initHeading;
         this.isFirst = isFirst;
+        thetaController.enableContinuousInput(-1* Math.PI, 1* Math.PI);
     }
 
     public HSSwerveDriveController(Trajectory trajectory, Rotation2d finalHeading) {

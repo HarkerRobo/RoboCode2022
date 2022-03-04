@@ -84,7 +84,7 @@ public class Trajectories {
             new Translation2d(7.70, 1.89), 
             new Translation2d(7.70, 0.96), 
             new Translation2d(5.76, 1.86)}), Rotation2d.fromDegrees(-90), 
-        List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(166)));
+        List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(-194)));
 
     public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(new Translation2d[] {
         new Translation2d(1.89, -7.70), new Translation2d(0.96, -7.70)}), Rotation2d.fromDegrees(180), 

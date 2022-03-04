@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
     private static Drivetrain drivetrain;
 
-    public static final boolean IS_PIGEON_UP = true;
+    public static final boolean IS_PIGEON_UP = false;
 
     public static final double DT_WIDTH = 0.5461; // 0.93345 bumper to bumper
     public static final double DT_LENGTH = 0.5969; // 0.88265
@@ -37,9 +38,13 @@ public class Drivetrain extends SubsystemBase {
         ChassisSpeeds speeds = kinematics.toChassisSpeeds(states);
         double period = 0.02;
 
+        for(int i = 0; i < 4;i ++) {
+            SmartDashboard.putNumber("state speed " + i, states[i].speedMetersPerSecond);
+        }
+
         // manually integrate heading, since odometry requires a gyro
         odometry.update(
-            odometry.getPoseMeters().getRotation().plus(Rotation2d.fromDegrees(speeds.omegaRadiansPerSecond * period)),
+            odometry.getPoseMeters().getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond * period)),
             states
         );
     }

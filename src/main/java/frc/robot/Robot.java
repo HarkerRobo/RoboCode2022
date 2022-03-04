@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    auto = Autons.TWO_BALL;
+    auto = Autons.THREE_BALL_AUTO;
     auto.schedule();
   }
 

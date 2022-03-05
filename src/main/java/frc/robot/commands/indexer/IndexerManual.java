@@ -1,5 +1,6 @@
 package frc.robot.commands.indexer;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import harkerrobolib.commands.IndefiniteCommand;

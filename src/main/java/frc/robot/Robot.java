@@ -25,6 +25,7 @@ import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
 import frc.robot.commands.intake.IntakeManual;
+import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().setDefaultCommand(Intake.getInstance(), new IntakeManual());
     CommandScheduler.getInstance().setDefaultCommand(Hood.getInstance(), new HoodManual());
     CommandScheduler.getInstance().setDefaultCommand(Climber.getInstance(), new ClimberManual());
+
     Drivetrain.getInstance().readCANCoders();
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
@@ -131,7 +133,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);
     SmartDashboard.putNumber("bottom g", Indexer.getInstance().getColor().green);
     SmartDashboard.putNumber("bottom b", Indexer.getInstance().getColor().blue);
-    SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
     SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
     SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
     SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());

@@ -78,18 +78,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getWheelRPS() {
-        double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO;
-        double encoderVel = shooterEncoder.getRate() / 1024;
-        if(Math.abs(integratedVel - encoderVel) > 7) {
-            fallbackOnEncoder = true;
-            fallbackTimer.start();
-        }
-        else 
-        {
-            fallbackOnEncoder = false;
-            fallbackTimer.stop();
-        }
-        return (fallbackOnEncoder) ? integratedVel : encoderVel;
+        // double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO;
+        // double encoderVel = shooterEncoder.getRate() / 1024;
+        // if(Math.abs(integratedVel - encoderVel) > 7) {
+        //     fallbackOnEncoder = true;
+        //     fallbackTimer.start();
+        // }
+        // else 
+        // {
+        //     fallbackOnEncoder = false;
+        //     fallbackTimer.stop();
+        // }
+        // return (fallbackOnEncoder) ? integratedVel : encoderVel;
+        return shooterEncoder.getRate() / 1024;
     }
 
     public SimpleVelocitySystem getVelocitySystem() {

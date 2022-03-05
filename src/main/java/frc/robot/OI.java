@@ -41,6 +41,7 @@ public class OI {
 
     public void initBindings() {
         operatorGamepad.getButtonBumperRight().whilePressed(new MoveBallsToShooter());
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ShooterManual());
         operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {

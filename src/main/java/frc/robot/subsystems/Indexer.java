@@ -22,8 +22,9 @@ public class Indexer extends SubsystemBase {
 
     private static final boolean BOTTOM_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : false;
     private static final int[][] RED_COLOR_RANGE = {{170,255},{0,0},{0,0}};
-    private static final int TOP_THRESHOLD = 172;
-    private static final int BOTTOM_THRESHOLD = 150;
+    private static final int TOP_THRESHOLD = 400
+    ;
+    private static final int BOTTOM_THRESHOLD = 400;
 
     private static final double INDEXER_CURRENT_CONTINUOUS = 30;
     private static final double INDEXER_CURRENT_PEAK = 30;
@@ -80,7 +81,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public int getProximity() {
-        if(!BOTTOM_SENSOR_IS_0)
+        if(BOTTOM_SENSOR_IS_0)
         return sensor.getProximity0();
     return sensor.getProximity1();
     }

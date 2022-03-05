@@ -16,8 +16,8 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     
     public void execute() {
         if(Math.abs(Shooter.getInstance().getWheelRPS() - 
-            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3 && 
-            (!Limelight.isTargetVisible() || Math.abs(Limelight.getTx()) < LIMELIGHT_THRESHOLD)) {
+            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 10) { // && 
+            // (!Limelight.isTargetVisible() || Math.abs(Limelight.getTx()) < LIMELIGHT_THRESHOLD)) {
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

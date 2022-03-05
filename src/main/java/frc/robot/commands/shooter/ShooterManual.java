@@ -31,7 +31,6 @@ public class ShooterManual extends IndefiniteCommand {
     }
     
     public void execute() {
-        if(!OI.getInstance().getOperatorGamepad().getButtonBumperLeftState()) return;
         if(Limelight.isTargetVisible()) velocity = referencePoints.get(Limelight.getDistance());
         else //if(OI.getInstance().getOperatorGamepad().getButtonBState()) 
             velocity = 32;

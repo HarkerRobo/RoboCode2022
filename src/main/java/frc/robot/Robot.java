@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
+    SmartDashboard.putNumber("heading", Drivetrain.getInstance().getHeading());
     field.setRobotPose(robotPose);
   }
 

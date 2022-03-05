@@ -21,7 +21,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
-    public static final double THETA_KP = 6;
+    public static final double THETA_KP = 4;
     public static final double THETA_KI = 0;
     public static final double THETA_KD = 0;
 
@@ -50,7 +50,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         this.trajectory = trajectory;
         this.initHeading = initHeading;
         this.isFirst = isFirst;
-        thetaController.enableContinuousInput(-1* Math.PI, 1* Math.PI);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public HSSwerveDriveController(Trajectory trajectory, Rotation2d finalHeading) {
@@ -63,8 +63,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         if(isFirst && initHeading != null) {
             // Drivetrain.getInstance().getPigeon().setYaw(initHeading.getDegrees());
             Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), 
-                                                                            initHeading), 
-                                                                 initHeading);
+                initHeading), initHeading);
         }
         startTime = Timer.getFPGATimestamp();
     }
@@ -79,6 +78,9 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
             double dy = nextState.getY() - initialState.getY();
             ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(dx*0.01, dy*0.01, 0, Drivetrain.getInstance().getHeadingRotation());
             Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
+            thetaController.reset(-Drivetrain.getInstance().getHeading());
+            xController.reset();
+            yController.reset();
         }
 
         else {  
@@ -89,6 +91,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
             SmartDashboard.putNumber("mp theta target position", thetaController.getSetpoint().position);
             SmartDashboard.putNumber("mp theta target velocity", thetaController.getSetpoint().velocity);
         }
+        SmartDashboard.putNumber("theta controller goal", thetaController.getGoal().position);
     }
 
     @Override

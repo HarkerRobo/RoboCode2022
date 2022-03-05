@@ -20,7 +20,7 @@ public class Shooter extends SubsystemBase {
     private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? true : true;
     private static final boolean FOLLOWER_INVERTED = (RobotMap.IS_COMP) ? false : false;
     
-    public static final double kS = 0.66342/2;    
+    public static final double kS = 0;//0.66342;    
     public static final double kV = 0.15911;
     public static final double kA = 0.019298;
 
@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
     
     private static final double MAX_ERROR = 0.1; 
     private static final double MODEL_STANDARD_DEVIATION = 0.1;
-    private static final double ENCODER_STANDARD_DEVIATION = 0.02;
+    private static final double ENCODER_STANDARD_DEVIATION = 0.007;
 
     private static final double SHOOTER_GEAR_RATIO = 1.5;
 
@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getWheelRPS() {
-        // double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO;
+        // double integratedVel = master.getSelectedSensorVelocity() / Units.FALCON_ENCODER_TICKS / SHOOTER_GEAR_RATIO * 10;
         // double encoderVel = shooterEncoder.getRate() / 1024;
         // if(Math.abs(integratedVel - encoderVel) > 7) {
         //     fallbackOnEncoder = true;

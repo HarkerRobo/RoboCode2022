@@ -75,7 +75,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired hood pos", 0);
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
-    // NetworkTableInstance.getDefault().setUpdateRate(0.02);
+    NetworkTableInstance.getDefault().setUpdateRate(0.02);
+    
   }
 
   /**
@@ -89,8 +90,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
-    Limelight.updateTx();
 
     Drivetrain.getInstance().getOdometry().update(
       Drivetrain.getInstance().getHeadingRotation(), 
@@ -138,7 +137,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
     SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
     SmartDashboard.putNumber("ll tx", Limelight.getTx());
-    SmartDashboard.putNumber("ll ty", Limelight.getTy());
+    SmartDashboard.putNumber("ll distance", Limelight.getDistance());
   }
 
   @Override

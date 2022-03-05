@@ -10,31 +10,15 @@ import harkerrobolib.commands.IndefiniteCommand;
 /**
  * Shoots with a set velocity in m/s
  */
-public class ShooterManual extends IndefiniteCommand {
-    private InterpolatedTreeMap referencePoints;
-
-    private double velocity;
+public class ShootAgainstHub extends IndefiniteCommand {
+    private static final double HUB_SPEED = 31;
     
-    public ShooterManual() {
+    public ShootAgainstHub() {
         addRequirements(Shooter.getInstance());
-        referencePoints = new InterpolatedTreeMap();
-        referencePoints.put(1.18, 28.75);
-        referencePoints.put(1.4, 29.5);
-        referencePoints.put(1.58, 29.75);
-        referencePoints.put(1.89, 30.5);
-        referencePoints.put(2.27, 31.5);
-        referencePoints.put(2.7, 33.0);
-        referencePoints.put(2.88, 36.0);
-        referencePoints.put(3.1, 38.0);
-        referencePoints.put(4.49, 55.0);
     }
     
     public void execute() {
-        if(Limelight.isTargetVisible()) velocity = referencePoints.get(Limelight.getDistance());
-        else //if(OI.getInstance().getOperatorGamepad().getButtonBState()) 
-            velocity = 32;
-        // velocity = SmartDashboard.getNumber("desired velocity", 0);
-        Shooter.getInstance().setVelocity(velocity);
+        Shooter.getInstance().setVelocity(HUB_SPEED);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
         SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());
@@ -43,7 +27,6 @@ public class ShooterManual extends IndefiniteCommand {
 
     @Override
     public void end(boolean interrupted) {
-        velocity = 0;
         Shooter.getInstance().setPercentOutput(0);
     }
 }

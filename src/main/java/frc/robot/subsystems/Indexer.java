@@ -22,9 +22,9 @@ public class Indexer extends SubsystemBase {
 
     private static final boolean BOTTOM_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : false;
     private static final int[][] RED_COLOR_RANGE = {{170,255},{0,0},{0,0}};
-    private static final int TOP_THRESHOLD = 400
+    private static final int TOP_THRESHOLD = 300
     ;
-    private static final int BOTTOM_THRESHOLD = 400;
+    private static final int BOTTOM_THRESHOLD = 300;
 
     private static final double INDEXER_CURRENT_CONTINUOUS = 30;
     private static final double INDEXER_CURRENT_PEAK = 30;

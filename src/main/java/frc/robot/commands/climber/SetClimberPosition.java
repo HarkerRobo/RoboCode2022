@@ -34,6 +34,7 @@ public class SetClimberPosition extends CommandBase {
     }
 
     public void end(boolean interrupted) {
+        System.out.println("down");
         Climber.getInstance().getClimberMaster().set(ControlMode.PercentOutput, 0);
     }
 }

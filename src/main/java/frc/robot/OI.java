@@ -13,6 +13,8 @@ import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.SetIntakeUp;
 import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.shooter.ShootAgainstHub;
+import frc.robot.commands.shooter.ShootWithLimelight;
 import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -40,24 +42,25 @@ public class OI {
     }
 
     public void initBindings() {
-        operatorGamepad.getButtonBumperRight().whilePressed(new MoveBallsToShooter());
-        operatorGamepad.getButtonBumperLeft().whilePressed(new ShooterManual());
-        operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
+        ((XboxGamepad)operatorGamepad).getButtonTriggerRight().whilePressed(new MoveBallsToShooter());
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ShootAgainstHub());
+        operatorGamepad.getButtonBumperRight().whilePressed(new ShootWithLimelight());
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
-        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
+        driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);
             SwerveManual.pigeonAngle = 0;
         }));
-        driverGamepad.getButtonA().whenPressed(new ZeroHood());
-        driverGamepad.getLeftDPadButton().whenPressed(new InstantCommand(() -> 
+        driverGamepad.getButtonSelect().whenPressed(new ZeroHood());
+        operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(() -> 
             {
                 Climber.getInstance().getClimberMaster().setSelectedSensorPosition(0);
                 Climber.getInstance().isZeroed = true;
                 Climber.getInstance().getClimberMaster().configReverseSoftLimitEnable(false);
             }));
-        driverGamepad.getButtonStart().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.3, false));
-        driverGamepad.getButtonSelect().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7, true));
-        driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3, false));
+        operatorGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.5, false));
+        operatorGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7, true));
+        operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.5, false));
+        operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
         // operatorGamepad.getButtonX().whenPressed(Autons.TWO_BALL_AUTO);
     }
 

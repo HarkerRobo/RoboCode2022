@@ -1,11 +1,10 @@
 package frc.robot.commands.drivetrain;
 
 import frc.robot.subsystems.Drivetrain;
-
+import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
-import harkerrobolib.util.Limelight;
 import harkerrobolib.util.MathUtil;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -22,7 +21,9 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.075;
+    public static final double LIMELIGHT_KP = 0.1;
+    public static final double LIMELIGHT_KD = 0.0007;
+    private PIDController txController;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
     
     public static double pigeonAngle;
@@ -31,6 +32,7 @@ public class SwerveManual extends IndefiniteCommand {
 
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
+        txController = new PIDController(LIMELIGHT_KP, 0, LIMELIGHT_KD);
     }
 
     @Override
@@ -76,10 +78,14 @@ public class SwerveManual extends IndefiniteCommand {
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
-        if(OI.getInstance().getDriverGamepad().getButtonBState() && Limelight.isTargetVisible()) {
-            angularVelocity = LIMELIGHT_KP * Limelight.getTx();
+        if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
+            Limelight.update();
+
+            angularVelocity = -txController.calculate(Limelight.getTx(), 0);
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
+        } else {
+            txController.reset();
         }
 
         SmartDashboard.putNumber("angular vel", angularVelocity);

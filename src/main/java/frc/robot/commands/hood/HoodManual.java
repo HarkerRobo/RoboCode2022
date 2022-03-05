@@ -36,12 +36,11 @@ public class HoodManual extends IndefiniteCommand{
         feedforward = new SimpleMotorFeedforward(HOOD_KS, HOOD_KV);
 
         referencePoints = new InterpolatedTreeMap();
-        referencePoints.put(0.88, 10.0);
-        referencePoints.put(1.12, 14.0);
-        referencePoints.put(1.49, 16.0);
-        referencePoints.put(1.89, 18.0);
-        referencePoints.put(2.27, 21.0);
-        referencePoints.put(2.67, 23.0);
+        referencePoints.put(1.18, 16.5);
+        referencePoints.put(1.4, 17.5);
+        referencePoints.put(1.58, 18.5);
+        referencePoints.put(1.89, 20.0);
+        referencePoints.put(2.27, 23.0);
     }
 
     public void initialize() {
@@ -51,11 +50,9 @@ public class HoodManual extends IndefiniteCommand{
     public void execute() {
         if(!Hood.isZeroed) return;
 
-        if(Limelight.isTargetVisible()) {
-            hoodPosition = referencePoints.get(Limelight.getDistance());
-        }
-        else // if(OI.getInstance().getOperatorGamepad().getButtonBState())
-            hoodPosition = 3;
+        hoodPosition = referencePoints.get(Limelight.getDistance());
+        if(OI.getInstance().getDriverGamepad().getButtonBumperLeftState())
+            hoodPosition = 5;
         // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity);

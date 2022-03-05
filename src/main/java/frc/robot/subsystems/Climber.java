@@ -20,8 +20,10 @@ public class Climber extends SubsystemBase {
     // private static final double CLIMBER_KI = 0;
     // private static final double CLIMBER_KD = 0;
 
-    public static final double MAX_HEIGHT = 112000; //change
-    public static final double DOWN_HEIGHT = 10000; //change
+    public static final double MAX_HEIGHT = 115000; //change
+    public static final double UP_HEIGHT = 115000; //change
+    public static final double ON_BAR_HEIGHT = 20000; //change
+    public static final double DOWN_HEIGHT = 0; //change
     public static final double ZERO_HEIGHT = 0; //change
     public boolean isZeroed;
 
@@ -52,7 +54,7 @@ public class Climber extends SubsystemBase {
         master.configReverseSoftLimitThreshold(2000);
         master.configReverseSoftLimitEnable(false);
 
-        master.configOpenloopRamp(0.3);
+        master.configOpenloopRamp(0.6);
         // master.config_kP(RobotMap.SLOT_INDEX, CLIMBER_KP);
         // master.config_kI(RobotMap.SLOT_INDEX, CLIMBER_KI);
         // master.config_kD(RobotMap.SLOT_INDEX, CLIMBER_KD);

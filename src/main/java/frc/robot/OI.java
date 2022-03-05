@@ -52,10 +52,11 @@ public class OI {
             {
                 Climber.getInstance().getClimberMaster().setSelectedSensorPosition(0);
                 Climber.getInstance().isZeroed = true;
-                Climber.getInstance().getClimberMaster().configReverseSoftLimitEnable(true);
+                Climber.getInstance().getClimberMaster().configReverseSoftLimitEnable(false);
             }));
-        driverGamepad.getButtonStart().whenPressed(new SetClimberPosition(100000));
-        driverGamepad.getButtonSelect().whenPressed(new SetClimberPosition(5000));
+        driverGamepad.getButtonStart().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.3));
+        driverGamepad.getButtonSelect().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7));
+        driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3));
         // operatorGamepad.getButtonX().whenPressed(Autons.TWO_BALL_AUTO);
     }
 

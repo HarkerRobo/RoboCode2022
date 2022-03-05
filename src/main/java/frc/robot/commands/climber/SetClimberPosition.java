@@ -8,21 +8,20 @@ import frc.robot.subsystems.Climber;
 public class SetClimberPosition extends CommandBase {
     private static final double OUTPUT_MAGNITUDE_FORWARD = 0.5;
     private static final double OUTPUT_MAGNITUDE_BACKWARD = -0.7;
-    private double MAX_ERROR = 1500;
+    private double MAX_ERROR = 500;
     private double position;
+    private double speed;
 
-    public SetClimberPosition(double pos) {
+    public SetClimberPosition(double pos, double speed) {
         addRequirements(Climber.getInstance());
         this.position = pos;
+        this.speed = speed;
     }
 
     public void execute() {
         if(!Climber.getInstance().isZeroed) return;
         double direction = Math.signum(position - Climber.getInstance().getPosition());
-        if(direction > 0)
-            Climber.getInstance().setClimberOutput(OUTPUT_MAGNITUDE_FORWARD);
-        else if(direction < 0)
-            Climber.getInstance().setClimberOutput(OUTPUT_MAGNITUDE_BACKWARD);
+        Climber.getInstance().setClimberOutput(direction * Math.abs(speed));
     }
 
     @Override

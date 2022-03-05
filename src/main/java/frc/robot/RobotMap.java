@@ -31,8 +31,8 @@ public class RobotMap {
     public static final int HOOD = 14;
     public static final int HOOD_ENCODER = 7;
 
-    public static final int CLIMBER_MASTER = 15;
-    public static final int CLIMBER_FOLLOWER = 16;  // chane
+    public static final int CLIMBER_FOLLOWER = 15;
+    public static final int CLIMBER_MASTER = 16;  // chane
     public static final int CLIMBER_FORWARD = 1; //change
     public static final int CLIMBER_BACKWARD = 6; //right
 

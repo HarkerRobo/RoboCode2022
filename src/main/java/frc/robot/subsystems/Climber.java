@@ -13,8 +13,8 @@ import harkerrobolib.wrappers.HSFalcon;
 public class Climber extends SubsystemBase {
     private static Climber climber;
 
-    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? false : false;
-    private static final boolean FOLLOWER_INVERTED = (RobotMap.IS_COMP) ? false : true;
+    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? false : true;
+    private static final boolean FOLLOWER_INVERTED = (RobotMap.IS_COMP) ? false : false;
 
     // private static final double CLIMBER_KP = 2;
     // private static final double CLIMBER_KI = 0;

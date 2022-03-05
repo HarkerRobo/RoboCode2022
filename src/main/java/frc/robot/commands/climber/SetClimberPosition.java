@@ -8,14 +8,16 @@ import frc.robot.subsystems.Climber;
 public class SetClimberPosition extends CommandBase {
     private static final double OUTPUT_MAGNITUDE_FORWARD = 0.5;
     private static final double OUTPUT_MAGNITUDE_BACKWARD = -0.7;
-    private double MAX_ERROR = 500;
+    private static final double MAX_ERROR = 500;
+    private boolean limitSwitch;
     private double position;
     private double speed;
 
-    public SetClimberPosition(double pos, double speed) {
+    public SetClimberPosition(double pos, double speed, boolean limitSwitch) {
         addRequirements(Climber.getInstance());
         this.position = pos;
         this.speed = speed;
+        this.limitSwitch = limitSwitch;
     }
 
     public void execute() {
@@ -26,6 +28,8 @@ public class SetClimberPosition extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        if(limitSwitch)
+            return Climber.getInstance().getClimberMaster().isRevLimitSwitchClosed() == 1;
         return Math.abs(position - Climber.getInstance().getPosition()) < MAX_ERROR;
     }
 

@@ -54,9 +54,9 @@ public class OI {
                 Climber.getInstance().isZeroed = true;
                 Climber.getInstance().getClimberMaster().configReverseSoftLimitEnable(false);
             }));
-        driverGamepad.getButtonStart().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.3));
-        driverGamepad.getButtonSelect().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7));
-        driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3));
+        driverGamepad.getButtonStart().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.3, false));
+        driverGamepad.getButtonSelect().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7, true));
+        driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3, false));
         // operatorGamepad.getButtonX().whenPressed(Autons.TWO_BALL_AUTO);
     }
 

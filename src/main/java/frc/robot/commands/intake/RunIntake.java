@@ -13,9 +13,11 @@ public class RunIntake extends IndefiniteCommand{
 
     public void execute() {
         Intake.getInstance().setVelocity(SPEED * Intake.MAX_RPS);
+        Intake.getInstance().state = 1;
     }
     
     public void end(boolean interrupted) {
         Intake.getInstance().setPercentOutput(0);
+        Intake.getInstance().state = 0;
     }
 }

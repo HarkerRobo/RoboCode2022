@@ -61,7 +61,7 @@ public class OI {
         operatorGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7, true));
         operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.5, false));
         operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
-        // operatorGamepad.getButtonX().whenPressed(Autons.TWO_BALL_AUTO);
+        operatorGamepad.getButtonX().whenPressed(Autons.THREE_BALL_AUTO);
     }
 
     public HSGamepad getDriverGamepad(){

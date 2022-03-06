@@ -49,13 +49,14 @@ public class Autons {
     //     new AlignWithLimelight().deadlineWith(new RevShooter()),
     //     new WaitCommand(2).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()));
 
-    public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
+    public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(  
         new SetIntakeDown(),
+        new ZeroHood(),
         Trajectories.threeBallAuto.get(0).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()),
+        new WaitCommand(2).deadlineWith(new RevShooter(), new AlignWithLimelight()),
         new WaitCommand(2).deadlineWith(new ShooterManual(), new MoveBallsToShooter()),
         Trajectories.threeBallAuto.get(1).deadlineWith(new RunIntake()),
-        new AlignWithLimelight().deadlineWith(new RevShooter()),
+        new WaitCommand(2).deadlineWith(new RevShooter(), new AlignWithLimelight()),
         new WaitCommand(5).deadlineWith(new ShooterManual(), new MoveBallsToShooter()));
 
     public static final SequentialCommandGroup ONE_BALL_AUTO = new SequentialCommandGroup(

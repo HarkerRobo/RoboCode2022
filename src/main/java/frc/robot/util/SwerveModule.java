@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Specifies a rotation and translation motor, using PID to correct the
@@ -49,7 +50,6 @@ public class SwerveModule {
 	private SimpleVelocitySystem translationLoop;
 	private SwerveModuleState state;
 	private CANCoder rotationEncoder;
-
 	public SwerveModule(int rotationDriveId, int rotationEncoderID,
 			int translationDriveId, boolean rotationInverted, boolean translationInverted) {
 		ROTATION_INVERT = rotationInverted;
@@ -169,5 +169,7 @@ public class SwerveModule {
 			translationLoop.update(getTranslationVelocity());
 		}
         translation.set(TalonFXControlMode.PercentOutput, (isPercentOutput) ? output: translationLoop.getOutput());
+		SmartDashboard.putNumber("drive output for " + rotation.getBaseID(), output);
+		SmartDashboard.putBoolean("isPercentOutput", isPercentOutput);
 	}
 }

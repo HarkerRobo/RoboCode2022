@@ -143,6 +143,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     Limelight.setLEDS(true);
+    Limelight.update();
     pd.setSwitchableChannel(true);
     Autons.ONE_BALL_AUTO.schedule();
   }

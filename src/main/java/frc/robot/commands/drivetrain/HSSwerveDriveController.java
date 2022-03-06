@@ -13,17 +13,17 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.subsystems.Drivetrain;
 
 public class HSSwerveDriveController extends SwerveControllerCommand {
-    public static final double X_KP = 8;
+    public static final double X_KP = 2;
     public static final double X_KI = 0;
     public static final double X_KD = 0;
 
-    public static final double Y_KP = 8;
+    public static final double Y_KP = 2;
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
-    public static final double THETA_KP = 10;
+    public static final double THETA_KP = 4;
     public static final double THETA_KI = 0;
-    public static final double THETA_KD = 7;
+    public static final double THETA_KD = 0;
 
     public static final double MAX_DRIVE_VELOCITY = 1;
     public static final double MAX_DRIVE_ACCELERATION = 0.5;
@@ -50,6 +50,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         this.trajectory = trajectory;
         this.initHeading = initHeading;
         this.isFirst = isFirst;
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public HSSwerveDriveController(Trajectory trajectory, Rotation2d finalHeading) {
@@ -60,28 +61,37 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public void initialize() {
         super.initialize();
         if(isFirst && initHeading != null) {
-            Drivetrain.getInstance().getPigeon().setYaw(initHeading.getDegrees());
-            Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), Drivetrain.getInstance().getHeadingRotation()),
-            Drivetrain.getInstance().getHeadingRotation());
+            // Drivetrain.getInstance().getPigeon().setYaw(-initHeading.getDegrees());
+            Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), 
+                initHeading), 
+                Drivetrain.getInstance().getHeadingRotation());
         }
         startTime = Timer.getFPGATimestamp();
     }
+
 
     @Override
     public void execute() {
         if(Timer.getFPGATimestamp() - startTime < TURN_TIME) {
             super.initialize();
-            Pose2d pose = trajectory.getStates().get(0).poseMeters;
-            ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(pose.getX()*0.00001, pose.getY()*0.00001, 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getHeading()));
-            Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
+            Pose2d initialState = trajectory.sample(0).poseMeters;
+            Pose2d nextState = trajectory.sample(0.1).poseMeters;
+            double dx = nextState.getX() - initialState.getX();
+            double dy = nextState.getY() - initialState.getY();
+            ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(dx*0.01, dy*0.01, 0, Drivetrain.getInstance().getHeadingRotation());
+            Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
+            thetaController.reset(-Drivetrain.getInstance().getHeading());
+            xController.reset();
+            yController.reset();
         }
+
         else {  
-        super.execute();
-        SmartDashboard.putNumber("mp x error", xController.getPositionError());
-        SmartDashboard.putNumber("mp y error", yController.getPositionError());
-        SmartDashboard.putNumber("mp theta error", thetaController.getPositionError());
-        SmartDashboard.putNumber("mp theta target position", thetaController.getSetpoint().position);
-        SmartDashboard.putNumber("mp theta target velocity", thetaController.getSetpoint().velocity);
+            super.execute();
+            SmartDashboard.putNumber("mp x error", xController.getPositionError());
+            SmartDashboard.putNumber("mp y error", yController.getPositionError());
+            SmartDashboard.putNumber("mp theta error", thetaController.getPositionError());
+            SmartDashboard.putNumber("mp theta target position", thetaController.getSetpoint().position);
+            SmartDashboard.putNumber("mp theta target velocity", thetaController.getSetpoint().velocity);
         }
     }
 

@@ -91,7 +91,7 @@ public class SwerveModule {
 		translation.setInverted(TRANSLATION_INVERT);
 
 		translation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, MOTOR_CURRENT_CONTINUOUS, MOTOR_CURRENT_PEAK, MOTOR_CURRENT_PEAK_DUR));
-
+		translation.configVoltageCompSaturation(VOLTAGE_COMP);
 		translation.configOpenloopRamp(0.3);
 		translation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 		translation.configVelocityMeasurementWindow(4);

@@ -21,7 +21,7 @@ public class ShootWithLimelight extends IndefiniteCommand {
         referencePoints.put(1.18, 28.75);
         referencePoints.put(1.4, 29.5);
         referencePoints.put(1.58, 29.75);
-        referencePoints.put(1.89, 30.5);
+        referencePoints.put(1.89, 30.0);
         referencePoints.put(2.27, 31.5);
         referencePoints.put(2.7, 33.0);
         referencePoints.put(2.88, 36.0);
@@ -31,7 +31,7 @@ public class ShootWithLimelight extends IndefiniteCommand {
     
     public void execute() {
         velocity = referencePoints.get(Limelight.getDistance());
-        velocity = SmartDashboard.getNumber("desired velocity", 0);
+        // velocity = SmartDashboard.getNumber("desired velocity", 0);
         Shooter.getInstance().setVelocity(velocity);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());

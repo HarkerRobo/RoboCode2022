@@ -5,11 +5,13 @@ import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 
@@ -21,9 +23,9 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.1;
-    public static final double LIMELIGHT_KD = 0.0007;
-    private PIDController txController;
+    public static final double LIMELIGHT_KP = 0.12;
+    public static final double LIMELIGHT_KD = 0.01;
+    private ProfiledPIDController txController;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
     
     public static double pigeonAngle;
@@ -32,12 +34,14 @@ public class SwerveManual extends IndefiniteCommand {
 
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
-        txController = new PIDController(LIMELIGHT_KP, 0, LIMELIGHT_KD);
+        txController = new ProfiledPIDController(LIMELIGHT_KP, 0, LIMELIGHT_KD, new Constraints(4, 4));
+        txController.setGoal(0);
     }
 
     @Override
     public void execute() {
         double angularVelocity = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
+        angularVelocity *= Math.abs(angularVelocity);
         double translationy = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
         double translationx = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
         double chasisMagnitude = Math.sqrt(Math.pow(translationx,2) + Math.pow(translationy,2));
@@ -74,18 +78,20 @@ public class SwerveManual extends IndefiniteCommand {
             angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
             SmartDashboard.putBoolean("holding pigeon angle", true);
         }
-        else {
+        else {  
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
         if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
             Limelight.update();
-
-            angularVelocity = -txController.calculate(Limelight.getTx(), 0);
+            
+            angularVelocity = -txController.calculate(Limelight.getTx());
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
+            SmartDashboard.putNumber("limelight setpoint", txController.getSetpoint().position);
+            SmartDashboard.putNumber("limelight goal", txController.getGoal().position);
         } else {
-            txController.reset();
+            // txController.reset(0);
         }
 
         SmartDashboard.putNumber("angular vel", angularVelocity);

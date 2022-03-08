@@ -15,8 +15,8 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    private static final double HOOD_KP = 1.0; 
-    private static final double HOOD_KI = 0.8;
+    private static final double HOOD_KP = 0.25; 
+    private static final double HOOD_KI = 0.4;
     private static final double HOOD_KD = 0.018539; 
     private static final double HOOD_IZONE = 100000; 
     private static final double HOOD_KS = 0.63651; 
@@ -31,7 +31,7 @@ public class HoodManual extends IndefiniteCommand{
     public HoodManual(){
         addRequirements(Hood.getInstance());
 
-        hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(30, 15));
+        hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(10, 15));
         hoodController.setIntegratorRange(-HOOD_IZONE, HOOD_IZONE);
         feedforward = new SimpleMotorFeedforward(HOOD_KS, HOOD_KV);
 
@@ -51,7 +51,7 @@ public class HoodManual extends IndefiniteCommand{
         if(!Hood.isZeroed) return;
 
         hoodPosition = referencePoints.get(Limelight.getDistance());
-        if(OI.getInstance().getDriverGamepad().getButtonBumperLeftState())
+        if(OI.getInstance().getOperatorGamepad().getButtonBumperRightState())
             hoodPosition = 5;
         // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);

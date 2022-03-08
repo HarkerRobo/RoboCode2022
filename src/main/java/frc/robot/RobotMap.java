@@ -20,8 +20,8 @@ public class RobotMap {
     public static final int PIGEON_ID = 0;
 
     public static final int INTAKE_ID = 8;
-    public static final int INTAKE_FORWARD = RobotMap.IS_COMP ? 3 : 0;
-    public static final int INTAKE_BACKWARD = RobotMap.IS_COMP ? 7 : 7;
+    public static final int INTAKE_FORWARD = RobotMap.IS_COMP ? 7 : 0;
+    public static final int INTAKE_BACKWARD = RobotMap.IS_COMP ? 3 : 7;
 
     public static final int SHOOTER_MASTER = 11;
     public static final int SHOOTER_FOLLOWER = 12;
@@ -33,8 +33,8 @@ public class RobotMap {
 
     public static final int CLIMBER_FOLLOWER = 15;
     public static final int CLIMBER_MASTER = 16;  // chane
-    public static final int CLIMBER_FORWARD = 1; //change
-    public static final int CLIMBER_BACKWARD = 6; //right
+    public static final int CLIMBER_FORWARD =  RobotMap.IS_COMP ? 2 : 1; //change
+    public static final int CLIMBER_BACKWARD =  RobotMap.IS_COMP ? 6: 6; //right
 
     public static final int INDEXER_TOP = 10;
     public static final int INDEXER_BOTTOM = 9;

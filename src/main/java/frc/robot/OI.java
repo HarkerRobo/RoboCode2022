@@ -43,8 +43,8 @@ public class OI {
 
     public void initBindings() {
         ((XboxGamepad)operatorGamepad).getButtonTriggerRight().whilePressed(new MoveBallsToShooter());
-        operatorGamepad.getButtonBumperLeft().whilePressed(new ShootAgainstHub());
-        operatorGamepad.getButtonBumperRight().whilePressed(new ShootWithLimelight());
+        operatorGamepad.getButtonBumperRight().whilePressed(new ShootAgainstHub());
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ShootWithLimelight());
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);
@@ -59,7 +59,7 @@ public class OI {
             }));
         operatorGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.5, false));
         operatorGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7, true));
-        operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.5, false));
+        operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3, false));
         operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
         operatorGamepad.getButtonX().whenPressed(Autons.THREE_BALL_AUTO);
     }

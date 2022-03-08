@@ -5,14 +5,18 @@ import frc.robot.Units;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.HSFalcon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,11 +31,15 @@ public class SwerveModule {
 
 	private static final double VOLTAGE_COMP = 10;
 
-	private static final double MOTOR_CURRENT_CONTINUOUS = 40;
-    private static final double MOTOR_CURRENT_PEAK = 60;
-    private static final double MOTOR_CURRENT_PEAK_DUR = 0.4;
+	private static final double ANGLE_MOTOR_CURRENT_CONTINUOUS = 25;
+    private static final double ANGLE_MOTOR_CURRENT_PEAK = 40;
+    private static final double ANGLE_MOTOR_CURRENT_PEAK_DUR = 0.1;
+
+	private static final double DRIVE_MOTOR_CURRENT_CONTINUOUS = 35;
+    private static final double DRIVE_MOTOR_CURRENT_PEAK = 60;
+    private static final double DRIVE_MOTOR_CURRENT_PEAK_DUR = 0.1;
 	
-	private static final double ANGLE_P = 0.23082;
+	private static final double ANGLE_P = 0.3;//0.23082;
 	private static final double ANGLE_I = 0;
 	private static final double ANGLE_D = 0;
 
@@ -69,16 +77,16 @@ public class SwerveModule {
 		rotation.configFactoryDefault();
 		rotation.setInverted(ROTATION_INVERT);
 		rotation.setNeutralMode(NeutralMode.Brake);
-		// rotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, ANGLE_CURRENT_CONTINUOUS, ANGLE_CURRENT_PEAK, ANGLE_CURRENT_PEAK_DUR));
 		rotation.configVoltageCompSaturation(VOLTAGE_COMP);
 		rotation.configForwardSoftLimitEnable(false);
 		rotation.configOpenloopRamp(0.1);
+		rotation.configClosedloopRamp(0.1);
 		rotation.config_kP(RobotMap.SLOT_INDEX, ANGLE_P);
 		rotation.config_kI(RobotMap.SLOT_INDEX, ANGLE_I);
 		rotation.config_kD(RobotMap.SLOT_INDEX, ANGLE_D);
 		rotation.configVelocityMeasurementWindow(16);
 		rotation.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_25Ms);
-		rotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, MOTOR_CURRENT_CONTINUOUS, MOTOR_CURRENT_PEAK, MOTOR_CURRENT_PEAK_DUR));
+		rotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, ANGLE_MOTOR_CURRENT_CONTINUOUS, ANGLE_MOTOR_CURRENT_PEAK, ANGLE_MOTOR_CURRENT_PEAK_DUR));
 
 		rotation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
 
@@ -90,7 +98,7 @@ public class SwerveModule {
 		translation.setNeutralMode(NeutralMode.Brake);
 		translation.setInverted(TRANSLATION_INVERT);
 
-		translation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, MOTOR_CURRENT_CONTINUOUS, MOTOR_CURRENT_PEAK, MOTOR_CURRENT_PEAK_DUR));
+		translation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, DRIVE_MOTOR_CURRENT_CONTINUOUS, DRIVE_MOTOR_CURRENT_PEAK, DRIVE_MOTOR_CURRENT_PEAK_DUR));
 		translation.configVoltageCompSaturation(VOLTAGE_COMP);
 		translation.configOpenloopRamp(0.3);
 		translation.selectProfileSlot(RobotMap.SLOT_INDEX, RobotMap.LOOP_INDEX);
@@ -164,6 +172,7 @@ public class SwerveModule {
 		if(Math.abs(output) < Drivetrain.MIN_OUTPUT*5){
 			output = 0;
 		}
+		double ff = translationLoop.getLinearSystemLoop().getFeedforward().calculate(VecBuilder.fill(output)).get(0, 0);
         if(!isPercentOutput) {
             translationLoop.set(output);
 			translationLoop.update(getTranslationVelocity());

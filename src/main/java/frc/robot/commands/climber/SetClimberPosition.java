@@ -29,7 +29,7 @@ public class SetClimberPosition extends CommandBase {
     @Override
     public boolean isFinished() {
         if(limitSwitch)
-            return Climber.getInstance().getClimberMaster().isRevLimitSwitchClosed() == 1;
+            return Climber.getInstance().getClimberMaster().isRevLimitSwitchClosed() == 1 || Climber.getInstance().getClimberMaster().isFwdLimitSwitchClosed() == 1;
         return Math.abs(position - Climber.getInstance().getPosition()) < MAX_ERROR;
     }
 

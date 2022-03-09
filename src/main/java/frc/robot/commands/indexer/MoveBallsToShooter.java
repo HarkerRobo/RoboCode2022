@@ -7,7 +7,7 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class MoveBallsToShooter extends IndefiniteCommand {
     
-    public static final double SPEED = 0.75;
+    public static final double SPEED = 0.3;
     public static final double LIMELIGHT_THRESHOLD = 10;
     
     public MoveBallsToShooter() {

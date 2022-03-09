@@ -11,7 +11,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  * Shoots with a set velocity in m/s
  */
 public class ShootAgainstHub extends IndefiniteCommand {
-    private static final double HUB_SPEED = 31;
+    private static final double HUB_SPEED = 26.5;
     
     public ShootAgainstHub() {
         addRequirements(Shooter.getInstance());

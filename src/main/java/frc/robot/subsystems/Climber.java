@@ -53,6 +53,7 @@ public class Climber extends SubsystemBase {
         master.setSelectedSensorPosition(0);
         master.configReverseSoftLimitThreshold(2000);
         master.configReverseSoftLimitEnable(false);
+        master.overrideLimitSwitchesEnable(false);
 
         master.configOpenloopRamp(0.6);
         // master.config_kP(RobotMap.SLOT_INDEX, CLIMBER_KP);

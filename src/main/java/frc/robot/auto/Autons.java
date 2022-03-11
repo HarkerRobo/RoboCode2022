@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
-import frc.robot.commands.drivetrain.HSSwerveDriveController;
-import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.IndexerManual;
@@ -17,9 +15,6 @@ import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.SetIntakeDown;
 import frc.robot.commands.shooter.RevShooter;
 import frc.robot.commands.shooter.ShooterManual;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Hood;
-import harkerrobolib.commands.IndefiniteCommand;
 
 /**
  * Stores and selects an autonomous routine to run.
@@ -32,14 +27,19 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @since February 13, 2020
  */
 public class Autons {
-    // public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
-    //     new SetIntakeDown(),
-    //     Trajectories.fiveBallAuto.get(0).deadlineWith(new RunIntake()),
-    //     new AlignWithLimelight().deadlineWith(new RevShooter()),
-    //     new WaitCommand(2).deadlineWith(new ShootWithVelocity(), new MoveBallsToShooter()),
-    //     Trajectories.fiveBallAuto.get(1).deadlineWith(new RunIntake()),
-    //     Trajectories.fiveBallAuto.get(2).deadlineWith(new RunIntake()),
-    //     Trajectories.fiveBallAuto.get(3));
+    public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
+        new SetIntakeDown(),
+        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2),
+        Trajectories.fiveBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
+        Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2),
+        Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
+        Trajectories.fiveBallAuto.get(4).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2));
 
     // public static final SequentialCommandGroup TWO_BALL_AUTO_STEAL_AND_YEET = new SequentialCommandGroup(
     //     Trajectories.twoBallAutoStealAndYeet.get(0),

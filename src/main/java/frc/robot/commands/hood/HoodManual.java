@@ -15,10 +15,10 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    public static final double HOOD_KP = 0.052413; 
-    public static final double HOOD_KI = 0.1;
-    public static final double HOOD_KD = 0.01241; 
-    public static final double HOOD_IZONE = 100000; 
+    public static final double HOOD_KP = 0.1; 
+    public static final double HOOD_KI = 0.01;
+    public static final double HOOD_KD = 0.1; 
+    public static final double HOOD_IZONE = 1; 
     public static final double HOOD_KS = 0.60537; 
     public static final double HOOD_KV = 0.049112; 
     public static final double HOOD_KA = 0.0006622;
@@ -51,11 +51,11 @@ public class HoodManual extends IndefiniteCommand{
     
     public void execute() {
         if(!Hood.isZeroed) return;
-        hoodController.setP(SmartDashboard.getNumber("hood P", HOOD_KP));
-        hoodController.setI(SmartDashboard.getNumber("hood I", HOOD_KI));
-        hoodController.setD(SmartDashboard.getNumber("hood D", HOOD_KD));
-        double izone = SmartDashboard.getNumber("hood izone", HOOD_IZONE);
-        hoodController.setIntegratorRange(-izone, izone);
+        // hoodController.setP(SmartDashboard.getNumber("hood P", HOOD_KP));
+        // hoodController.setI(SmartDashboard.getNumber("hood I", HOOD_KI));
+        // hoodController.setD(SmartDashboard.getNumber("hood D", HOOD_KD));
+        // double izone = SmartDashboard.getNumber("hood izone", HOOD_IZONE);
+        // hoodController.setIntegratorRange(-izone, izone);
 
         hoodPosition = referencePoints.get(Limelight.getDistance());
         if(OI.getInstance().getOperatorGamepad().getButtonBumperRightState())

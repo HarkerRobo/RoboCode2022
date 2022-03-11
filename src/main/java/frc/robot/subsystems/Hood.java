@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -32,7 +33,7 @@ public class Hood extends SubsystemBase{
         hood.configFactoryDefault();
         hood.setInverted(HOOD_INVERTED);
         hood.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
-        hood.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, HOOD_CURRENT_CONTINUOUS, HOOD_CURRENT_PEAK, HOOD_CURRENT_PEAK_DUR));
+        hood.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, HOOD_CURRENT_CONTINUOUS, HOOD_CURRENT_PEAK, HOOD_CURRENT_PEAK_DUR));
         // hood.configPeakOutputForward(0.3);
         // hood.configPeakOutputReverse(-0.3);
     }

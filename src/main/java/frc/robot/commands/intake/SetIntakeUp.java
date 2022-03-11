@@ -12,6 +12,6 @@ public class SetIntakeUp extends InstantCommand {
         addRequirements(Intake.getInstance());
     }
     public void initialize() {
-        Intake.getInstance().getSolenoid().set(DoubleSolenoid.Value.kReverse);
+        Intake.getInstance().getSolenoid().set(DoubleSolenoid.Value.kForward);
     }
  }

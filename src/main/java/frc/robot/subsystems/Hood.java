@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -36,6 +37,8 @@ public class Hood extends SubsystemBase{
         hood.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, HOOD_CURRENT_CONTINUOUS, HOOD_CURRENT_PEAK, HOOD_CURRENT_PEAK_DUR));
         // hood.configPeakOutputForward(0.3);
         // hood.configPeakOutputReverse(-0.3);
+        hood.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_25Ms);
+        hood.configVelocityMeasurementWindow(8);
     }
 
     public double getHoodPos(){

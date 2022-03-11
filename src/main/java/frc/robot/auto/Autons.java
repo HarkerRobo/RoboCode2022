@@ -37,7 +37,6 @@ public class Autons {
         new RevAndAlign(1),
         new ShootAndIndex(2),
         Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
-        Trajectories.fiveBallAuto.get(4).deadlineWith(new IntakeAndIndex()),
         new RevAndAlign(1),
         new ShootAndIndex(2));
 
@@ -73,10 +72,10 @@ public class Autons {
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(  
         new SetIntakeDown(),
         Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
-        new RevAndAlign(1),
+        new RevAndAlign(2),//dennis was here
         new ShootAndIndex(2),
         Trajectories.threeBallAuto.get(1).deadlineWith(new RunIntake()),
-        new RevAndAlign(1),
+        new RevAndAlign(2),
         new ShootAndIndex(5));
 
     public static final SequentialCommandGroup ONE_BALL_AUTO = new SequentialCommandGroup(

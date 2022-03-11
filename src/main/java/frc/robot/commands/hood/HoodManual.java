@@ -15,9 +15,9 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    public static final double HOOD_KP = 0.1; 
-    public static final double HOOD_KI = 0.01;
-    public static final double HOOD_KD = 0.1; 
+    public static final double HOOD_KP = 0.07; 
+    public static final double HOOD_KI = 0.004;
+    public static final double HOOD_KD = 0.02041; 
     public static final double HOOD_IZONE = 1; 
     public static final double HOOD_KS = 0.60537; 
     public static final double HOOD_KV = 0.049112; 

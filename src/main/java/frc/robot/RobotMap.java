@@ -4,7 +4,7 @@ package frc.robot;
  * Defines robot-wide constants
  */
 public class RobotMap {
-    public static final boolean IS_COMP = false;
+    public static final boolean IS_COMP = true;
 
     public static final int LOOP_INDEX = 0;
 
@@ -13,9 +13,9 @@ public class RobotMap {
     public static final int OPERATOR_PORT = 1;
     public static final String CANIVORE = (IS_COMP) ? "BINGCHILLING" : "RIO";
 
-    public static final int[] TRANSLATION_IDS = {13, 4, 6, 2}; // TL, TR, BL, BR
-    public static final int[] ROTATION_IDS = {1, 5, 7, 3}; // TL, TR, BL, BR
-    public static final int[] ROTATION_CANCODER_IDS = {0, 2, 3, 1}; //TL, TR, BL, BR
+    public static final int[] TRANSLATION_IDS = {13, 4, 2, 6}; // TL, TR, BL, BR
+    public static final int[] ROTATION_IDS = {1, 5, 3, 7}; // TL, TR, BL, BR
+    public static final int[] ROTATION_CANCODER_IDS = {0, 2, 1, 3}; //TL, TR, BL, BR
 
     public static final int PIGEON_ID = 0;
 

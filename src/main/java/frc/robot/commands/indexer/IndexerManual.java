@@ -15,12 +15,14 @@ public class IndexerManual extends IndefiniteCommand {
 
     public void execute() {
         if(Intake.getInstance().state == 1){
-            if(!Indexer.getInstance().topOccupied())
+            if(!Indexer.getInstance().topOccupied()) {
                 Indexer.getInstance().setPercentOutputTop(INTAKE_SPEED);
-            else
+            }
+            else {
                 Indexer.getInstance().setPercentOutputTop(0);
-            if(Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied())
-                Indexer.getInstance().setPercentOutputBottom(0);
+            }
+            if(Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) 
+                Indexer.getInstance().setPercentOutputBottom(0);    
             else
                 Indexer.getInstance().setPercentOutputBottom(INTAKE_SPEED);
         } else if(Intake.getInstance().state == -1){

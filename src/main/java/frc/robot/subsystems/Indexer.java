@@ -3,7 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.util.PicoColorSensor;
@@ -21,10 +25,9 @@ public class Indexer extends SubsystemBase {
     private static final boolean BOTTOM_INVERT = (RobotMap.IS_COMP) ? false : false;
 
     private static final boolean BOTTOM_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : false;
-    private static final int[][] RED_COLOR_RANGE = {{170,255},{0,0},{0,0}};
-    private static final int TOP_THRESHOLD = 300
-    ;
+    private static final int TOP_THRESHOLD = 300;
     private static final int BOTTOM_THRESHOLD = 300;
+    private static final ColorMatch matcher = new ColorMatch();
 
     private static final double INDEXER_CURRENT_CONTINUOUS = 30;
     private static final double INDEXER_CURRENT_PEAK = 30;
@@ -36,6 +39,9 @@ public class Indexer extends SubsystemBase {
         top = new HSFalcon(RobotMap.INDEXER_TOP, RobotMap.CANIVORE);
         bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM, RobotMap.CANIVORE);
         sensor = new PicoColorSensor();
+        matcher.addColorMatch(new Color(1, 0, 0));
+        matcher.addColorMatch(new Color(0, 0, 1));
+        matcher.setConfidenceThreshold(0.05);
         init();
     }
 
@@ -66,11 +72,10 @@ public class Indexer extends SubsystemBase {
         return sensor.getProximity0() > TOP_THRESHOLD;
     }
 
-    public boolean bottomHasRed() {
-        return isRed(getColor());
-    }
-
-    public boolean bottomHasBlue() {
+    public boolean bottomisWrongColor() {
+        if(DriverStation.getAlliance() == DriverStation.Alliance.Red){
+            return isBlue(getColor());
+        }
         return isRed(getColor());
     }
 
@@ -87,13 +92,15 @@ public class Indexer extends SubsystemBase {
     }
 
     private boolean isRed(RawColor col) {
-        if(col.red < RED_COLOR_RANGE[0][0] || col.red > RED_COLOR_RANGE[0][1])
-            return false;
-        if(col.blue < RED_COLOR_RANGE[1][0] || col.blue > RED_COLOR_RANGE[1][1])
-            return false;
-        if(col.green < RED_COLOR_RANGE[2][0] || col.green > RED_COLOR_RANGE[2][1])
-            return false;
-        return true;
+        ColorMatchResult match = matcher.matchColor(new Color(col.red/255, col.green/255, col.blue/255));
+        if(match == null) return false;
+        return match.color.red == 1.0;
+    }
+
+    private boolean isBlue(RawColor col) {
+        ColorMatchResult match = matcher.matchColor(new Color(col.red/255, col.green/255, col.blue/255));
+        if(match == null) return false;
+        return match.color.blue == 1.0;
     }
 
     public void setPercentOutputBottom(double output) {

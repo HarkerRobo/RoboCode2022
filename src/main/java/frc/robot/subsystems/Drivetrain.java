@@ -37,7 +37,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double TRANSLATION_GEAR_RATIO = 6.75;
     public static final double ROTATION_GEAR_RATIO = 12.8; // 12.8 rotations of motor = 1 rotation of wheel
-    public static final double WHEEL_DIAMETER = 4; //inches
+    public static final double WHEEL_DIAMETER = 3.872; //inches
     public static final double FEET_TO_METER = 0.3048;
 
     public static final double MIN_OUTPUT = 0.01;
@@ -111,7 +111,7 @@ public class Drivetrain extends SubsystemBase {
     public SwerveDriveKinematics getKinematics(){
         return kinematics;
     }
-
+    
     public SwerveModule getTopLeft() {
         return modules[0];
     }

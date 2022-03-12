@@ -28,8 +28,8 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public static final double MAX_DRIVE_VELOCITY = 1;
     public static final double MAX_DRIVE_ACCELERATION = 0.5;
 
-    public static final double MAX_ANGLE_VELOCITY = Math.PI;
-    public static final double MAX_ANGLE_ACCELERATION = Math.PI;
+    public static final double MAX_ANGLE_VELOCITY = Math.PI/2;
+    public static final double MAX_ANGLE_ACCELERATION = Math.PI/2;
 
     private static PIDController xController = new PIDController(X_KP, X_KI, X_KD);
     private static PIDController yController = new PIDController(Y_KP, Y_KI, Y_KD);
@@ -61,7 +61,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public void initialize() {
         super.initialize();
         if(isFirst && initHeading != null) {
-            // Drivetrain.getInstance().getPigeon().setYaw(-initHeading.getDegrees());
+            Drivetrain.getInstance().getPigeon().setYaw(-initHeading.getDegrees());
             Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), 
                 initHeading), 
                 Drivetrain.getInstance().getHeadingRotation());

@@ -66,6 +66,18 @@ public class Trajectories {
         new Pose2d(8.3,1.5,Rotation2d.fromDegrees(180))
     ), config);
 
+    public static final List<HSSwerveDriveController> lineAndTurn = getDrivetrainCommands(generateDirectTrajectories(
+        new Translation2d[] {
+            new Translation2d(0,0),
+            new Translation2d(0, -1)
+        }), Rotation2d.fromDegrees(-90), List.of(Rotation2d.fromDegrees(0)));
+
+        // public static final List<HSSwerveDriveController> turn = getDrivetrainCommands(generateDirectTrajectories(
+        //     new Translation2d[] {
+        //         new Translation2d(0,0),
+        //         new Translation2d(0, 0.0001)
+        //     }), Rotation2d.fromDegrees(-90), List.of(Rotation2d.fromDegrees(0)));
+
     
     public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {

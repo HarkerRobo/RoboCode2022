@@ -27,19 +27,30 @@ import frc.robot.commands.shooter.ShooterManual;
  * @since February 13, 2020
  */
 public class Autons {
-    // public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
-    //     new SetIntakeDown(),
-    //     Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
-    //     new RevAndAlign(1),
-    //     new ShootAndIndex(2),
-    //     Trajectories.fiveBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
-    //     Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
-    //     new RevAndAlign(1),
-    //     new ShootAndIndex(2),
-    //     Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
-    //     Trajectories.fiveBallAuto.get(4).deadlineWith(new IntakeAndIndex()),
-    //     new RevAndAlign(1),
-    //     new ShootAndIndex(2));
+    public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
+        new SetIntakeDown(),
+        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2),
+        Trajectories.fiveBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
+        Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2),
+        Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2));
+    
+    public static final SequentialCommandGroup LINE_AND_TURN = new SequentialCommandGroup(
+        new SetIntakeDown(),
+        Trajectories.lineAndTurn.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2));
+
+    // public static final SequentialCommandGroup TURN = new SequentialCommandGroup(
+    //         new SetIntakeDown(),
+    //         Trajectories.turn.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
+    //         new RevAndAlign(1),
+    //         new ShootAndIndex(2));
 
     // public static final SequentialCommandGroup TWO_BALL_AUTO_STEAL_AND_YEET = new SequentialCommandGroup(
     //     Trajectories.twoBallAutoStealAndYeet.get(0),

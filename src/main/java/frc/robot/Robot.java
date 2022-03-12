@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.Autons;
 import frc.robot.commands.climber.ClimberManual;
+import frc.robot.commands.drivetrain.HSSwerveDriveController;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
@@ -73,10 +74,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("desired angle", 90);
     SmartDashboard.putNumber("intake RPS", 0.1);
     SmartDashboard.putNumber("desired hood pos", 0);
-    SmartDashboard.putNumber("hood P", HoodManual.HOOD_KP);
-    SmartDashboard.putNumber("hood I", HoodManual.HOOD_KI);
-    SmartDashboard.putNumber("hood D", HoodManual.HOOD_KD);
-    SmartDashboard.putNumber("hood izone", HoodManual.HOOD_IZONE);
+    
+    SmartDashboard.putNumber("theta P", HSSwerveDriveController.THETA_KP);
+    SmartDashboard.putNumber("theta I", HSSwerveDriveController.THETA_KI);
+    SmartDashboard.putNumber("theta D", HSSwerveDriveController.THETA_KD);
+    // SmartDashboard.putNumber("hood izone", HoodManual.HOOD_IZONE);
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
     NetworkTableInstance.getDefault().setUpdateRate(0.02);

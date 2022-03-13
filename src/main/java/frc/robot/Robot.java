@@ -10,6 +10,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -136,10 +137,12 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
     SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
-    SmartDashboard.putNumber("bottom r", Indexer.getInstance().getColor().red);
-    SmartDashboard.putNumber("bottom g", Indexer.getInstance().getColor().green);
-    SmartDashboard.putNumber("bottom b", Indexer.getInstance().getColor().blue);
-    SmartDashboard.putNumber("bottom proximity", Indexer.getInstance().getProximity());
+    SmartDashboard.putNumber("indexer r", Indexer.getInstance().getColor().red);
+    SmartDashboard.putNumber("indexer g", Indexer.getInstance().getColor().green);
+    SmartDashboard.putNumber("indexer b", Indexer.getInstance().getColor().blue);
+    SmartDashboard.putBoolean("indexerRed", Indexer.getInstance().isRed(Indexer.getInstance().getColor()));
+    SmartDashboard.putBoolean("indexerBlue", Indexer.getInstance().isBlue(Indexer.getInstance().getColor()));
+    SmartDashboard.putBoolean("indexerWrongColor", Indexer.getInstance().intakeHasWrongColor());
     SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
     SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
     SmartDashboard.putNumber("ll tx", Limelight.getTx());

@@ -1,3 +1,4 @@
+
 package frc.robot.commands.hood;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -40,8 +41,10 @@ public class HoodManual extends IndefiniteCommand{
         hoodController.setTolerance(0);
 
         referencePoints = new InterpolatedTreeMap();
+        referencePoints.put(1.08, 10.0);
         referencePoints.put(1.18, 16.5);
-        referencePoints.put(1.4, 17.5);
+        referencePoints.put(1.33, 15.5); //prac
+        // referencePoints.put(1.4, 17.5);
         referencePoints.put(1.58, 18.5);
         referencePoints.put(1.89, 20.0);
         referencePoints.put(2.27, 23.0);
@@ -61,8 +64,8 @@ public class HoodManual extends IndefiniteCommand{
 
         hoodPosition = referencePoints.get(Limelight.getDistance());
         if(OI.getInstance().getOperatorGamepad().getButtonBumperRightState())
-            hoodPosition = 2;
-        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+            hoodPosition = 3;
+        hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity) + HOOD_KG;
         double output = controlEffort + feedforwardAmount;

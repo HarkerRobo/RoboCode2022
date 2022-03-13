@@ -6,7 +6,8 @@ import frc.robot.subsystems.Intake;
 import harkerrobolib.commands.IndefiniteCommand;
 
 public class IndexerManual extends IndefiniteCommand {
-    private double INTAKE_SPEED = 0.35;
+    private static final double INTAKE_SPEED = 0.35;
+    private static final double INTAKE_BOTTOM_SPEED = 0.9;
     private double OUTTAKE_SPEED = -0.7;
     
     public IndexerManual() {
@@ -24,8 +25,8 @@ public class IndexerManual extends IndefiniteCommand {
             if(Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) 
                 Indexer.getInstance().setPercentOutputBottom(0);    
             else
-                Indexer.getInstance().setPercentOutputBottom(INTAKE_SPEED);
-            // if(Indexer.getInstance().bottomisWrongColor())
+                Indexer.getInstance().setPercentOutputBottom(INTAKE_BOTTOM_SPEED);
+            // if(Indexer.getInstance().intakeHasWrongColor())
             //     Indexer.getInstance().setPercentOutputBottom(-INTAKE_SPEED);
         } 
         else if(Intake.getInstance().state == -1){

@@ -44,6 +44,6 @@ public class ShooterManual extends IndefiniteCommand {
     @Override
     public void end(boolean interrupted) {
         velocity = 0;
-        Shooter.getInstance().setPercentOutput(0);
+        Shooter.getInstance().setPercentOutput(velocity);
     }
 }

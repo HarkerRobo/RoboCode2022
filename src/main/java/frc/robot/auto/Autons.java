@@ -69,9 +69,10 @@ public class Autons {
         }
     }
 
-    private static class RevAndAlign extends ParallelDeadlineGroup {
+    public static class RevAndAlign extends ParallelDeadlineGroup {
         public RevAndAlign(double timeout) {
             super(new WaitCommand(timeout), new RevShooter(), new AlignWithLimelight(), new HoodManual());
+            // 
         }
     }
 
@@ -84,11 +85,13 @@ public class Autons {
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(  
         new SetIntakeDown(),
         Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
-        new RevAndAlign(2),//dennis was here
+        new RevAndAlign(2),//ur mom was here
         new ShootAndIndex(2),
         Trajectories.threeBallAuto.get(1).deadlineWith(new RunIntake()),
+        new TurnInPlace(153),
         new RevAndAlign(2),
         new ShootAndIndex(5));
+        
 
     public static final SequentialCommandGroup ONE_BALL_AUTO = new SequentialCommandGroup(
         new ZeroHood(),

@@ -35,6 +35,7 @@ public class AlignWithLimelight extends IndefiniteCommand {
     public void end(boolean isFinished){
         System.out.println("end");
         ChassisSpeeds chassis = new ChassisSpeeds(0,0,0);
-        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
+        // SwerveManual.pigeonAngle = Drivetrain.getInstance().getHeading();
+        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), true);
     }
 }

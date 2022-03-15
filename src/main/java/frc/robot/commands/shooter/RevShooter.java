@@ -13,5 +13,6 @@ public class RevShooter extends IndefiniteCommand{
     }
 
     public void end(boolean isFinished){
+        // Shooter.getInstance().setVelocity(0);
     }
 }

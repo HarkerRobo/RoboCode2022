@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnInPlace extends CommandBase{
     private double turn;
     private ProfiledPIDController thetaController;
-    private static final double TOLERANCE = 0;
+    private static final double TOLERANCE = 0.05;
 
     public TurnInPlace(double setpoint) {
         addRequirements(Drivetrain.getInstance());
@@ -21,16 +21,19 @@ public class TurnInPlace extends CommandBase{
 
     }
     public void initialize() {
-        thetaController.setP(SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP));
-        thetaController.setI(SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI));
-        thetaController.setD(SmartDashboard.getNumber("theta D", HSSwerveDriveController.THETA_KD));
+        // thetaController.setP(SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP));
+        // thetaController.setI(SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI));
+        // thetaController.setD(SmartDashboard.getNumber("theta D", HSSwerveDriveController.THETA_KD));
+        thetaController.setP(1);
+        thetaController.setI(0.01);
+        thetaController.setD(0);
         thetaController.setGoal(turn);
     }
 
 
     public void execute() {
-        double angularVelocity = -thetaController.calculate(Drivetrain.getInstance().getHeading()*Math.PI/180);
-        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, -angularVelocity, Drivetrain.getInstance().getHeadingRotation());
+        double angularVelocity = thetaController.calculate(Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getRadians());
+        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, angularVelocity, Drivetrain.getInstance().getHeadingRotation());
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
         // SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP);
         // SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI);

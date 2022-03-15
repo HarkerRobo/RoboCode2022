@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.Autons;
+import frc.robot.auto.Trajectories;
 import frc.robot.auto.TurnInPlace;
 import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.climber.ToggleClimber;
@@ -63,6 +64,8 @@ public class OI {
         operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3, false));
         operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
         operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
+        operatorGamepad.getButtonA().whilePressed(Autons.THREE_BALL_AUTO);
+        // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }
 
     public HSGamepad getDriverGamepad(){

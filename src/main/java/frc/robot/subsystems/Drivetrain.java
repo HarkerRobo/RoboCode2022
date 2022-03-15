@@ -80,6 +80,13 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    public void setAngle(SwerveModuleState[] states){
+        for(int i = 0; i < 4; i++){
+            states[i].speedMetersPerSecond = 0;
+            modules[i].setSwerveManual(states[i], true);
+        }
+    }
+
     public void setAngleAndDriveVelocity(SwerveModuleState[] states) {
         setAngleAndDriveVelocity(states, false);
     }

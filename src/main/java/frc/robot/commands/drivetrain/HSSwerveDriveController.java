@@ -61,11 +61,12 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public void initialize() {
         super.initialize();
         if(isFirst && initHeading != null) {
-            Drivetrain.getInstance().getPigeon().setYaw(-initHeading.getDegrees());
+            // Drivetrain.getInstance().getPigeon().setYaw(-initHeading.getDegrees()-90);
             Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), 
                 initHeading), 
                 Drivetrain.getInstance().getHeadingRotation());
         }
+        
         startTime = Timer.getFPGATimestamp();
     }
 
@@ -79,8 +80,8 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
             double dx = nextState.getX() - initialState.getX();
             double dy = nextState.getY() - initialState.getY();
             ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(dx*0.01, dy*0.01, 0, Drivetrain.getInstance().getHeadingRotation());
-            Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
-            thetaController.reset(-Drivetrain.getInstance().getHeading());
+            Drivetrain.getInstance().setAngle(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
+            // thetaController.reset(Drivetrain.getInstance().getHeading());
             xController.reset();
             yController.reset();
         }

@@ -33,7 +33,8 @@ public class ShooterManual extends IndefiniteCommand {
         if(Limelight.isTargetVisible()) velocity = referencePoints.get(Limelight.getDistance());
         else //if(OI.getInstance().getOperatorGamepad().getButtonBState()) 
             velocity = 32;
-        // velocity = SmartDashboard.getNumber("desired velocity", 0);
+        SmartDashboard.putNumber("shooter ref point val", velocity);
+        velocity = SmartDashboard.getNumber("desired velocity", 0);
         Shooter.getInstance().setVelocity(velocity);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());

@@ -33,7 +33,7 @@ public class TurnInPlace extends CommandBase{
 
     public void execute() {
         double angularVelocity = thetaController.calculate(Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getRadians());
-        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, angularVelocity, Drivetrain.getInstance().getHeadingRotation());
+        ChassisSpeeds chassis = new ChassisSpeeds(0, 0, angularVelocity);
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
         // SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP);
         // SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI);
@@ -46,7 +46,7 @@ public class TurnInPlace extends CommandBase{
     }
 
     public void end(boolean interrupted) {
-        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Drivetrain.getInstance().getHeadingRotation());
+        ChassisSpeeds chassis = new ChassisSpeeds(0, 0, 0);
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
     }
 

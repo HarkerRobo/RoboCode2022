@@ -46,7 +46,8 @@ public class SwerveManual extends IndefiniteCommand {
         double translationx = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
         double chasisMagnitude = Math.sqrt(Math.pow(translationx,2) + Math.pow(translationy,2));
         
-        
+        translationx *= Math.abs(translationx);
+        translationy *= Math.abs(translationy);
         if(Math.abs(chasisMagnitude) < Drivetrain.MIN_OUTPUT){
             translationx = 0;
             translationy = 0;

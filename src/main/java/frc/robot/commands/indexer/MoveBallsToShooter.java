@@ -1,5 +1,7 @@
 package frc.robot.commands.indexer;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
@@ -7,16 +9,17 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class MoveBallsToShooter extends IndefiniteCommand {
     
-    public static final double SPEED = 0.21;
+    public static final double SPEED = 0.25;
     public static final double LIMELIGHT_THRESHOLD = 10;
+    private static Debouncer debouncer = new Debouncer(0.1, DebounceType.kFalling);
     
     public MoveBallsToShooter() {
         addRequirements(Indexer.getInstance());
     }
     
     public void execute() {
-        if(Math.abs(Shooter.getInstance().getWheelRPS() - 
-            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3) {
+        if(debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
+            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3)) {
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

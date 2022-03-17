@@ -16,8 +16,8 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    public static final double HOOD_KP = 0.107; 
-    public static final double HOOD_KI = 0.017;//0.004;
+    public static final double HOOD_KP = 1.0; 
+    public static final double HOOD_KI = 0.01;//0.004;
     public static final double HOOD_KD = 0;//0.0020817; 
     public static final double HOOD_IZONE = 0.2; 
     public static final double HOOD_KS = 0.45;//0.7; 
@@ -41,13 +41,18 @@ public class HoodManual extends IndefiniteCommand{
         hoodController.setTolerance(0);
 
         referencePoints = new InterpolatedTreeMap();
-        referencePoints.put(1.08, 10.0);
-        referencePoints.put(1.18, 16.5);
-        referencePoints.put(1.33, 15.5); //prac
-        // referencePoints.put(1.4, 17.5);
-        referencePoints.put(1.58, 18.5);
-        referencePoints.put(1.89, 20.0);
-        referencePoints.put(2.27, 23.0);
+        referencePoints.put(0.94, 5.0);
+        referencePoints.put(1.15, 6.0);
+        referencePoints.put(1.3, 7.0);
+        referencePoints.put(1.54, 8.5);
+        referencePoints.put(1.75, 11.0);
+        referencePoints.put(1.9, 12.0);
+        referencePoints.put(2.26, 16.0);
+        referencePoints.put(2.5, 17.0);
+        referencePoints.put(2.72, 18.0);
+        referencePoints.put(2.99, 19.5);
+        referencePoints.put(3.18, 22.0);
+        referencePoints.put(3.39, 23.0);
     }
 
     public void initialize() {
@@ -64,9 +69,9 @@ public class HoodManual extends IndefiniteCommand{
 
         hoodPosition = referencePoints.get(Limelight.getDistance());
         if(OI.getInstance().getOperatorGamepad().getButtonBumperRightState())
-            hoodPosition = 3;
-        SmartDashboard.putNumber("hood position ref value", hoodPosition);
-        hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
+            hoodPosition = 1;
+        // SmartDashboard.putNumber("hood position ref value", hoodPosition);
+        // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);
         double feedforwardAmount = feedforward.calculate(hoodController.getSetpoint().velocity) + HOOD_KG;
         double output = controlEffort + feedforwardAmount;

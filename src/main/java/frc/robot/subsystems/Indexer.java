@@ -3,11 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorMatchResult;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -25,16 +27,16 @@ public class Indexer extends SubsystemBase {
     private static final boolean TOP_INVERT = (RobotMap.IS_COMP) ? true : true;
     private static final boolean BOTTOM_INVERT = (RobotMap.IS_COMP) ? false : false;
 
-    private static final boolean INDEXER_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : false;
-    private static final int BOTTOM_THRESHOLD = 300;
-    private static final int INDEXER_THRESHOLD = 175;
-    private static final ColorMatch matcher = new ColorMatch();
+    private static final boolean INDEXER_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : true;
+    private static final int INDEXER_THRESHOLD = 20;
 
     private static final double INDEXER_CURRENT_CONTINUOUS = 30;
-    private static final double INDEXER_CURRENT_PEAK = 30;
-    private static final double INDEXER_CURRENT_PEAK_DUR = 0.05;
+    private static final double INDEXER_CURRENT_PEAK = 40;
+    private static final double INDEXER_CURRENT_PEAK_DUR = 0.2;
 
     private boolean lastBallWrongColor;
+    private double lastBallRecorded;
+    private Debouncer debouncer;
 
     private PicoColorSensor sensor;
     private DigitalInput topSensor;
@@ -46,10 +48,9 @@ public class Indexer extends SubsystemBase {
         sensor = new PicoColorSensor();
         topSensor = new DigitalInput(RobotMap.INDEXER_TOP_SENSOR);
         bottomSensor = new DigitalInput(RobotMap.INDEXER_BOTTOM_SENSOR);
-        matcher.addColorMatch(new Color(1, 0, 0));
-        matcher.addColorMatch(new Color(0, 0, 1));
-        matcher.setConfidenceThreshold(0.05);
         lastBallWrongColor = false;
+        lastBallRecorded = Timer.getFPGATimestamp();
+        debouncer = new Debouncer(1, DebounceType.kFalling);
         init();
     }
 
@@ -77,13 +78,27 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean intakeHasWrongColor() {
-        if(getIndexerProximity() >= INDEXER_THRESHOLD)
-        {
-            if(DriverStation.getAlliance() == DriverStation.Alliance.Red)
-                lastBallWrongColor = isBlue(getColor());
-            else lastBallWrongColor = isRed(getColor());
-        }
-        return lastBallWrongColor;
+
+        // if(getIndexerProximity() >= INDEXER_THRESHOLD)
+        // {
+        //     lastBallWrongColor = intakeHasWrongColorNotDebounced();   
+        //     lastBallRecorded = Timer.getFPGATimestamp();
+        // }
+        // if(Timer.getFPGATimestamp() - lastBallRecorded >= 0.4)
+        //     lastBallWrongColor = false;
+        // return lastBallWrongColor;
+        SmartDashboard.putNumber("intake not debounced", intakeHasWrongColorNotDebounced() ? 1 : 0);
+        SmartDashboard.putNumber("intake debounced", debouncer.calculate(intakeHasWrongColorNotDebounced()) ? 1 : 0);
+        return debouncer.calculate(intakeHasWrongColorNotDebounced());
+    }
+
+    public boolean intakeHasWrongColorNotDebounced() {
+        if(getIndexerProximity() >= INDEXER_THRESHOLD) 
+            return false;
+        if(DriverStation.getAlliance() == DriverStation.Alliance.Red)
+            return getColor().blue > getColor().red;
+        else 
+            return getColor().red > getColor().blue;
     }
 
     public RawColor getColor() {
@@ -96,18 +111,6 @@ public class Indexer extends SubsystemBase {
         if(INDEXER_SENSOR_IS_0)
             return sensor.getProximity0();
         return sensor.getProximity1();
-    }
-
-    public boolean isRed(RawColor col) {
-        ColorMatchResult match = matcher.matchColor(new Color(col.red/255, col.green/255, col.blue/255));
-        if(match == null) return false;
-        return match.color.red == 1.0;
-    }
-
-    public boolean isBlue(RawColor col) {
-        ColorMatchResult match = matcher.matchColor(new Color(col.red/255, col.green/255, col.blue/255));
-        if(match == null) return false;
-        return match.color.blue == 1.0;
     }
 
     public void setPercentOutputBottom(double output) {

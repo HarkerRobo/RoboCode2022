@@ -76,9 +76,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("intake RPS", 0.1);
     SmartDashboard.putNumber("desired hood pos", 0);
     
-    SmartDashboard.putNumber("theta P", HSSwerveDriveController.THETA_KP);
-    SmartDashboard.putNumber("theta I", HSSwerveDriveController.THETA_KI);
-    SmartDashboard.putNumber("theta D", HSSwerveDriveController.THETA_KD);
+    // SmartDashboard.putNumber("hood P", HSSwerveDriveController.THETA_KP);
+    // SmartDashboard.putNumber("hood I", HSSwerveDriveController.THETA_KI);
+    // SmartDashboard.putNumber("hood D", HSSwerveDriveController.THETA_KD);
     // SmartDashboard.putNumber("hood izone", HoodManual.HOOD_IZONE);
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
@@ -140,9 +140,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("indexer r", Indexer.getInstance().getColor().red);
     SmartDashboard.putNumber("indexer g", Indexer.getInstance().getColor().green);
     SmartDashboard.putNumber("indexer b", Indexer.getInstance().getColor().blue);
-    SmartDashboard.putBoolean("indexerRed", Indexer.getInstance().isRed(Indexer.getInstance().getColor()));
-    SmartDashboard.putBoolean("indexerBlue", Indexer.getInstance().isBlue(Indexer.getInstance().getColor()));
-    SmartDashboard.putBoolean("indexerWrongColor", Indexer.getInstance().intakeHasWrongColor());
+    // SmartDashboard.putNumber("indexerWrongColor debounced", (Indexer.getInstance().intakeHasWrongColor()) ? 100 : 0);
+    // SmartDashboard.putNumber("indexerWrongColor", (Indexer.getInstance().intakeHasWrongColorNotDebounced()) ? 100 : 0);
+    SmartDashboard.putNumber("intake proximity", Indexer.getInstance().getIndexerProximity());
     SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
     SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
     SmartDashboard.putNumber("ll tx", Limelight.getTx());

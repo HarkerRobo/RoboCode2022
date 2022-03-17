@@ -24,10 +24,11 @@ public class IndexerManual extends IndefiniteCommand {
             }
             if(Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) 
                 Indexer.getInstance().setPercentOutputBottom(0);    
+            else if(Indexer.getInstance().intakeHasWrongColor())
+                Indexer.getInstance().setPercentOutputBottom(-INTAKE_SPEED);
             else
                 Indexer.getInstance().setPercentOutputBottom(INTAKE_BOTTOM_SPEED);
-            // if(Indexer.getInstance().intakeHasWrongColor())
-            //     Indexer.getInstance().setPercentOutputBottom(-INTAKE_SPEED);
+            
         } 
         else if(Intake.getInstance().state == -1){
             Indexer.getInstance().setPercentOutputTop(OUTTAKE_SPEED);

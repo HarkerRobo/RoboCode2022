@@ -13,8 +13,8 @@ import harkerrobolib.wrappers.HSFalcon;
 public class Climber extends SubsystemBase {
     private static Climber climber;
 
-    private static final boolean MASTER_INVERTED = (RobotMap.IS_COMP) ? false : true;
-    private static final boolean FOLLOWER_INVERTED = (RobotMap.IS_COMP) ? false : false;
+    private static final boolean left_INVERTED = (RobotMap.IS_COMP) ? false : true;
+    private static final boolean right_INVERTED = (RobotMap.IS_COMP) ? false : false;
 
     // private static final double CLIMBER_KP = 2;
     // private static final double CLIMBER_KI = 0;
@@ -27,52 +27,69 @@ public class Climber extends SubsystemBase {
     public static final double ZERO_HEIGHT = 0; //change
     public boolean isZeroed;
 
-    private HSFalcon master;
-    private HSFalcon follower;
+    private HSFalcon left;
+    private HSFalcon right;
     private DoubleSolenoid piston;
 
     private Climber() {
-        master = new HSFalcon(RobotMap.CLIMBER_MASTER, RobotMap.CANIVORE);
-        follower = new HSFalcon(RobotMap.CLIMBER_FOLLOWER, RobotMap.CANIVORE);
+        left = new HSFalcon(RobotMap.CLIMBER_LEFT, RobotMap.CANIVORE);
+        right = new HSFalcon(RobotMap.CLIMBER_RIGHT, RobotMap.CANIVORE);
         piston = new DoubleSolenoid(PneumaticsModuleType.REVPH ,RobotMap.CLIMBER_FORWARD, RobotMap.CLIMBER_BACKWARD);
         init();
         isZeroed = false;
     }
 
     public void init() {
-        master.configFactoryDefault();
-        follower.configFactoryDefault();
+        left.configFactoryDefault();
+        right.configFactoryDefault();
 
-        master.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.LOOP_INDEX, 20);
+        left.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.LOOP_INDEX, 20);
 
-        follower.follow(master);
-        master.setNeutralMode(NeutralMode.Brake);
-        follower.setNeutralMode(NeutralMode.Brake);
-        master.configForwardSoftLimitThreshold(MAX_HEIGHT);
-        master.configForwardSoftLimitEnable(true);
-        master.setSelectedSensorPosition(0);
-        master.configReverseSoftLimitThreshold(2000);
-        master.configReverseSoftLimitEnable(false);
-        master.overrideLimitSwitchesEnable(false);
+        left.setNeutralMode(NeutralMode.Brake);
+        right.setNeutralMode(NeutralMode.Brake);
+        left.configForwardSoftLimitThreshold(MAX_HEIGHT);
+        left.configForwardSoftLimitEnable(true);
+        left.setSelectedSensorPosition(0);
+        left.configReverseSoftLimitThreshold(2000);
+        left.configReverseSoftLimitEnable(false);
+        left.overrideLimitSwitchesEnable(false);
 
-        master.configOpenloopRamp(0.6);
-        // master.config_kP(RobotMap.SLOT_INDEX, CLIMBER_KP);
-        // master.config_kI(RobotMap.SLOT_INDEX, CLIMBER_KI);
-        // master.config_kD(RobotMap.SLOT_INDEX, CLIMBER_KD);
+        left.configOpenloopRamp(0.6);
 
-        master.setInverted(MASTER_INVERTED);
-        follower.setInverted(FOLLOWER_INVERTED);
+        right.configForwardSoftLimitThreshold(MAX_HEIGHT);
+        right.configForwardSoftLimitEnable(true);
+        right.setSelectedSensorPosition(0);
+        right.configReverseSoftLimitThreshold(2000);
+        right.configReverseSoftLimitEnable(false);
+        right.overrideLimitSwitchesEnable(false);
 
-        // master.configPeakOutputForward(0.8);
-        // master.configPeakOutputReverse(0.8);
+        right.configOpenloopRamp(0.6);
+
+        // left.config_kP(RobotMap.SLOT_INDEX, CLIMBER_KP);
+        // left.config_kI(RobotMap.SLOT_INDEX, CLIMBER_KI);
+        // left.config_kD(RobotMap.SLOT_INDEX, CLIMBER_KD);
+
+        left.setInverted(left_INVERTED);
+        right.setInverted(right_INVERTED);
+
+        // left.configPeakOutputForward(0.8);
+        // left.configPeakOutputReverse(0.8);
     }
 
-    public double getPosition() {
-        return master.getSelectedSensorPosition();
+    public double getPositionLeft() {
+        return left.getSelectedSensorPosition();
     }
 
-    public void setClimberOutput(double output) {
-        master.set(ControlMode.PercentOutput, output);
+    public double getPositionRight() {
+        return right.getSelectedSensorPosition();
+    }
+
+    public void setClimberOutputLeft(double output) {
+        left.set(ControlMode.PercentOutput, output);
+    }
+
+    public void setClimberOutputRight(double output) {
+        right.set(ControlMode.PercentOutput, output);
     }
 
     public void toggleClimber() {
@@ -81,12 +98,12 @@ public class Climber extends SubsystemBase {
         else piston.toggle();
     }
 
-    public HSFalcon getClimberMaster() {
-        return master;
+    public HSFalcon getClimberLeft() {
+        return left;
     }
 
-    public HSFalcon getClimberFollower() {
-        return follower;
+    public HSFalcon getClimberRight() {
+        return right;
     }
 
     public DoubleSolenoid getClimberPiston() {

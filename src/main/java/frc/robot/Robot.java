@@ -76,6 +76,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("intake RPS", 0.1);
     SmartDashboard.putNumber("desired hood pos", 0);
     
+    SmartDashboard.putNumber("limelight align kP", SwerveManual.LIMELIGHT_KP);
+    SmartDashboard.putNumber("limelight align kD", SwerveManual.LIMELIGHT_KD);
     // SmartDashboard.putNumber("hood P", HSSwerveDriveController.THETA_KP);
     // SmartDashboard.putNumber("hood I", HSSwerveDriveController.THETA_KI);
     // SmartDashboard.putNumber("hood D", HSSwerveDriveController.THETA_KD);
@@ -117,7 +119,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("br abs", Drivetrain.getInstance().getBottomRight().getCanCoder().getAbsolutePosition());
-    SmartDashboard.putNumber("limit switch", Climber.getInstance().getClimberMaster().isRevLimitSwitchClosed());
+    SmartDashboard.putNumber("limit switch", Climber.getInstance().getClimberLeft().isRevLimitSwitchClosed());
     // SmartDashboard.putNumber("tl angle", Drivetrain.getInstance().getTopLeft().getRotationAngle());
     // SmartDashboard.putNumber("tr angle", Drivetrain.getInstance().getTopRight().getRotationAngle());
     // SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
@@ -132,7 +134,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
     SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
     SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
-    SmartDashboard.putNumber("climber pos", Climber.getInstance().getPosition());
+    SmartDashboard.putNumber("climber pos", Climber.getInstance().getPositionLeft());
     // SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
     // SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
     // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.Autons;
 import frc.robot.auto.Trajectories;
 import frc.robot.auto.TurnInPlace;
+import frc.robot.commands.climber.ClimberManual;
 import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.climber.ToggleClimber;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
@@ -53,15 +54,9 @@ public class OI {
             SwerveManual.pigeonAngle = 0;
         }));
         driverGamepad.getButtonSelect().whenPressed(new ZeroHood());
-        operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(() -> 
-            {
-                Climber.getInstance().getClimberMaster().setSelectedSensorPosition(0);
-                Climber.getInstance().isZeroed = true;
-                Climber.getInstance().getClimberMaster().configReverseSoftLimitEnable(false);
-            }));
-        operatorGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, 0.5, false));
-        operatorGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.7, true));
-        operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, 0.3, false));
+        operatorGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, ClimberManual.MAGNITUDE_UP));
+        operatorGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, ClimberManual.MAGNITUDE_BACKWARD));
+        operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, ClimberManual.MAGNITUDE_UP));
         operatorGamepad.getButtonY().whenPressed(new ToggleClimber());
         operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
         operatorGamepad.getButtonA().whilePressed(Autons.THREE_BALL_AUTO);

@@ -23,8 +23,8 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.08;
-    public static final double LIMELIGHT_KD = 0.01;
+    public static double LIMELIGHT_KP = 0.08;
+    public static double LIMELIGHT_KD = 0.01;
     private ProfiledPIDController txController;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
     
@@ -40,14 +40,18 @@ public class SwerveManual extends IndefiniteCommand {
 
     @Override
     public void execute() {
+        txController.setP(SmartDashboard.getNumber("limelight align kP", LIMELIGHT_KP));
+        txController.setD(SmartDashboard.getNumber("limelight align kD", LIMELIGHT_KD));
+
         double angularVelocity = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
         angularVelocity *= Math.abs(angularVelocity);
         double translationy = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
         double translationx = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
-        double chasisMagnitude = Math.sqrt(Math.pow(translationx,2) + Math.pow(translationy,2));
+       
         
         translationx *= Math.abs(translationx);
         translationy *= Math.abs(translationy);
+        double chasisMagnitude = Math.sqrt(Math.pow(translationx,2) + Math.pow(translationy,2));
         if(Math.abs(chasisMagnitude) < Drivetrain.MIN_OUTPUT){
             translationx = 0;
             translationy = 0;
@@ -83,6 +87,7 @@ public class SwerveManual extends IndefiniteCommand {
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
+
         if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
             Limelight.update();
             
@@ -92,7 +97,7 @@ public class SwerveManual extends IndefiniteCommand {
             SmartDashboard.putNumber("limelight setpoint", txController.getSetpoint().position);
             SmartDashboard.putNumber("limelight goal", txController.getGoal().position);
         } else {
-            // txController.reset(0);
+            txController.reset(0);
         }
 
         SmartDashboard.putNumber("angular vel", angularVelocity);

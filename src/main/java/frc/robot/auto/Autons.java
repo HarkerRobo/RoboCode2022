@@ -82,13 +82,14 @@ public class Autons {
         }
     }
 
-    public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(  
+    public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
+        new ZeroHood(),
         new SetIntakeDown(),
-        Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
-        new RevAndAlign(2),//ur mom was here
+        Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(2),
         new ShootAndIndex(2),
         Trajectories.threeBallAuto.get(1).deadlineWith(new RunIntake()),
-        new TurnInPlace(153),
+        new TurnInPlace(-135),
         new RevAndAlign(2),
         new ShootAndIndex(5));
         

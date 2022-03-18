@@ -4,7 +4,7 @@ package frc.robot;
  * Defines robot-wide constants
  */
 public class RobotMap {
-    public static final boolean IS_COMP = false;
+    public static final boolean IS_COMP = true;
 
     public static final int LOOP_INDEX = 0;
 
@@ -31,8 +31,8 @@ public class RobotMap {
     public static final int HOOD = 14;
     public static final int HOOD_ENCODER = 7;
 
-    public static final int CLIMBER_FOLLOWER = 15;
-    public static final int CLIMBER_MASTER = 16;  // chane
+    public static final int CLIMBER_RIGHT = 15;
+    public static final int CLIMBER_LEFT = 16;
     public static final int CLIMBER_FORWARD =  RobotMap.IS_COMP ? 2 : 1; //change
     public static final int CLIMBER_BACKWARD =  RobotMap.IS_COMP ? 6: 6; //right
 

@@ -16,7 +16,7 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class HoodManual extends IndefiniteCommand{
 
-    public static final double HOOD_KP = 1.0; 
+    public static final double HOOD_KP = 0.1; 
     public static final double HOOD_KI = 0.01;//0.004;
     public static final double HOOD_KD = 0;//0.0020817; 
     public static final double HOOD_IZONE = 0.2; 
@@ -49,7 +49,7 @@ public class HoodManual extends IndefiniteCommand{
         referencePoints.put(1.9, 12.0);
         referencePoints.put(2.26, 16.0);
         referencePoints.put(2.5, 17.0);
-        referencePoints.put(2.72, 18.0);
+        referencePoints.put(2.72, 19.0);
         referencePoints.put(2.99, 19.5);
         referencePoints.put(3.18, 22.0);
         referencePoints.put(3.39, 23.0);

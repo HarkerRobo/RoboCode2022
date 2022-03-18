@@ -81,10 +81,10 @@ public class Trajectories {
     
     public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
-            new Translation2d(7.70, 1.89), 
-            new Translation2d(7.70, 0.86), 
-            new Translation2d(5.76, 1.86)}), Rotation2d.fromDegrees(-90), 
-        List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(166)));
+            new Translation2d(7.436414, 2.015084), 
+            new Translation2d(7.425043, 1.071275), 
+            new Translation2d(5.503312, 1.901372)}), Rotation2d.fromDegrees(-90), 
+        List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(150)));
 
     public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {

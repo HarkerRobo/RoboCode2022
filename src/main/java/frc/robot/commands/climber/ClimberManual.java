@@ -7,25 +7,28 @@ import harkerrobolib.commands.IndefiniteCommand;
 public class ClimberManual extends IndefiniteCommand{
 
     public static final double MAGNITUDE_UP = 0.5;
-    public static final double MAGNITUDE_BACKWARD = -0.5;
-    public static final double MAGNITUDE_IDLE = -0.05;
+    public static final double MAGNITUDE_BACKWARD = -0.7;
+    public static final double MAGNITUDE_IDLE = -0.06;
 
     public ClimberManual() {
+        
         addRequirements(Climber.getInstance());
     }
 
     public void execute() {
         if (OI.getInstance().getDriverGamepad().getDownDPadButton().get()){
-            Climber.getInstance().setClimberOutputLeft(MAGNITUDE_BACKWARD);
-            Climber.getInstance().setClimberOutputRight(MAGNITUDE_BACKWARD);
+            System.out.println("alex");
+            Climber.getInstance().setClimberOutput(MAGNITUDE_BACKWARD);
         }
         else if (OI.getInstance().getDriverGamepad().getUpDPadButton().get()){
-            Climber.getInstance().setClimberOutputLeft(MAGNITUDE_UP);
-            Climber.getInstance().setClimberOutputRight(MAGNITUDE_UP);
+            Climber.getInstance().setClimberOutput(MAGNITUDE_UP);
         }
         else {
-            Climber.getInstance().setClimberOutputLeft(MAGNITUDE_IDLE);
-            Climber.getInstance().setClimberOutputRight(MAGNITUDE_IDLE);
+            if(Climber.getInstance().getPositionLeft() > Climber.STOP_GOING_DOWN_HEIGHT) {
+                Climber.getInstance().setClimberOutput(0);
+            } else {
+                Climber.getInstance().setClimberOutput(MAGNITUDE_IDLE);
+            }
         }
     }
 }

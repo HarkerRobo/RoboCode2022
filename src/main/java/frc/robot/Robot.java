@@ -16,12 +16,14 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.Autons;
 import frc.robot.commands.climber.ClimberManual;
+import frc.robot.commands.climber.PigeonPitchTraversal;
 import frc.robot.commands.drivetrain.HSSwerveDriveController;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
@@ -46,6 +48,7 @@ import frc.robot.util.Limelight;
 public class Robot extends TimedRobot {
   Field2d field;
   private PowerDistribution pd;
+  private Timer pitchVel;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -57,6 +60,9 @@ public class Robot extends TimedRobot {
     pd = new PowerDistribution();
     pd.setSwitchableChannel(false);
     field = new Field2d();
+    pitchVel = new Timer();
+    pitchVel.reset();
+    pitchVel.start();
     SmartDashboard.putData(field);
     // new Compressor(PneumaticsModuleType.REVPH).disable();
     // default commands are commands that are always running on the robot
@@ -109,12 +115,19 @@ public class Robot extends TimedRobot {
     );
     Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
     field.setRobotPose(new Pose2d(robotPose.getX(), robotPose.getY(), robotPose.getRotation()));
-
+    if(pitchVel.hasElapsed(0.06)) {
+      pitchVel.reset();
+      Drivetrain.getInstance().updatePitchVel();
+    }
     SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
     SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
     SmartDashboard.putNumber("odometry y", Drivetrain.getInstance().getOdometry().getPoseMeters().getY());
     SmartDashboard.putNumber("odometry theta", Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
+    SmartDashboard.putNumber("cur pitch", Drivetrain.getInstance().getPigeon().getPitch());
+    SmartDashboard.putNumber("pitch vel", Drivetrain.getInstance().getPitchVel());
+    SmartDashboard.putNumber("ready to climb up",(Drivetrain.getInstance().getPitchVel() > 0 && 
+    Drivetrain.getInstance().getPrevPitchVel() < 0) ? 10 : 0);
     // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
     // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
@@ -149,6 +162,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
     SmartDashboard.putNumber("ll tx", Limelight.getTx());
     SmartDashboard.putNumber("ll distance", Limelight.getDistance());
+    SmartDashboard.putNumber("left climber hit", Climber.getInstance().leftLimitSwitchHit() ? 1 : -1);
+    SmartDashboard.putNumber("right climber hit", Climber.getInstance().rightLimitSwitchHit() ? 2 : 0);
   }
 
   @Override

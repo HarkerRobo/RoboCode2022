@@ -1,13 +1,14 @@
 package frc.robot.commands.climber;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Climber;
 
-public class ToggleClimber extends InstantCommand {
-    public ToggleClimber() {
+public class SetClimberForward extends InstantCommand {
+    public SetClimberForward() {
         addRequirements(Climber.getInstance());
     }
 
     public void initialize() {
-        Climber.getInstance().toggleClimber();
+        Climber.getInstance().getClimberPiston().set(Value.kForward);
     }
 }

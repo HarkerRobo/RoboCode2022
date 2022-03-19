@@ -45,6 +45,9 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_ANGULAR_VEL = Math.PI*1.7;
 
     private boolean fieldCentric = true;
+    private double pigeonPitchVel = 0.0;
+    private double lastPigeonPitch = 0.0;
+    private double prevPitchVel = 0.0;
 
     private WPI_Pigeon2 pigeon;
 
@@ -67,6 +70,7 @@ public class Drivetrain extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(0, 0, new Rotation2d()));
+        lastPigeonPitch = pigeon.getPitch();
     }
 
     /**
@@ -105,6 +109,21 @@ public class Drivetrain extends SubsystemBase {
 
     public double getHeading(){
         return (!IS_PIGEON_UP) ? -pigeon.getYaw() : pigeon.getYaw();
+    }
+
+    public double getPitchVel(){
+        return pigeonPitchVel;
+    }
+
+    public void updatePitchVel(){
+        double pigeonPitch = pigeon.getPitch();
+        prevPitchVel = pigeonPitchVel;
+        pigeonPitchVel = pigeonPitch - lastPigeonPitch;
+        lastPigeonPitch = pigeonPitch;
+    }
+
+    public double getPrevPitchVel() {
+        return prevPitchVel;
     }
 
     public Rotation2d getHeadingRotation() {

@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
+import frc.robot.RobotMap;
 import frc.robot.Units;
 import frc.robot.subsystems.Hood;
 import frc.robot.util.InterpolatedTreeMap;
@@ -41,18 +42,28 @@ public class HoodManual extends IndefiniteCommand{
         hoodController.setTolerance(0);
 
         referencePoints = new InterpolatedTreeMap();
-        referencePoints.put(0.94, 5.0);
-        referencePoints.put(1.15, 6.0);
-        referencePoints.put(1.3, 7.0);
-        referencePoints.put(1.54, 8.5);
-        referencePoints.put(1.75, 11.0);
-        referencePoints.put(1.9, 12.0);
-        referencePoints.put(2.26, 16.0);
-        referencePoints.put(2.5, 17.0);
-        referencePoints.put(2.72, 19.0);
-        referencePoints.put(2.99, 19.5);
-        referencePoints.put(3.18, 22.0);
-        referencePoints.put(3.39, 23.0);
+        // if(RobotMap.IS_COMP) {
+            referencePoints.put(0.94, 5.0);
+            referencePoints.put(1.15, 6.0);
+            referencePoints.put(1.3, 7.0);
+            referencePoints.put(1.54, 8.5);
+            referencePoints.put(1.75, 11.0);
+            referencePoints.put(1.9, 12.0);
+            referencePoints.put(2.26, 16.0);
+            referencePoints.put(2.5, 17.0);
+            referencePoints.put(2.72, 19.0);
+            referencePoints.put(2.99, 19.5);
+            referencePoints.put(3.18, 22.0);
+            referencePoints.put(3.39, 23.0);
+        // } else {
+        //     referencePoints.put(1.08, 10.0);
+        //     referencePoints.put(1.18, 16.5);
+        //     referencePoints.put(1.33, 15.5); //prac
+        //     // referencePoints.put(1.4, 17.5);
+        //     referencePoints.put(1.58, 18.5);
+        //     referencePoints.put(1.89, 20.0);
+        //     referencePoints.put(2.27, 23.0);
+        // }
     }
 
     public void initialize() {

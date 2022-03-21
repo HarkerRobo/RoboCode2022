@@ -8,7 +8,7 @@ import frc.robot.subsystems.Intake;
  * Command to intake with a set velocity
  */
 public class IntakeManual extends IndefiniteCommand {    
-    private static final double SPEED = 0.4;
+    private static final double SPEED = 0.6;
 
     public IntakeManual() {
         addRequirements(Intake.getInstance());

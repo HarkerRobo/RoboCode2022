@@ -56,15 +56,15 @@ public class OI {
             SwerveManual.pigeonAngle = 0;
         }));
         driverGamepad.getButtonSelect().whenPressed(new ZeroHood());
-        operatorGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, ClimberManual.MAGNITUDE_UP));
-        operatorGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, ClimberManual.MAGNITUDE_BACKWARD));
+        driverGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, ClimberManual.MAGNITUDE_UP));
+        driverGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, ClimberManual.MAGNITUDE_BACKWARD));
         // operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, ClimberManual.MAGNITUDE_UP));
-        operatorGamepad.getRightDPadButton().whenPressed(new MoveClimbToNextBar());
+        driverGamepad.getRightDPadButton().whenPressed(new MoveClimbToNextBar());
         // operatorGamepad.getLeftDPadButton().whenPressed(new PigeonPitchTraversal());
-        operatorGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT / 2, 0.5));
-        operatorGamepad.getButtonY().whenPressed(new InstantCommand(Climber.getInstance()::toggleClimber));
+        driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT / 3 , 0.5));
+        driverGamepad.getButtonA().whenPressed(new InstantCommand(Climber.getInstance()::toggleClimber));
         operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
-        operatorGamepad.getButtonA().whilePressed(Autons.THREE_BALL_AUTO);
+        driverGamepad.getButtonB().whilePressed(Autons.THREE_BALL_AUTO);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }
 

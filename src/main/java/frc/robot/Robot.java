@@ -84,6 +84,8 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putNumber("limelight align kP", SwerveManual.LIMELIGHT_KP);
     SmartDashboard.putNumber("limelight align kD", SwerveManual.LIMELIGHT_KD);
+    SmartDashboard.putNumber("limelight align kI", SwerveManual.LIMELIGHT_KI);
+    SmartDashboard.putNumber("limelight align izone", SwerveManual.LIMELIGHT_IZONE);
     // SmartDashboard.putNumber("hood P", HSSwerveDriveController.THETA_KP);
     // SmartDashboard.putNumber("hood I", HSSwerveDriveController.THETA_KI);
     // SmartDashboard.putNumber("hood D", HSSwerveDriveController.THETA_KD);

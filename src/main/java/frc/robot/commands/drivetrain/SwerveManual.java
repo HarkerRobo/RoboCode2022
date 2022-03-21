@@ -24,6 +24,8 @@ public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
     public static double LIMELIGHT_KP = 0.08;
+    public static double LIMELIGHT_KI = 0.01;
+    public static double LIMELIGHT_IZONE = 3;
     public static double LIMELIGHT_KD = 0.01;
     private ProfiledPIDController txController;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
@@ -34,14 +36,18 @@ public class SwerveManual extends IndefiniteCommand {
 
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
-        txController = new ProfiledPIDController(LIMELIGHT_KP, 0, LIMELIGHT_KD, new Constraints(4, 4));
+        txController = new ProfiledPIDController(LIMELIGHT_KP, LIMELIGHT_KI, LIMELIGHT_KD, new Constraints(4, 4));
         txController.setGoal(0);
+        txController.setIntegratorRange(-LIMELIGHT_IZONE, LIMELIGHT_IZONE);
     }
 
     @Override
     public void execute() {
         txController.setP(SmartDashboard.getNumber("limelight align kP", LIMELIGHT_KP));
+        txController.setI(SmartDashboard.getNumber("limelight align kI", LIMELIGHT_KI));
         txController.setD(SmartDashboard.getNumber("limelight align kD", LIMELIGHT_KD));
+        double izone = SmartDashboard.getNumber("limelight align izone", LIMELIGHT_IZONE);
+        txController.setIntegratorRange(-izone, izone);
 
         double angularVelocity = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
         angularVelocity *= Math.abs(angularVelocity);
@@ -94,6 +100,7 @@ public class SwerveManual extends IndefiniteCommand {
             angularVelocity = -txController.calculate(Limelight.getTx());
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
+            SmartDashboard.putNumber("ll error", txController.getPositionError());
             SmartDashboard.putNumber("limelight setpoint", txController.getSetpoint().position);
             SmartDashboard.putNumber("limelight goal", txController.getGoal().position);
         } else {

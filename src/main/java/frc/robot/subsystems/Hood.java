@@ -35,13 +35,12 @@ public class Hood extends SubsystemBase{
         hood.setInverted(HOOD_INVERTED);
         hood.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
         hood.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, HOOD_CURRENT_CONTINUOUS, HOOD_CURRENT_PEAK, HOOD_CURRENT_PEAK_DUR));
-        // hood.configForwardSoftLimitThreshold(23552);
-        // hood.configReverseSoftLimitThreshold(0);
-        // hood.configForwardSoftLimitEnable(true);
-        // hood.configReverseSoftLimitEnable(true);
+        hood.configForwardSoftLimitThreshold(23552);
+        hood.configReverseSoftLimitThreshold(0);
+        hood.configForwardSoftLimitEnable(true);
         
-        // hood.configPeakOutputForward(0.3);
-        // hood.configPeakOutputReverse(-0.3);
+        hood.configPeakOutputForward(0.3);
+        hood.configPeakOutputReverse(-0.3);
         hood.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_25Ms);
         hood.configVelocityMeasurementWindow(8);
     }

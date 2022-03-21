@@ -11,6 +11,10 @@ public class ZeroHood extends CommandBase {
         addRequirements(Hood.getInstance());
     }
 
+    public void initialize() {
+        Hood.getInstance().getHood().configReverseSoftLimitEnable(false);
+    }
+
     public void execute(){
         Hood.getInstance().getHood().set(ControlMode.PercentOutput, -0.08);
     }
@@ -21,8 +25,11 @@ public class ZeroHood extends CommandBase {
     }
 
     public void end(boolean interrupted){
-        Hood.getInstance().getHood().set(ControlMode.PercentOutput, 0);
-        Hood.getInstance().getHood().setSelectedSensorPosition(0);
-        Hood.isZeroed = true;
+        if(!interrupted) {
+            Hood.getInstance().getHood().set(ControlMode.PercentOutput, 0);
+            Hood.getInstance().getHood().setSelectedSensorPosition(0);
+            Hood.isZeroed = true;
+        }
+        Hood.getInstance().getHood().configReverseSoftLimitEnable(true);
     }
 }

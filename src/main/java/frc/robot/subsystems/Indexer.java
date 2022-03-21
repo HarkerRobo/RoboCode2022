@@ -89,7 +89,8 @@ public class Indexer extends SubsystemBase {
         // return lastBallWrongColor;
         SmartDashboard.putNumber("intake not debounced", intakeHasWrongColorNotDebounced() ? 1 : 0);
         SmartDashboard.putNumber("intake debounced", debouncer.calculate(intakeHasWrongColorNotDebounced()) ? 1 : 0);
-        return debouncer.calculate(intakeHasWrongColorNotDebounced());
+        return false;
+        // return debouncer.calculate(intakeHasWrongColorNotDebounced());
     }
 
     public boolean intakeHasWrongColorNotDebounced() {

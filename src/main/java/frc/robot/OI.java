@@ -60,9 +60,10 @@ public class OI {
         driverGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, ClimberManual.MAGNITUDE_BACKWARD));
         // operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, ClimberManual.MAGNITUDE_UP));
         driverGamepad.getRightDPadButton().whenPressed(new MoveClimbToNextBar());
+        // operatorGamepad.getRightDPadButton().whenPressed(new MoveClimbToNextBar());
+        driverGamepad.getButtonA().whenPressed(new InstantCommand(Climber.getInstance()::toggleClimber));
         // operatorGamepad.getLeftDPadButton().whenPressed(new PigeonPitchTraversal());
         driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT / 3 , 0.5));
-        driverGamepad.getButtonA().whenPressed(new InstantCommand(Climber.getInstance()::toggleClimber));
         operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
         driverGamepad.getButtonB().whilePressed(Autons.THREE_BALL_AUTO);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));

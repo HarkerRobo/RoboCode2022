@@ -16,11 +16,11 @@ public class ClimberManual extends IndefiniteCommand{
     }
 
     public void execute() {
-        if (OI.getInstance().getDriverGamepad().getDownDPadButton().get()){
+        if (OI.getInstance().getOperatorGamepad().getDownDPadButton().get()){
             System.out.println("alex");
             Climber.getInstance().setClimberOutput(MAGNITUDE_BACKWARD);
         }
-        else if (OI.getInstance().getDriverGamepad().getUpDPadButton().get()){
+        else if (OI.getInstance().getOperatorGamepad().getUpDPadButton().get()){
             Climber.getInstance().setClimberOutput(MAGNITUDE_UP);
         }
         else {

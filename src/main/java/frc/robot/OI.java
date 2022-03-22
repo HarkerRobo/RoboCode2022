@@ -14,6 +14,7 @@ import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.climber.SetClimberForward;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.SetIntakeUp;
@@ -64,8 +65,9 @@ public class OI {
         driverGamepad.getButtonA().whenPressed(new InstantCommand(Climber.getInstance()::toggleClimber));
         // operatorGamepad.getLeftDPadButton().whenPressed(new PigeonPitchTraversal());
         driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT / 3 , 0.5));
-        operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
-        driverGamepad.getButtonB().whilePressed(Autons.THREE_BALL_AUTO);
+        operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> HoodManual.downMode = !HoodManual.downMode));
+        // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
+        // driverGamepad.getButtonB().whilePressed(Autons.THREE_BALL_AUTO);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }
 

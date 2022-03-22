@@ -28,6 +28,7 @@ public class HoodManual extends IndefiniteCommand{
     public static final double HOOD_KG = 0.087132;
     
     private double hoodPosition;
+    public static boolean downMode = false;
 
     public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(10, 15));
     private InterpolatedTreeMap referencePoints;
@@ -80,6 +81,8 @@ public class HoodManual extends IndefiniteCommand{
         hoodPosition = referencePoints.get(Limelight.getDistance());
         if(OI.getInstance().getOperatorGamepad().getButtonBumperRightState())
             hoodPosition = 1;
+        if(downMode)
+            hoodPosition = 0;
         //SmartDashboard.putNumber("hood position ref value", hoodPosition);
         // hoodPosition = SmartDashboard.getNumber("desired hood pos", 1);
         double controlEffort = hoodController.calculate(Hood.getInstance().getHoodPos(), hoodPosition);

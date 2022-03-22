@@ -26,25 +26,12 @@ import frc.robot.commands.shooter.ShooterManual;
  * @author Angela Jia
  * @since February 13, 2020
  */
-public class Autons {
-    public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
-        new SetIntakeDown(),
-        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
-        new RevAndAlign(1),
-        new ShootAndIndex(2),
-        Trajectories.fiveBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
-        Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
-        new RevAndAlign(1),
-        new ShootAndIndex(2),
-        Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
-        new RevAndAlign(1),
-        new ShootAndIndex(2));
-    
-    public static final SequentialCommandGroup LINE_AND_TURN = new SequentialCommandGroup(
-        new SetIntakeDown(),
-        Trajectories.lineAndTurn.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
-        new RevAndAlign(1),
-        new ShootAndIndex(2));
+public class Autons {    
+    // public static final SequentialCommandGroup LINE_AND_TURN = new SequentialCommandGroup(
+    //     new SetIntakeDown(),
+    //     Trajectories.lineAndTurn.get(0).deadlineWith(new IntakeAndIndex(), new ZeroHood()),
+    //     new RevAndAlign(1),
+    //     new ShootAndIndex(2));
 
     // public static final SequentialCommandGroup TURN = new SequentialCommandGroup(
     //         new SetIntakeDown(),
@@ -82,6 +69,19 @@ public class Autons {
         }
     }
 
+    public static final SequentialCommandGroup ONE_BALL_AUTO = new SequentialCommandGroup(
+        new RevAndAlign(2).deadlineWith(new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
+        new ShootAndIndex(2),
+        Trajectories.oneBallBackUp.get(0)
+    );
+
+    public static final SequentialCommandGroup TWO_BALL_AUTO = new SequentialCommandGroup(
+        new SetIntakeDown(),
+        Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
+        new RevAndAlign(2),
+        new ShootAndIndex(5)
+    );
+    
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
         new SetIntakeDown(),
         Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
@@ -91,20 +91,21 @@ public class Autons {
         new Rotate(0.5, 2.5),
         new RevAndAlign(1),
         new ShootAndIndex(5));
-        
 
-    public static final SequentialCommandGroup ONE_BALL_AUTO = new SequentialCommandGroup(
-        new ZeroHood(),
-        new WaitCommand(2).deadlineWith(new HoodManual()),
-        new ShooterManual().alongWith(new MoveBallsToShooter())
-    );
+    public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
+        new SetIntakeDown(),
+        Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
+        new RevAndAlign(1),
+        new ShootAndIndex(1.5),
+        Trajectories.threeBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
+        new Rotate(0.5, 2.5),
+        new RevAndAlign(1),
+        new ShootAndIndex(1.5),
+        Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
+        Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(1),
+        new ShootAndIndex(2));
 
-    // public static final SequentialCommandGroup TWO_BALL_AUTO = new SequentialCommandGroup(
-    //     new SetIntakeDown(),
-    //     new WaitCommand(2).deadlineWith(new MoveBackward(), new ZeroHood(), new RunIntake()),
-    //     new WaitCommand(2).deadlineWith(new HoodManual()),
-    //     new ShootWithVelocity().alongWith(new MoveBallsToShooter())
-    // );
     // public static final SequentialCommandGroup TWO_BALL_AUTO = new SequentialCommandGroup(
     //     new SetIntakeDown(),
     //     Trajectories.twoBallAuto.get(0).deadlineWith(new RunIntake()),

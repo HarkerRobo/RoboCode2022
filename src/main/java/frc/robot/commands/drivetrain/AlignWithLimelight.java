@@ -35,7 +35,7 @@ public class AlignWithLimelight extends IndefiniteCommand {
     }
 
     public void execute() {
-        Limelight.update();
+        // Limelight.update();
         double angularVelocity = -txController.calculate(Limelight.getTx(), 0);
         ChassisSpeeds chassis = new ChassisSpeeds(0, 0, -angularVelocity);
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);

@@ -43,11 +43,11 @@ public class SwerveManual extends IndefiniteCommand {
 
     @Override
     public void execute() {
-        txController.setP(SmartDashboard.getNumber("limelight align kP", LIMELIGHT_KP));
-        txController.setI(SmartDashboard.getNumber("limelight align kI", LIMELIGHT_KI));
-        txController.setD(SmartDashboard.getNumber("limelight align kD", LIMELIGHT_KD));
-        double izone = SmartDashboard.getNumber("limelight align izone", LIMELIGHT_IZONE);
-        txController.setIntegratorRange(-izone, izone);
+        // txController.setP(SmartDashboard.getNumber("limelight align kP", LIMELIGHT_KP));
+        // txController.setI(SmartDashboard.getNumber("limelight align kI", LIMELIGHT_KI));
+        // txController.setD(SmartDashboard.getNumber("limelight align kD", LIMELIGHT_KD));
+        // double izone = SmartDashboard.getNumber("limelight align izone", LIMELIGHT_IZONE);
+        // txController.setIntegratorRange(-izone, izone);
 
         double angularVelocity = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
         angularVelocity *= Math.abs(angularVelocity);

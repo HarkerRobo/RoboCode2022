@@ -47,8 +47,11 @@ import frc.robot.util.Limelight;
  */
 public class Robot extends TimedRobot {
   Field2d field;
-  private PowerDistribution pd;
+  // private PowerDistribution pd;
   private Timer pitchVel;
+  private boolean wasAuto = false;
+
+  private Command auto = Autons.THREE_BALL_AUTO;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -57,8 +60,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     Limelight.setLEDS(false);
-    pd = new PowerDistribution();
-    pd.setSwitchableChannel(false);
+    // pd = new PowerDistribution();
+    // pd.setSwitchableChannel(false);
     field = new Field2d();
     pitchVel = new Timer();
     pitchVel.reset();
@@ -125,7 +128,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
     SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
     SmartDashboard.putNumber("odometry y", Drivetrain.getInstance().getOdometry().getPoseMeters().getY());
-    SmartDashboard.putNumber("odometry theta", Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
+    SmartDashboard.putNumber("odometry theta", Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getRadians());
     SmartDashboard.putNumber("cur pitch", Drivetrain.getInstance().getPigeon().getPitch());
     SmartDashboard.putNumber("pitch vel", Drivetrain.getInstance().getPitchVel());
     SmartDashboard.putNumber("ready to climb up",(Drivetrain.getInstance().getPitchVel() > 0 && 
@@ -172,8 +175,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Limelight.setLEDS(true);
     Limelight.update();
-    pd.setSwitchableChannel(true);
-    Autons.ONE_BALL_AUTO.schedule();
+    auto.schedule();
+  }
+
+  @Override
+  public void autonomousPeriodic() {
+    Limelight.update();
+    wasAuto = true;
   }
 
   /**
@@ -181,9 +189,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
+    if(wasAuto) {
+      wasAuto = false;
+      if(auto == Autons.THREE_BALL_AUTO) {
+        // Drivetrain.getInstance().getPigeon().setYaw() 
+      }
+    }
     Limelight.setLEDS(true);
-    pd.setSwitchableChannel(true);  
-    Autons.ONE_BALL_AUTO.cancel();
   }
 
   /**
@@ -192,6 +204,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+    // Limelight.update();
     // if(Math.random() < 1.0/3000)
     //   CommandScheduler.getInstance().schedule(new ToggleIntake());
   }
@@ -202,7 +215,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     Limelight.setLEDS(false);
-    pd.setSwitchableChannel(false);
   }
 
   /**
@@ -211,7 +223,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Limelight.setLEDS(false);
-    pd.setSwitchableChannel(false);
   }
 
   /**

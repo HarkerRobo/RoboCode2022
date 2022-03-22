@@ -22,6 +22,7 @@ public class IndexerManual extends IndefiniteCommand {
             else {
                 Indexer.getInstance().setPercentOutputTop(0);
             }
+            
             if(Indexer.getInstance().topOccupied() && Indexer.getInstance().bottomOccupied()) 
                 Indexer.getInstance().setPercentOutputBottom(0);    
             else if(Indexer.getInstance().intakeHasWrongColor())
@@ -44,5 +45,11 @@ public class IndexerManual extends IndefiniteCommand {
                 Indexer.getInstance().setPercentOutputTop(0);
             // }
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        Indexer.getInstance().setPercentOutputBottom(0);
+        Indexer.getInstance().setPercentOutputTop(0);
     }
 }

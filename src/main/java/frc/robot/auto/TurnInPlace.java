@@ -24,7 +24,7 @@ public class TurnInPlace extends CommandBase{
         // thetaController.setP(SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP));
         // thetaController.setI(SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI));
         // thetaController.setD(SmartDashboard.getNumber("theta D", HSSwerveDriveController.THETA_KD));
-        thetaController.setP(1);
+        thetaController.setP(4.7);
         thetaController.setI(0.01);
         thetaController.setD(0);
         thetaController.setGoal(turn);
@@ -32,13 +32,13 @@ public class TurnInPlace extends CommandBase{
 
 
     public void execute() {
-        double angularVelocity = thetaController.calculate(Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getRadians());
-        ChassisSpeeds chassis = new ChassisSpeeds(0, 0, angularVelocity);
-        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis));
+        double angularVelocity = thetaController.calculate(Drivetrain.getInstance().getHeadingRotation().getRadians());
+        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(0,0, -angularVelocity, Drivetrain.getInstance().getHeadingRotation())));
         // SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP);
         // SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI);
         // SmartDashboard.getNumber("theta D", HSSwerveDriveController.THETA_KD);
         SmartDashboard.putNumber("theta error", thetaController.getPositionError());
+        SmartDashboard.putNumber("theta pos", thetaController.getGoal().position);  
     }
 
     public boolean isFinished() {

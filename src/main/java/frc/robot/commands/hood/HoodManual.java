@@ -29,17 +29,16 @@ public class HoodManual extends IndefiniteCommand{
     
     private double hoodPosition;
 
-    private ProfiledPIDController hoodController;
+    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(10, 15));
     private InterpolatedTreeMap referencePoints;
     private SimpleMotorFeedforward feedforward;
     
     public HoodManual(){
         addRequirements(Hood.getInstance());
 
-        hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(10, 15));
         hoodController.setIntegratorRange(-HOOD_IZONE, HOOD_IZONE);
         feedforward = new SimpleMotorFeedforward(0, HOOD_KV, HOOD_KA);
-        hoodController.setTolerance(0);
+        hoodController.setTolerance(0.1);
 
         referencePoints = new InterpolatedTreeMap();
         // if(RobotMap.IS_COMP) {

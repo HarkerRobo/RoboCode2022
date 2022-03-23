@@ -29,9 +29,7 @@ public class Shooter extends SubsystemBase {
     private static final double MAX_ERROR = 0.1; 
     private static final double MODEL_STANDARD_DEVIATION = 0.1;
     private static final double ENCODER_STANDARD_DEVIATION = 0.007;
-
-    private static final double SHOOTER_GEAR_RATIO = 1.5;
-
+    
     public static final double SHOOTER_REV_TIME = 1.0;
 
     private SimpleVelocitySystem velocitySystem;

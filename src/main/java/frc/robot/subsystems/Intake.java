@@ -10,7 +10,6 @@ import harkerrobolib.wrappers.HSFalcon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.FloatDeserializer;
 
 /**
  * Defines an intake with a motor and a double solenoid

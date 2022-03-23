@@ -1,10 +1,7 @@
 package frc.robot.commands.climber;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Drivetrain;
 
 public class SetClimberPosition extends CommandBase {
     private static final double MAX_ERROR = 500;

@@ -5,18 +5,14 @@ import frc.robot.Units;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.HSFalcon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -172,7 +168,6 @@ public class SwerveModule {
 		if(Math.abs(output) < Drivetrain.MIN_OUTPUT*5){
 			output = 0;
 		}
-		double ff = translationLoop.getLinearSystemLoop().getFeedforward().calculate(VecBuilder.fill(output)).get(0, 0);
         if(!isPercentOutput) {
             translationLoop.set(output);
 			translationLoop.update(getTranslationVelocity());

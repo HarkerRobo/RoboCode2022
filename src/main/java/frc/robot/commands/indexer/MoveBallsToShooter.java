@@ -2,11 +2,8 @@ package frc.robot.commands.indexer;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
-import frc.robot.commands.hood.HoodManual;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 
 public class MoveBallsToShooter extends IndefiniteCommand {

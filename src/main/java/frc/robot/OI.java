@@ -1,27 +1,16 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.auto.Autons;
-import frc.robot.auto.Trajectories;
-import frc.robot.auto.TurnInPlace;
 import frc.robot.commands.climber.ClimberManual;
 import frc.robot.commands.climber.MoveClimbToNextBar;
-import frc.robot.commands.climber.PigeonPitchTraversal;
 import frc.robot.commands.climber.SetClimberPosition;
-import frc.robot.commands.climber.SetClimberForward;
-import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
-import frc.robot.commands.intake.SetIntakeUp;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.shooter.ShootAgainstHub;
 import frc.robot.commands.shooter.ShootWithLimelight;
-import frc.robot.commands.shooter.ShooterManual;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.HSGamepad;

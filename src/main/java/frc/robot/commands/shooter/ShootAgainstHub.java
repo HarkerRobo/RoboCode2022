@@ -1,10 +1,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.OI;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.InterpolatedTreeMap;
-import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 
 /**

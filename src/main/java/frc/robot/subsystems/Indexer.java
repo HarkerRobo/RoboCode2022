@@ -40,6 +40,7 @@ public class Indexer extends SubsystemBase {
     private PicoColorSensor sensor;
     private DigitalInput topSensor;
     private DigitalInput bottomSensor;
+    private DigitalInput intakeColorSensor;
 
     private Indexer() {
         top = new HSFalcon(RobotMap.INDEXER_TOP, RobotMap.CANIVORE);

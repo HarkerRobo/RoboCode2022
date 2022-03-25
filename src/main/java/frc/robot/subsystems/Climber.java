@@ -21,8 +21,9 @@ public class Climber extends SubsystemBase {
     // private static final double CLIMBER_KI = 0;
     // private static final double CLIMBER_KD = 0;
 
-    public static final double MAX_HEIGHT = 120200; //change
-    public static final double UP_HEIGHT = 117000; //change
+    public static final double MAX_HEIGHT = 119000; //change
+    public static final double UP_AND_BACK_HEIGHT = 112000; //change
+    public static final double UP_HEIGHT = 117000;
     public static final double STOP_GOING_DOWN_HEIGHT = 65000; //change
     public static final double ON_BAR_HEIGHT = 20000; //change
     public static final double DOWN_HEIGHT = 0; //change

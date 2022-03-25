@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
@@ -37,6 +38,7 @@ public class Hood extends SubsystemBase{
         hood.configForwardSoftLimitThreshold(23552);
         hood.configReverseSoftLimitThreshold(0);
         hood.configForwardSoftLimitEnable(true);
+        hood.setNeutralMode(NeutralMode.Brake);
         
         hood.configPeakOutputForward(0.3);
         hood.configPeakOutputReverse(-0.3);

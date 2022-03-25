@@ -41,6 +41,20 @@ public class HoodManual extends IndefiniteCommand{
         hoodController.setTolerance(0.1);
 
         referencePoints = new InterpolatedTreeMap();
+        // referencePoints.put(0.94, 5.0);
+        // referencePoints.put(1.15, 6.0);
+        // referencePoints.put(1.3, 7.0);
+        // referencePoints.put(1.54, 8.5);
+        // referencePoints.put(1.75, 11.0);
+        // referencePoints.put(1.9, 12.0);
+        // referencePoints.put(2.26, 16.0);
+        // referencePoints.put(2.5, 17.0);
+        // referencePoints.put(2.72, 19.0);
+        // referencePoints.put(2.99, 19.5);
+        // referencePoints.put(3.18, 22.0);
+        // referencePoints.put(3.39, 23.0);
+
+        //NEW
         referencePoints.put(1.36, 7.0);
         referencePoints.put(1.54, 11.0);
         referencePoints.put(1.75, 14.5);

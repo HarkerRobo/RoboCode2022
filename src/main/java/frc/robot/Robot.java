@@ -11,6 +11,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -40,7 +41,7 @@ import frc.robot.util.Limelight;
  */
 public class Robot extends TimedRobot {
   Field2d field;
-  // private PowerDistribution pd;
+  private PowerDistribution pd;
   private Timer pitchVel;
   private boolean wasAuto = false;
 
@@ -53,8 +54,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     Limelight.setLEDS(false);
-    // pd = new PowerDistribution();
-    // pd.setSwitchableChannel(false);
+    pd = new PowerDistribution();
+    pd.setSwitchableChannel(false);
     field = new Field2d();
     pitchVel = new Timer();
     pitchVel.reset();
@@ -88,7 +89,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("hood izone", HoodManual.HOOD_IZONE);
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
-    NetworkTableInstance.getDefault().setUpdateRate(0.02);
+    // NetworkTableInstance.getDefault().setUpdateRate(0.02);
     
   }
 
@@ -116,6 +117,7 @@ public class Robot extends TimedRobot {
       pitchVel.reset();
       Drivetrain.getInstance().updatePitchVel();
     }
+
     SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
     SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
     SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
@@ -174,6 +176,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Limelight.update();
     wasAuto = true;
+    pd.setSwitchableChannel(true);
   }
 
   /**
@@ -196,6 +199,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+    pd.setSwitchableChannel(true);
     // Limelight.update();
     // if(Math.random() < 1.0/3000)
     //   CommandScheduler.getInstance().schedule(new ToggleIntake());
@@ -215,6 +219,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     Limelight.setLEDS(false);
+    pd.setSwitchableChannel(false);
+
   }
 
   /**

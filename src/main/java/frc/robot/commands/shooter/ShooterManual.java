@@ -24,13 +24,13 @@ public class ShooterManual extends IndefiniteCommand {
             referencePoints.put(1.54, 28.0);
             referencePoints.put(1.75, 29.0);
             referencePoints.put(1.9, 30.5);
-            referencePoints.put(2.26, 33.5);
-            referencePoints.put(2.5, 34.0);
-            referencePoints.put(2.72, 34.5);
-            referencePoints.put(2.99, 38.0);
-            referencePoints.put(3.18, 45.0);
-            referencePoints.put(3.39, 51.0);
-            referencePoints.put(4.0, 56.0);
+            referencePoints.put(2.26, 34.0);
+            referencePoints.put(2.5, 34.5);
+            referencePoints.put(2.72, 35.0);
+            referencePoints.put(2.99, 38.5);
+            referencePoints.put(3.18, 45.5);
+            referencePoints.put(3.39, 51.5);
+            referencePoints.put(4.0, 56.5);
         // } else {
         //     referencePoints.put(1.08, 28.0);
         //     referencePoints.put(1.18, 29.0);

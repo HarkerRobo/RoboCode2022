@@ -37,13 +37,13 @@ public class Trajectories {
     public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
             new Translation2d(7.436414, 2.015084), 
-            new Translation2d(7.325043, 0.871275)}), Rotation2d.fromDegrees(-90), 
+            new Translation2d(7.45043, 0.821275)}), Rotation2d.fromDegrees(-90), 
         List.of(Rotation2d.fromDegrees(-90)));
 
     public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
             new Translation2d(7.436414, 2.015084), 
-            new Translation2d(7.325043, 0.871275), 
+            new Translation2d(7.325043, 0.901275), 
             new Translation2d(5.303312, 1.901372)}), Rotation2d.fromDegrees(-90), 
         List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(150)));
     

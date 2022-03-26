@@ -18,9 +18,11 @@ public class SetClimberPosition extends CommandBase {
 
     public void execute() {
         if(!Climber.getInstance().isZeroed && !limitSwitch) return;
+        double multiplier = 1;
         double direction = Math.signum(position - Climber.getInstance().getPositionLeft());
         if(limitSwitch) direction = -1;
-        Climber.getInstance().setClimberOutput(direction * Math.abs(speed));
+        if(Math.abs(position - Climber.getInstance().getPositionLeft()) < 10000 && direction == 1) multiplier = 0.3;
+        Climber.getInstance().setClimberOutput(direction * Math.abs(speed) * multiplier);
         // if(limitSwitch)
         // {
         //     if(Climber.getInstance().getClimberLeft().isRevLimitSwitchClosed() == 1 || Climber.getInstance().getClimberLeft().isFwdLimitSwitchClosed() == 1)

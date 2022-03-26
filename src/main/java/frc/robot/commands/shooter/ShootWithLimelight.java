@@ -34,17 +34,17 @@ public class ShootWithLimelight extends IndefiniteCommand {
         //NEW
         referencePoints.put(1.36, 26.5);
         referencePoints.put(1.54, 29.0);
-        referencePoints.put(1.75, 28.5);
+        referencePoints.put(1.75, 29.3);
         referencePoints.put(1.91, 29.0);
-        referencePoints.put(2.17, 28.5);
-        referencePoints.put(2.4, 29.5);
-        referencePoints.put(2.62, 31.0);
-        referencePoints.put(2.84, 32.0);
-        referencePoints.put(3.11, 34.5);
-        referencePoints.put(3.43, 37.5);
-        referencePoints.put(3.73, 41.0);
-        referencePoints.put(4.25, 61.0);
-        referencePoints.put(4.52, 64.0);
+        referencePoints.put(2.17, 29.5);
+        referencePoints.put(2.4, 30.0);
+        referencePoints.put(2.62, 31.5);
+        referencePoints.put(2.84, 32.5);
+        referencePoints.put(3.11, 35.0);
+        referencePoints.put(3.43, 38.0);
+        referencePoints.put(3.73, 41.5);
+        referencePoints.put(4.25, 61.5);
+        referencePoints.put(4.52, 64.5);
     }
     
     public void execute() {

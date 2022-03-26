@@ -48,8 +48,8 @@ public class Limelight {
     public static final int LIMELIGHT_ANGLE = 43;
     
     private static double[] nullArr;    
-    private static LinearFilter txFilter = LinearFilter.movingAverage(15);
-    private static LinearFilter tyFilter = LinearFilter.movingAverage(15);
+    private static LinearFilter txFilter = LinearFilter.movingAverage(5);
+    private static LinearFilter tyFilter = LinearFilter.movingAverage(5);
     private static double currentTx;
     private static double currentTy;
     public static final double LIMELIGHT_HEIGHT = 0.94;

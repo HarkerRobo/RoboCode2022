@@ -56,7 +56,7 @@ public class HoodManual extends IndefiniteCommand{
 
         //NEW
         referencePoints.put(1.36, 7.0);
-        referencePoints.put(1.54, 11.0);
+        referencePoints.put(1.54, 13.0);
         referencePoints.put(1.75, 14.5);
         referencePoints.put(1.91, 18.0);
         referencePoints.put(2.17, 22.0);

@@ -12,7 +12,7 @@ public class MoveClimbToNextBar extends ParallelCommandGroup {
     public MoveClimbToNextBar() {
         super();
         addCommands(new SequentialCommandGroup(
-            new SetClimberPosition(Climber.UP_HEIGHT, 0.5),
+            new SetClimberPosition(Climber.UP_AND_BACK_HEIGHT, 0.5),
             new WaitUntilCommand(()-> Drivetrain.getInstance().getPitchVel() > 0 && 
                 Drivetrain.getInstance().getPrevPitchVel() < 0)
             // new SetClimberForward()

@@ -101,9 +101,7 @@ public class Autons {
         new RevAndAlign(1),
         new ShootAndIndex(1.5),
         Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
-        Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
-        new RevAndAlign(1),
-        new ShootAndIndex(2));
+        Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()));
 
     // public static final SequentialCommandGroup TWO_BALL_AUTO = new SequentialCommandGroup(
     //     new SetIntakeDown(),

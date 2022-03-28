@@ -52,8 +52,8 @@ public class Trajectories {
             new Translation2d(7.436414, 2.015084), 
             new Translation2d(7.325043, 0.871275), 
             new Translation2d(5.303312, 1.901372),
-            new Translation2d(1.66, 1.43),
-            new Translation2d(5.35, 2.38)}), Rotation2d.fromDegrees(-90),
+            new Translation2d(1.54, 1.37),
+            new Translation2d(5.303312, 1.901372)}), Rotation2d.fromDegrees(-90),
         List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(150),Rotation2d.fromDegrees(-152), Rotation2d.fromDegrees(-152)));
     
 

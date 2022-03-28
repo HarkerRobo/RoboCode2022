@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
   private Timer pitchVel;
   private boolean wasAuto = false;
 
-  private Command auto = Autons.THREE_BALL_AUTO;
+  private Command auto = Autons.TWO_BALL_AUTO;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors

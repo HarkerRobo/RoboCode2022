@@ -13,6 +13,7 @@ public class ShootWithLimelight extends IndefiniteCommand {
     private InterpolatedTreeMap referencePoints;
 
     private double velocity;
+    public static double velocityOffset = 0.8;
     
     public ShootWithLimelight() {
         addRequirements(Shooter.getInstance());
@@ -32,25 +33,25 @@ public class ShootWithLimelight extends IndefiniteCommand {
         // referencePoints.put(4.0, 56.0);
 
         //NEW
-        referencePoints.put(1.36, 26.5);
+        referencePoints.put(1.36, 28.0);
         referencePoints.put(1.54, 29.0);
         referencePoints.put(1.75, 29.3);
-        referencePoints.put(1.91, 29.0);
-        referencePoints.put(2.17, 29.5);
-        referencePoints.put(2.4, 30.0);
-        referencePoints.put(2.62, 31.5);
-        referencePoints.put(2.84, 32.5);
-        referencePoints.put(3.11, 35.0);
-        referencePoints.put(3.43, 38.0);
-        referencePoints.put(3.73, 41.5);
-        referencePoints.put(4.25, 61.5);
-        referencePoints.put(4.52, 64.5);
+        referencePoints.put(1.91, 29.3);
+        referencePoints.put(2.17, 29.7);
+        referencePoints.put(2.4, 30.2);
+        referencePoints.put(2.62, 31.7);
+        referencePoints.put(2.84, 32.7);
+        referencePoints.put(3.11, 35.2);
+        referencePoints.put(3.43, 38.2);
+        referencePoints.put(3.73, 41.7);
+        referencePoints.put(4.25, 61.7);
+        referencePoints.put(4.52, 64.7);
     }
     
     public void execute() {
         velocity = referencePoints.get(Limelight.getDistance());
         // velocity = SmartDashboard.getNumber("desired velocity", 0);
-        Shooter.getInstance().setVelocity(velocity+0.5);
+        Shooter.getInstance().setVelocity(velocity+velocityOffset);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
         SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());

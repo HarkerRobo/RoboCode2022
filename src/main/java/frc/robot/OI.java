@@ -56,6 +56,8 @@ public class OI {
         // operatorGamepad.getLeftDPadButton().whenPressed(new PigeonPitchTraversal());
         driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(2*Climber.UP_HEIGHT / 3 , 0.6));
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> HoodManual.downMode = !HoodManual.downMode));
+        operatorGamepad.getRightDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset += 0.2));
+        operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset -= 0.2));
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
         //driverGamepad.getButtonB().whilePressed(Autons.THREE_BALL_AUTO);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));

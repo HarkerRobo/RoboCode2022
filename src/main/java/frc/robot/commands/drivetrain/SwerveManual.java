@@ -28,6 +28,9 @@ public class SwerveManual extends IndefiniteCommand {
     public static double LIMELIGHT_KD = 0.01;
     private ProfiledPIDController txController;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
+
+    // private double lastXVel = 0;
+    // private double lastYVel = 0;
     
     public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
@@ -112,6 +115,26 @@ public class SwerveManual extends IndefiniteCommand {
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
         else
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(0));
+
+        // ChassisSpeeds prevSpeed = Drivetrain.getInstance().getKinematics().toChassisSpeeds(
+        //     Drivetrain.getInstance().getTopLeft().getState(),
+        //     Drivetrain.getInstance().getTopRight().getState(), 
+        //     Drivetrain.getInstance().getBottomLeft().getState(), 
+        //         Drivetrain.getInstance().getBottomRight().getState());
+
+        //     double ax = (chassis.vxMetersPerSecond - prevSpeed.vxMetersPerSecond) / 0.02;
+        //     double ay = (chassis.vyMetersPerSecond - prevSpeed.vyMetersPerSecond) / 0.02;
+        //     double mag = Math.sqrt(ax*ax + ay*ay);
+
+        //     double limitedMag = limiter.calculate(mag);
+        // if(Math.abs(mag) > 1e-2) {
+        //     ax = ax / mag * limitedMag;
+        //     ay = ay / mag * limitedMag;
+        // }  
+
+        // chassis.vxMetersPerSecond = prevSpeed.vxMetersPerSecond + ax * 0.02;
+        // chassis.vyMetersPerSecond = prevSpeed.vyMetersPerSecond + ay * 0.02;
+
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
     }
 }

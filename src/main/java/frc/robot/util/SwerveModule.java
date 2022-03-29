@@ -45,7 +45,7 @@ public class SwerveModule {
 
 	private static final double MAX_ERROR = 0.05;  
     private static final double MODEL_STANDARD_DEVIATION = 0.5;
-    private static final double ENCODER_STANDARD_DEVIATION = 0.05;
+    private static final double ENCODER_STANDARD_DEVIATION = 0.035;
 	
 
 	private boolean ROTATION_INVERT;
@@ -62,7 +62,6 @@ public class SwerveModule {
 		rotation = new HSFalcon(rotationDriveId, RobotMap.CANIVORE);
 		translation = new HSFalcon(translationDriveId, RobotMap.CANIVORE);
 		rotationEncoder = new CANCoder(rotationEncoderID, RobotMap.CANIVORE);
-		rotationEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 50);
 		rotationMotorInit();
 		translationMotorInit();
 		translationLoop = new SimpleVelocitySystem(DRIVE_KS, DRIVE_KV, DRIVE_KA, MAX_ERROR, Units.MAX_CONTROL_EFFORT, MODEL_STANDARD_DEVIATION, ENCODER_STANDARD_DEVIATION, RobotMap.LOOP_TIME);

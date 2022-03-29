@@ -8,9 +8,9 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class MoveBallsToShooter extends IndefiniteCommand {
     
-    public static final double SPEED = 0.25;
+    public static final double SPEED = 0.3;
     public static final double LIMELIGHT_THRESHOLD = 10;
-    private static Debouncer debouncer = new Debouncer(0.1, DebounceType.kFalling);
+    private static Debouncer debouncer = new Debouncer(0.07, DebounceType.kFalling);
     
     public MoveBallsToShooter() {
         addRequirements(Indexer.getInstance());

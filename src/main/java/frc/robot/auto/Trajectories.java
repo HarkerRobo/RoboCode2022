@@ -24,27 +24,28 @@ import frc.robot.subsystems.Drivetrain;
  * @since February 12, 2020
  */
 public class Trajectories {
-    public static TrajectoryConfig config = new TrajectoryConfig(HSSwerveDriveController.MAX_DRIVE_VELOCITY,
-            HSSwerveDriveController.MAX_DRIVE_ACCELERATION).setKinematics(Drivetrain.getInstance().getKinematics());
+    public static TrajectoryConfig threeconfig = new TrajectoryConfig(2,1.5).setKinematics(Drivetrain.getInstance().getKinematics());
+
+    public static TrajectoryConfig fiveconfig = new TrajectoryConfig(3,2.5).setKinematics(Drivetrain.getInstance().getKinematics());
     
 
     public static final List<HSSwerveDriveController> oneBallBackUp = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
             new Translation2d(6.02, 4.13),
-            new Translation2d(4.41, 4.16)}), Rotation2d.fromDegrees(0),
+            new Translation2d(4.41, 4.16)}, threeconfig), Rotation2d.fromDegrees(0),
         List.of(Rotation2d.fromDegrees(0)));
 
     public static final List<HSSwerveDriveController> twoBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
             new Translation2d(7.436414, 2.015084), 
-            new Translation2d(7.45043, 0.821275)}), Rotation2d.fromDegrees(-90), 
+            new Translation2d(7.45043, 0.821275)}, threeconfig), Rotation2d.fromDegrees(-90), 
         List.of(Rotation2d.fromDegrees(-90)));
 
     public static final List<HSSwerveDriveController> threeBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
             new Translation2d(7.436414, 2.015084), 
             new Translation2d(7.325043, 0.901275), 
-            new Translation2d(5.303312, 1.901372)}), Rotation2d.fromDegrees(-90), 
+            new Translation2d(5.303312, 1.901372)}, threeconfig), Rotation2d.fromDegrees(-90), 
         List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(150)));
     
     public static final List<HSSwerveDriveController> fiveBallAuto = getDrivetrainCommands(generateDirectTrajectories(
@@ -52,9 +53,9 @@ public class Trajectories {
             new Translation2d(7.436414, 2.015084), 
             new Translation2d(7.325043, 0.871275), 
             new Translation2d(5.303312, 1.901372),
-            new Translation2d(1.54, 1.37),
-            new Translation2d(5.303312, 1.901372)}), Rotation2d.fromDegrees(-90),
-        List.of(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(150),Rotation2d.fromDegrees(-152), Rotation2d.fromDegrees(-152)));
+            new Translation2d(1.54, 1.42),
+            new Translation2d(5.303312, 1.901372)}, fiveconfig), Rotation2d.fromDegrees(-90),
+        List.of(Rotation2d.fromDegrees(-94),Rotation2d.fromDegrees(150),Rotation2d.fromDegrees(-152), Rotation2d.fromDegrees(-152)));
     
 
     // public static final Trajectory moveForward = TrajectoryGenerator.generateTrajectory(List.of(
@@ -130,7 +131,7 @@ public class Trajectories {
     //     List.of(Rotation2d.fromDegrees(-46), Rotation2d.fromDegrees(-132), Rotation2d.fromDegrees(-99)));
 
    
-    public static List<Trajectory> generateDirectTrajectories(Translation2d[] input){
+    public static List<Trajectory> generateDirectTrajectories(Translation2d[] input, TrajectoryConfig config){
         List<Trajectory> out = new ArrayList<Trajectory>();
         for(int i=0;i<input.length-1;i++) {
             out.add(TrajectoryGenerator.generateTrajectory(List.of(

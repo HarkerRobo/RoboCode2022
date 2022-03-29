@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.auto.Autons;
 import frc.robot.commands.climber.ClimberManual;
 import frc.robot.commands.climber.MoveClimbToNextBar;
 import frc.robot.commands.climber.SetClimberPosition;
@@ -59,7 +60,7 @@ public class OI {
         operatorGamepad.getRightDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset += 0.2));
         operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset -= 0.2));
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
-        //driverGamepad.getButtonB().whilePressed(Autons.THREE_BALL_AUTO);
+        driverGamepad.getButtonB().whilePressed(Autons.FIVE_BALL_AUTO);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }
 

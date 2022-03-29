@@ -13,11 +13,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.subsystems.Drivetrain;
 
 public class HSSwerveDriveController extends SwerveControllerCommand {
-    public static final double X_KP = 2;
+    public static final double X_KP = 4;
     public static final double X_KI = 0;
     public static final double X_KD = 0;
 
-    public static final double Y_KP = 2;
+    public static final double Y_KP = 4;
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
@@ -35,7 +35,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     private static PIDController yController = new PIDController(Y_KP, Y_KI, Y_KD);
     private static ProfiledPIDController thetaController = 
         new ProfiledPIDController(THETA_KP, THETA_KI, THETA_KD, new Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION));
-    private static final double TURN_TIME = 0.6;
+    private static final double TURN_TIME = 0.3;
     
     private Rotation2d initHeading;
     Trajectory trajectory;

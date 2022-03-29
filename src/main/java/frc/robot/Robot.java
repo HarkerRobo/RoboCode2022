@@ -200,7 +200,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     pd.setSwitchableChannel(true);
-    // Limelight.update();
+    Limelight.update();
     // if(Math.random() < 1.0/3000)
     //   CommandScheduler.getInstance().schedule(new ToggleIntake());
   }

@@ -39,11 +39,11 @@ public class SwerveModule {
 	private static final double ANGLE_I = 0;
 	private static final double ANGLE_D = 0;
 
-	private static final double DRIVE_KS = 0;//-0.62769/2;
+	private static final double DRIVE_KS = -0.1;//-0.62769/2;
 	private static final double DRIVE_KV = 2.2819;
 	private static final double DRIVE_KA = 0.3621;
 
-	private static final double MAX_ERROR = 0.05;  
+	private static final double MAX_ERROR = 1;  
     private static final double MODEL_STANDARD_DEVIATION = 0.5;
     private static final double ENCODER_STANDARD_DEVIATION = 0.035;
 	

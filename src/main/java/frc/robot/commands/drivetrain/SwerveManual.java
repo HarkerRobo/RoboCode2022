@@ -74,12 +74,12 @@ public class SwerveManual extends IndefiniteCommand {
         translationx *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
         translationy *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
 
-        double mag = Math.sqrt(translationx * translationx + translationy * translationy);
-        double limitedMag = limiter.calculate(mag);
-        if(Math.abs(mag) > 1e-3) {
-            translationx = translationx / mag * limitedMag;
-            translationy = translationy / mag * limitedMag;
-        }
+        // double mag = Math.sqrt(translationx * translationx + translationy * translationy);
+        // double limitedMag = limiter.calculate(mag);
+        // if(Math.abs(mag) > 1e-3) {
+        //     translationx = translationx / mag * limitedMag;
+        //     translationy = translationy / mag * limitedMag;
+        // }
 
         if(OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
             translationy *= 0.6;
@@ -116,24 +116,31 @@ public class SwerveManual extends IndefiniteCommand {
         else
             chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(0));
 
-        // ChassisSpeeds prevSpeed = Drivetrain.getInstance().getKinematics().toChassisSpeeds(
-        //     Drivetrain.getInstance().getTopLeft().getState(),
-        //     Drivetrain.getInstance().getTopRight().getState(), 
-        //     Drivetrain.getInstance().getBottomLeft().getState(), 
-        //         Drivetrain.getInstance().getBottomRight().getState());
+        ChassisSpeeds prevSpeed = Drivetrain.getInstance().getKinematics().toChassisSpeeds(
+            Drivetrain.getInstance().getTopLeft().getState(),
+            Drivetrain.getInstance().getTopRight().getState(), 
+            Drivetrain.getInstance().getBottomLeft().getState(), 
+                Drivetrain.getInstance().getBottomRight().getState());
 
-        //     double ax = (chassis.vxMetersPerSecond - prevSpeed.vxMetersPerSecond) / 0.02;
-        //     double ay = (chassis.vyMetersPerSecond - prevSpeed.vyMetersPerSecond) / 0.02;
-        //     double mag = Math.sqrt(ax*ax + ay*ay);
+            double ax = (chassis.vxMetersPerSecond - prevSpeed.vxMetersPerSecond) / 0.02;
+            double ay = (chassis.vyMetersPerSecond - prevSpeed.vyMetersPerSecond) / 0.02;
+            double mag = Math.sqrt(ax*ax + ay*ay);
+        
+            double limitedMag = mag;
+            if(Math.abs(limitedMag) > 30) {
+                limitedMag = 30 * Math.signum(limitedMag);
+            }
+        if(Math.abs(mag) > 3) {
+            ax = ax / Math.abs(mag) * limitedMag; //mag * limitedMag;
+            ay = ay / Math.abs(mag) * limitedMag;  //ay / mag * limitedMag;
+        }
 
-        //     double limitedMag = limiter.calculate(mag);
-        // if(Math.abs(mag) > 1e-2) {
-        //     ax = ax / mag * limitedMag;
-        //     ay = ay / mag * limitedMag;
-        // }  
-
-        // chassis.vxMetersPerSecond = prevSpeed.vxMetersPerSecond + ax * 0.02;
-        // chassis.vyMetersPerSecond = prevSpeed.vyMetersPerSecond + ay * 0.02;
+        chassis.vxMetersPerSecond = prevSpeed.vxMetersPerSecond + ax * 0.02;
+        chassis.vyMetersPerSecond = prevSpeed.vyMetersPerSecond + ay * 0.02;
+        SmartDashboard.putNumber("axsays", ax);
+        SmartDashboard.putNumber("ays", ay);
+        SmartDashboard.putNumber("speedxs", chassis.vxMetersPerSecond);
+        SmartDashboard.putNumber("speedys", chassis.vyMetersPerSecond);
 
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
     }

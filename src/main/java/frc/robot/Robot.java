@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("hood izone", HoodManual.HOOD_IZONE);
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
-    // NetworkTableInstance.getDefault().setUpdateRate(0.02);
+    NetworkTableInstance.getDefault().setUpdateRate(0.02);
     
   }
 

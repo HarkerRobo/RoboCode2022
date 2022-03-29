@@ -50,12 +50,12 @@ public class Trajectories {
     
     public static final List<HSSwerveDriveController> fiveBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
-            new Translation2d(7.436414, 2.015084), 
-            new Translation2d(7.325043, 0.871275), 
+            new Translation2d(7.656414, 1.865084), 
+            new Translation2d(7.645043, 0.741275), 
             new Translation2d(5.303312, 1.901372),
             new Translation2d(1.54, 1.42),
-            new Translation2d(5.303312, 1.901372)}, fiveconfig), Rotation2d.fromDegrees(-90),
-        List.of(Rotation2d.fromDegrees(-94),Rotation2d.fromDegrees(150),Rotation2d.fromDegrees(-152), Rotation2d.fromDegrees(-152)));
+            new Translation2d(5.89, 2.03)}, fiveconfig), Rotation2d.fromDegrees(-90),
+        List.of(Rotation2d.fromDegrees(-100),Rotation2d.fromDegrees(150),Rotation2d.fromDegrees(-140), Rotation2d.fromDegrees(-140)));
     
 
     // public static final Trajectory moveForward = TrajectoryGenerator.generateTrajectory(List.of(

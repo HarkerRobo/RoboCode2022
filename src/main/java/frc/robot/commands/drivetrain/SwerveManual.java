@@ -11,6 +11,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 
@@ -26,6 +27,7 @@ public class SwerveManual extends IndefiniteCommand {
     public static double LIMELIGHT_KI = 0.01;
     public static double LIMELIGHT_IZONE = 3;
     public static double LIMELIGHT_KD = 0.01;
+
     private ProfiledPIDController txController;
     private SlewRateLimiter limiter = new SlewRateLimiter(3);
 
@@ -35,6 +37,13 @@ public class SwerveManual extends IndefiniteCommand {
     public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
     private Debouncer debouncer = new Debouncer(PIGEON_DELAY, DebounceType.kRising);
+    private double translationXVel;
+    private double translationYVel;
+    private double angularVel;
+    private double translationXAcc;
+    private double translationYAcc;
+    private boolean holdingPigeonAngle;
+    private ChassisSpeeds output;
 
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
@@ -45,103 +54,113 @@ public class SwerveManual extends IndefiniteCommand {
 
     @Override
     public void execute() {
-        // txController.setP(SmartDashboard.getNumber("limelight align kP", LIMELIGHT_KP));
-        // txController.setI(SmartDashboard.getNumber("limelight align kI", LIMELIGHT_KI));
-        // txController.setD(SmartDashboard.getNumber("limelight align kD", LIMELIGHT_KD));
-        // double izone = SmartDashboard.getNumber("limelight align izone", LIMELIGHT_IZONE);
-        // txController.setIntegratorRange(-izone, izone);
+        readJoySticks();
+        squareOutputs();
+        scaleOutputs();
+        SmartDashboard.putNumber("trans X", translationXVel);
+        pigeonKP();
+        limelightAlign();
 
-        double angularVelocity = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
-        angularVelocity *= Math.abs(angularVelocity);
-        double translationy = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
-        double translationx = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
-       
-        
-        translationx *= Math.abs(translationx);
-        translationy *= Math.abs(translationy);
-        double chasisMagnitude = Math.sqrt(Math.pow(translationx,2) + Math.pow(translationy,2));
+        SmartDashboard.putNumber("angular vel", angularVel);
+        generateOutputChassisSpeeds();
+        clampAcceleration();
+
+        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(output), false);
+    }
+
+    private void readJoySticks() {
+        angularVel = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
+        translationYVel = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
+        translationXVel = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
+    }
+
+    private void squareOutputs() {
+        translationXVel *= Math.abs(translationXVel);
+        translationYVel *= Math.abs(translationYVel);
+        angularVel *= Math.abs(angularVel);
+    }
+
+    private void scaleOutputs(){
+        double chasisMagnitude = Math.sqrt(Math.pow(translationXVel,2) + Math.pow(translationYVel,2));
         if(Math.abs(chasisMagnitude) < Drivetrain.MIN_OUTPUT){
-            translationx = 0;
-            translationy = 0;
-            if (Math.abs(angularVelocity) < Drivetrain.MIN_OUTPUT) {
-                angularVelocity = 0.001;
+            translationXVel = 0;
+            translationYVel = 0;
+            if (Math.abs(angularVel) < Drivetrain.MIN_OUTPUT) {
+                angularVel = 0.001;
             }
         }
-    
-        SmartDashboard.putNumber("trans X", translationx);
-
-        angularVelocity *= Drivetrain.MAX_ANGULAR_VEL * OUTPUT_MULTIPLIER;
-        translationx *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
-        translationy *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
-
-        // double mag = Math.sqrt(translationx * translationx + translationy * translationy);
-        // double limitedMag = limiter.calculate(mag);
-        // if(Math.abs(mag) > 1e-3) {
-        //     translationx = translationx / mag * limitedMag;
-        //     translationy = translationy / mag * limitedMag;
-        // }
-
+        angularVel *= Drivetrain.MAX_ANGULAR_VEL * OUTPUT_MULTIPLIER;
+        translationXVel *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
+        translationYVel *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
         if(OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
-            translationy *= 0.6;
-            translationx *= 0.6;
+            translationYVel *= 0.6;
+            translationXVel *= 0.6;
         }
+    }
 
+    private void pigeonKP() {
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
-            angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
+            angularVel = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
             SmartDashboard.putBoolean("holding pigeon angle", true);
         }
         else {  
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
         }
+    }
 
+    private void limelightAlign() {
         if(OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible()) {
             Limelight.update();
             
-            angularVelocity = -txController.calculate(Limelight.getTx());
+            angularVel = -txController.calculate(Limelight.getTx());
             pigeonAngle = Drivetrain.getInstance().getHeading();
             SmartDashboard.putBoolean("holding pigeon angle", false);
             SmartDashboard.putNumber("ll error", txController.getPositionError());
             SmartDashboard.putNumber("limelight setpoint", txController.getSetpoint().position);
             SmartDashboard.putNumber("limelight goal", txController.getGoal().position);
-        } else {
+        } 
+        else {
             txController.reset(0);
         }
+    }
 
-        SmartDashboard.putNumber("angular vel", angularVelocity);
-        ChassisSpeeds chassis;
+    private void generateOutputChassisSpeeds() {
         if(Drivetrain.getInstance().isFieldCentric())
-            chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
+            output = ChassisSpeeds.fromFieldRelativeSpeeds(translationXVel, translationYVel, -angularVel, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getYaw()));
         else
-            chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, Rotation2d.fromDegrees(0));
+            output = ChassisSpeeds.fromFieldRelativeSpeeds(translationXVel, translationYVel, -angularVel, Rotation2d.fromDegrees(0));
+    }
 
+    private void clampAcceleration() {
         ChassisSpeeds prevSpeed = Drivetrain.getInstance().getKinematics().toChassisSpeeds(
             Drivetrain.getInstance().getTopLeft().getState(),
             Drivetrain.getInstance().getTopRight().getState(), 
             Drivetrain.getInstance().getBottomLeft().getState(), 
-                Drivetrain.getInstance().getBottomRight().getState());
-
-            double ax = (chassis.vxMetersPerSecond - prevSpeed.vxMetersPerSecond) / 0.02;
-            double ay = (chassis.vyMetersPerSecond - prevSpeed.vyMetersPerSecond) / 0.02;
-            double mag = Math.sqrt(ax*ax + ay*ay);
+            Drivetrain.getInstance().getBottomRight().getState());
+        double prevX = prevSpeed.vxMetersPerSecond;
+        double prevY = prevSpeed.vyMetersPerSecond;
+        translationXAcc = (output.vxMetersPerSecond - prevX) / 0.02;
+        translationYAcc = (output.vyMetersPerSecond - prevY) / 0.02;
+        double mag = Math.sqrt(translationXAcc*translationXAcc + translationYAcc*translationYAcc);
+        double limitedMag = MathUtil.constrain(mag, -Drivetrain.MAX_DRIVE_ACC, Drivetrain.MAX_DRIVE_ACC);
         
-            double limitedMag = mag;
-            if(Math.abs(limitedMag) > 30) {
-                limitedMag = 30 * Math.signum(limitedMag);
-            }
-        if(Math.abs(mag) > 3) {
-            ax = ax / Math.abs(mag) * limitedMag; //mag * limitedMag;
-            ay = ay / Math.abs(mag) * limitedMag;  //ay / mag * limitedMag;
-        }
+        translationXAcc = translationXAcc /mag * limitedMag;
+        translationYAcc = translationYAcc /mag * limitedMag;
+        
+        output.vxMetersPerSecond = prevX + translationXAcc * 0.02;
+        output.vyMetersPerSecond = prevY + translationYAcc * 0.02;
+    }
 
-        chassis.vxMetersPerSecond = prevSpeed.vxMetersPerSecond + ax * 0.02;
-        chassis.vyMetersPerSecond = prevSpeed.vyMetersPerSecond + ay * 0.02;
-        SmartDashboard.putNumber("axsays", ax);
-        SmartDashboard.putNumber("ays", ay);
-        SmartDashboard.putNumber("speedxs", chassis.vxMetersPerSecond);
-        SmartDashboard.putNumber("speedys", chassis.vyMetersPerSecond);
-
-        Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
+    public void initSendable(SendableBuilder builder)
+    {
+        builder.setSmartDashboardType("Swerve Manual");
+        builder.addDoubleProperty("Translation X Vel", () -> translationXVel, null);
+        builder.addDoubleProperty("Translation Y Vel", () -> translationYVel, null);
+        builder.addDoubleProperty("Angular Vel", () -> angularVel, null);
+        builder.addDoubleProperty("Translation X Acc", () -> translationXAcc, null);
+        builder.addDoubleProperty("Translation Y Acc", () -> translationYAcc, null);
+        builder.addBooleanProperty("Holding Pigeon Angle", () -> holdingPigeonAngle, null);
     }
 }

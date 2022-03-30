@@ -10,7 +10,7 @@ import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 
 public class AlignWithLimelight extends IndefiniteCommand {
-    private static final double LIMELIGHT_THRESHOLD = 1.5;
+    public static final double LIMELIGHT_THRESHOLD = 1.5;
     public static final double LIMELIGHT_KP = SwerveManual.LIMELIGHT_KP*1.2;
     public static final double LIMELIGHT_KD = SwerveManual.LIMELIGHT_KD;
     public static final double LIMELIGHT_IZONE = SwerveManual.LIMELIGHT_IZONE;

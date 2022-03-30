@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.Autons;
 import frc.robot.commands.climber.ClimberManual;
 import frc.robot.commands.climber.MoveClimbToNextBar;
@@ -38,9 +39,8 @@ public class OI {
     }
 
     public void initBindings() {
-        ((XboxGamepad)operatorGamepad).getButtonTriggerRight().whilePressed(new MoveBallsToShooter());
-        operatorGamepad.getButtonBumperRight().whilePressed(new ShootAgainstHub());
-        operatorGamepad.getButtonBumperLeft().whilePressed(new ShootWithLimelight());
+        operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter()));
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter()));
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);
@@ -61,6 +61,7 @@ public class OI {
         operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset -= 0.2));
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
         driverGamepad.getButtonB().whilePressed(Autons.FIVE_BALL_AUTO);
+        driverGamepad.getButtonX().whenPressed(Drivetrain.getInstance()::toggleFieldCentric);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }
 

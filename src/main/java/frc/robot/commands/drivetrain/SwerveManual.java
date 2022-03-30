@@ -29,7 +29,6 @@ public class SwerveManual extends IndefiniteCommand {
     public static double LIMELIGHT_KD = 0.01;
 
     private ProfiledPIDController txController;
-    private SlewRateLimiter limiter = new SlewRateLimiter(3);
 
     // private double lastXVel = 0;
     // private double lastYVel = 0;
@@ -57,11 +56,8 @@ public class SwerveManual extends IndefiniteCommand {
         readJoySticks();
         squareOutputs();
         scaleOutputs();
-        SmartDashboard.putNumber("trans X", translationXVel);
         pigeonKP();
         limelightAlign();
-
-        SmartDashboard.putNumber("angular vel", angularVel);
         generateOutputChassisSpeeds();
         clampAcceleration();
 
@@ -102,11 +98,11 @@ public class SwerveManual extends IndefiniteCommand {
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
             angularVel = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getHeading());
-            SmartDashboard.putBoolean("holding pigeon angle", true);
+            holdingPigeonAngle = true;
         }
         else {  
             pigeonAngle = Drivetrain.getInstance().getHeading();
-            SmartDashboard.putBoolean("holding pigeon angle", false);
+            holdingPigeonAngle = false;
         }
     }
 
@@ -116,7 +112,6 @@ public class SwerveManual extends IndefiniteCommand {
             
             angularVel = -txController.calculate(Limelight.getTx());
             pigeonAngle = Drivetrain.getInstance().getHeading();
-            SmartDashboard.putBoolean("holding pigeon angle", false);
             SmartDashboard.putNumber("ll error", txController.getPositionError());
             SmartDashboard.putNumber("limelight setpoint", txController.getSetpoint().position);
             SmartDashboard.putNumber("limelight goal", txController.getGoal().position);

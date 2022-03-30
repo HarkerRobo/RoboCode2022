@@ -5,6 +5,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
@@ -34,10 +35,23 @@ public class MoveBallsToShooter extends IndefiniteCommand {
                 Drivetrain.getInstance().getBottomRight().getState());
         
         double translationMag = Math.sqrt(speed.vxMetersPerSecond * speed.vxMetersPerSecond + speed.vyMetersPerSecond * speed.vyMetersPerSecond);
-        double limelightThreshold = Math.atan(HUB_RADIUS/Limelight.getDistance()) * 2 + 1;
-        if(Math.abs(HoodManual.hoodController.getPositionError()) <= 0.15 && Math.abs(Limelight.getTx()) <= limelightThreshold &&
-            Math.abs(translationMag) <= 0.2 && debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
-            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3)) {
+        double limelightThreshold = Math.toDegrees(Math.atan(HUB_RADIUS/(Limelight.getDistance() + HUB_RADIUS))) * 2 + 1;
+
+        boolean isHood = Math.abs(HoodManual.hoodController.getPositionError()) <= 0.5;
+        boolean isLimelight = Limelight.isTargetVisible();
+        boolean isTx = Math.abs(Limelight.getTx()) <= limelightThreshold;
+        boolean isTranslation = Math.abs(translationMag) <= 0.2;
+        boolean isRotation = Math.abs(speed.omegaRadiansPerSecond) <= 0.2;
+        boolean isShooter = debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
+                            Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3);
+        SmartDashboard.putNumber("autoshot ll thresh", limelightThreshold);
+        SmartDashboard.putBoolean("autoshot isHood", isHood);
+        SmartDashboard.putBoolean("autoshot isLimelight", isLimelight);
+        SmartDashboard.putBoolean("autoshot isTx", isTx);
+        SmartDashboard.putBoolean("autoshot isTranslation", isTranslation);
+        SmartDashboard.putBoolean("autoshot isRotation", isRotation);
+        SmartDashboard.putBoolean("autoshot isShooter", isShooter);
+        if(isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) {
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

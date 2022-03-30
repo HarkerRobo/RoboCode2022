@@ -50,7 +50,7 @@ public class ShootWithLimelight extends IndefiniteCommand {
     
     public void execute() {
         velocity = referencePoints.get(Limelight.getDistance());
-        // velocity = SmartDashboard.getNumber("desired velocity", 0);
+        SmartDashboard.putNumber("desired velocity", velocity+velocityOffset);
         Shooter.getInstance().setVelocity(velocity+velocityOffset);
         SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
         SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());

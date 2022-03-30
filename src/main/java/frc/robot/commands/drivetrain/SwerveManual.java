@@ -112,7 +112,7 @@ public class SwerveManual extends IndefiniteCommand {
             
             angularVel = -txController.calculate(Limelight.getTx());
             pigeonAngle = Drivetrain.getInstance().getHeading();
-            SmartDashboard.putNumber("ll error", txController.getPositionError());
+             SmartDashboard.putNumber("ll error", txController.getPositionError());
             SmartDashboard.putNumber("limelight setpoint", txController.getSetpoint().position);
             SmartDashboard.putNumber("limelight goal", txController.getGoal().position);
         } 

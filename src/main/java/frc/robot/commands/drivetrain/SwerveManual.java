@@ -140,6 +140,7 @@ public class SwerveManual extends IndefiniteCommand {
         translationYAcc = (output.vyMetersPerSecond - prevY) / 0.02;
         double mag = Math.sqrt(translationXAcc*translationXAcc + translationYAcc*translationYAcc);
         double limitedMag = MathUtil.constrain(mag, -Drivetrain.MAX_DRIVE_ACC, Drivetrain.MAX_DRIVE_ACC);
+        mag = mag == 0 ? 1 : 0;
         
         translationXAcc = translationXAcc /mag * limitedMag;
         translationYAcc = translationYAcc /mag * limitedMag;

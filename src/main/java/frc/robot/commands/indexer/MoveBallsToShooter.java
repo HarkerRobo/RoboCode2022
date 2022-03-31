@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.OI;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
@@ -35,7 +36,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
                 Drivetrain.getInstance().getBottomRight().getState());
         
         double translationMag = Math.sqrt(speed.vxMetersPerSecond * speed.vxMetersPerSecond + speed.vyMetersPerSecond * speed.vyMetersPerSecond);
-        double limelightThreshold = Math.toDegrees(Math.atan(HUB_RADIUS/(Limelight.getDistance() + HUB_RADIUS))) * 2 + 1;
+        double limelightThreshold = Math.toDegrees(Math.atan(HUB_RADIUS/(Limelight.getDistance() + HUB_RADIUS))) + 1;
 
         boolean isHood = Math.abs(HoodManual.hoodController.getPositionError()) <= 0.5;
         boolean isLimelight = Limelight.isTargetVisible();
@@ -51,7 +52,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
         SmartDashboard.putBoolean("autoshot isTranslation", isTranslation);
         SmartDashboard.putBoolean("autoshot isRotation", isRotation);
         SmartDashboard.putBoolean("autoshot isShooter", isShooter);
-        if(isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) {
+        if((isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

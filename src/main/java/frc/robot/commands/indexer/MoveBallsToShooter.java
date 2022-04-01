@@ -5,7 +5,7 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.OI;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
@@ -22,8 +22,10 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     public static final double SPEED = 0.3;
     public static final double LIMELIGHT_THRESHOLD = 5;
     public static final double HUB_RADIUS = 0.6096;
+    private double limelightThreshold;
     private static Debouncer debouncer = new Debouncer(0.07, DebounceType.kFalling);
     private boolean override;
+    private boolean isHood, isLimelight, isTx, isTranslation, isRotation, isShooter;
     
     public MoveBallsToShooter(boolean override) {
         addRequirements(Indexer.getInstance());
@@ -38,22 +40,15 @@ public class MoveBallsToShooter extends IndefiniteCommand {
                 Drivetrain.getInstance().getBottomRight().getState());
         
         double translationMag = Math.sqrt(speed.vxMetersPerSecond * speed.vxMetersPerSecond + speed.vyMetersPerSecond * speed.vyMetersPerSecond);
-        double limelightThreshold = Math.toDegrees(Math.atan(HUB_RADIUS/(Limelight.getDistance() + HUB_RADIUS))) + 1;
+        limelightThreshold = Math.toDegrees(Math.atan(HUB_RADIUS/(Limelight.getDistance() + HUB_RADIUS))) + 1;
 
-        boolean isHood = Math.abs(HoodManual.hoodController.getPositionError()) <= 0.5;
-        boolean isLimelight = Limelight.isTargetVisible();
-        boolean isTx = Math.abs(Limelight.getTx()) <= limelightThreshold;
-        boolean isTranslation = Math.abs(translationMag) <= 0.2;
-        boolean isRotation = Math.abs(speed.omegaRadiansPerSecond) <= 0.2;
-        boolean isShooter = debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
+        isHood = Math.abs(HoodManual.hoodController.getPositionError()) <= 0.5;
+        isLimelight = Limelight.isTargetVisible();
+        isTx = Math.abs(Limelight.getTx()) <= limelightThreshold;
+        isTranslation = Math.abs(translationMag) <= 0.2;
+        isRotation = Math.abs(speed.omegaRadiansPerSecond) <= 0.2;
+        isShooter = debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
                             Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3);
-        SmartDashboard.putNumber("autoshot ll thresh", limelightThreshold);
-        SmartDashboard.putBoolean("autoshot isHood", isHood);
-        SmartDashboard.putBoolean("autoshot isLimelight", isLimelight);
-        SmartDashboard.putBoolean("autoshot isTx", isTx);
-        SmartDashboard.putBoolean("autoshot isTranslation", isTranslation);
-        SmartDashboard.putBoolean("autoshot isRotation", isRotation);
-        SmartDashboard.putBoolean("autoshot isShooter", isShooter);
         if((isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) || override || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
@@ -62,5 +57,16 @@ public class MoveBallsToShooter extends IndefiniteCommand {
             Indexer.getInstance().setPercentOutputBottom(0);
             Indexer.getInstance().setPercentOutputTop(0);
         }
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Move Balls to Shooter");
+        builder.addDoubleProperty("Limelight Threshold", () -> limelightThreshold, null);
+        builder.addBooleanProperty("Hood at Position", () -> isHood, null);
+        builder.addBooleanProperty("Limelight is Visible", () -> isLimelight, null);
+        builder.addBooleanProperty("Tx within Threshold", () -> isTx, null);
+        builder.addBooleanProperty("Robot not Translating", () -> isTranslation, null);
+        builder.addBooleanProperty("Robot not Rotating", () -> isRotation, null);
+        builder.addBooleanProperty("Shooter at Velocity", () -> isShooter, null);
     }
 }

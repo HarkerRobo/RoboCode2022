@@ -6,10 +6,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.subsystems.Drivetrain;
 
 public class HSSwerveDriveController extends SwerveControllerCommand {
@@ -82,15 +82,8 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
             xController.reset();
             yController.reset();
         }
-
-        else {  
+        else
             super.execute();
-            SmartDashboard.putNumber("mp x error", xController.getPositionError());
-            SmartDashboard.putNumber("mp y error", yController.getPositionError());
-            SmartDashboard.putNumber("mp theta error", thetaController.getPositionError());
-            SmartDashboard.putNumber("mp theta target position", thetaController.getSetpoint().position);
-            SmartDashboard.putNumber("mp theta target velocity", thetaController.getSetpoint().velocity);
-        }
     }
 
     @Override
@@ -99,5 +92,14 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
         SwerveManual.pigeonAngle = Drivetrain.getInstance().getHeading();
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0))), true);
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Auton");
+        builder.addDoubleProperty("X Error", xController::getPositionError, null);
+        builder.addDoubleProperty("Y Error", yController::getPositionError, null);
+        builder.addDoubleProperty("Theta Error", thetaController::getPositionError, null);
+        builder.addDoubleProperty("Theta Target Position", () -> thetaController.getSetpoint().position, null);
+        builder.addDoubleProperty("Theta Target Velocity", () -> thetaController.getSetpoint().velocity, null);
     }
 }

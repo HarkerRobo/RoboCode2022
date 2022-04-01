@@ -1,6 +1,5 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -16,10 +15,6 @@ public class ShootAgainstHub extends IndefiniteCommand {
     
     public void execute() {
         Shooter.getInstance().setVelocity(HUB_SPEED);
-        SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
-        SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
-        SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());
-        // SmartDashboard.putNumber("shooter control effort", Shooter.getInstance().getMaster().getMotorOutputVoltage()/10);
     }
 
     @Override

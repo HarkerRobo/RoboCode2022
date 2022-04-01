@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -108,10 +109,6 @@ public class Climber extends SubsystemBase {
         return !rightSwitch.get();
     }
 
-    // public void setClimberOutputRight(double output) {
-    //     right.set(ControlMode.PercentOutput, output);
-    // }
-
     public void toggleClimber() {
         if(piston.get() == DoubleSolenoid.Value.kOff)
             piston.set(DoubleSolenoid.Value.kReverse);
@@ -136,5 +133,19 @@ public class Climber extends SubsystemBase {
         }
         return climber;
     }
-    
+
+    public void initSendable(SendableBuilder builder){
+        builder.setSmartDashboardType("Climber");
+        builder.addBooleanProperty("Left Limit Switch Hit", this::leftLimitSwitchHit, null);
+        builder.addBooleanProperty("Right Limit Switch Hit", this::rightLimitSwitchHit, null);
+        builder.addBooleanProperty("Climber Extended Forward", () -> piston.get() == 
+            (RobotMap.IS_COMP ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward), null);
+        builder.addDoubleProperty("Climber Left Position", this::getPositionLeft, null);
+        builder.addDoubleProperty("Climber Right Position", this::getPositionRight, null);
+        builder.addDoubleProperty("Climber Motor Percent Output", left::getMotorOutputPercent, null);
+        builder.addDoubleProperty("Current Pitch", Drivetrain.getInstance().getPigeon()::getPitch, null);
+        builder.addDoubleProperty("Current Pitch Vel", Drivetrain.getInstance()::getPitchVel, null);
+        builder.addBooleanProperty("Ready to Traverse", () -> Drivetrain.getInstance().getPitchVel() > 0 && 
+            Drivetrain.getInstance().getPrevPitchVel() < 0, null);
+    }
 }

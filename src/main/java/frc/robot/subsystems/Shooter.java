@@ -3,11 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Units;
+import frc.robot.util.Limelight;
 import frc.robot.util.SimpleVelocitySystem;
 import harkerrobolib.wrappers.HSFalcon;
 
@@ -118,5 +120,15 @@ public class Shooter extends SubsystemBase {
             shooter = new Shooter();
         }
         return shooter;
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Shooter");
+        builder.addDoubleProperty("Current Velocity", this::getWheelRPS, null);
+        builder.addDoubleProperty("Target Velocity", () -> velocitySystem.getLinearSystemLoop().getNextR(0), null);
+        builder.addDoubleProperty("Kalman Velocity", velocitySystem::getVelocity, null);
+        builder.addDoubleProperty("Current Output", velocitySystem::getOutput, null);
+        builder.addDoubleProperty("Limelight tx", Limelight::getTx, null);
+        builder.addDoubleProperty("Limelight Distance", Limelight::getDistance, null);
     }
 }

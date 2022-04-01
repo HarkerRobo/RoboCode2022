@@ -10,6 +10,8 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -73,20 +75,6 @@ public class Robot extends TimedRobot {
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
-    SmartDashboard.putNumber("desired velocity", 0);
-    SmartDashboard.putNumber("desired hood angle", 0.5);
-    SmartDashboard.putNumber("desired angle", 90);
-    SmartDashboard.putNumber("intake RPS", 0.1);
-    SmartDashboard.putNumber("desired hood pos", 0);
-    
-    SmartDashboard.putNumber("limelight align kP", SwerveManual.LIMELIGHT_KP);
-    SmartDashboard.putNumber("limelight align kD", SwerveManual.LIMELIGHT_KD);
-    SmartDashboard.putNumber("limelight align kI", SwerveManual.LIMELIGHT_KI);
-    SmartDashboard.putNumber("limelight align izone", SwerveManual.LIMELIGHT_IZONE);
-    // SmartDashboard.putNumber("hood P", HSSwerveDriveController.THETA_KP);
-    // SmartDashboard.putNumber("hood I", HSSwerveDriveController.THETA_KI);
-    // SmartDashboard.putNumber("hood D", HSSwerveDriveController.THETA_KD);
-    // SmartDashboard.putNumber("hood izone", HoodManual.HOOD_IZONE);
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
     NetworkTableInstance.getDefault().setUpdateRate(0.02);
@@ -117,52 +105,6 @@ public class Robot extends TimedRobot {
       pitchVel.reset();
       Drivetrain.getInstance().updatePitchVel();
     }
-
-    SmartDashboard.putNumber("shooter encoder ticks", Shooter.getInstance().getShooterEncoder().get());
-    SmartDashboard.putNumber("limelight distance", Limelight.getDistance());
-    SmartDashboard.putNumber("odometry x", Drivetrain.getInstance().getOdometry().getPoseMeters().getX());
-    SmartDashboard.putNumber("odometry y", Drivetrain.getInstance().getOdometry().getPoseMeters().getY());
-    SmartDashboard.putNumber("odometry theta", Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getRadians());
-    SmartDashboard.putNumber("cur pitch", Drivetrain.getInstance().getPigeon().getPitch());
-    SmartDashboard.putNumber("pitch vel", Drivetrain.getInstance().getPitchVel());
-    SmartDashboard.putNumber("ready to climb up",(Drivetrain.getInstance().getPitchVel() > 0 && 
-    Drivetrain.getInstance().getPrevPitchVel() < 0) ? 10 : 0);
-    // SmartDashboard.putNumber("tl abs", Drivetrain.getInstance().getTopLeft().getCanCoder().getAbsolutePosition());
-    // SmartDashboard.putNumber("tr abs", Drivetrain.getInstance().getTopRight().getCanCoder().getAbsolutePosition());
-    // SmartDashboard.putNumber("bl abs", Drivetrain.getInstance().getBottomLeft().getCanCoder().getAbsolutePosition());
-    // SmartDashboard.putNumber("br abs", Drivetrain.getInstance().getBottomRight().getCanCoder().getAbsolutePosition());
-    SmartDashboard.putNumber("limit switch", Climber.getInstance().getClimberLeft().isRevLimitSwitchClosed());
-    // SmartDashboard.putNumber("tl angle", Drivetrain.getInstance().getTopLeft().getRotationAngle());
-    // SmartDashboard.putNumber("tr angle", Drivetrain.getInstance().getTopRight().getRotationAngle());
-    // SmartDashboard.putNumber("bl angle", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
-    // SmartDashboard.putNumber("br angle", Drivetrain.getInstance().getBottomRight().getRotationAngle());
-
-    // SmartDashboard.putNumber("bl angle error", Drivetrain.getInstance().getBottomLeft().getRotationAngle());
-
-    SmartDashboard.putNumber("pigeon angle", Drivetrain.getInstance().getHeading());
-    // SmartDashboard.putNumber("bottom left angle error", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getClosedLoopError());
-    SmartDashboard.putNumber("bottom left control effort", Drivetrain.getInstance().getBottomLeft().getRotationMotor().getMotorOutputPercent());
-    SmartDashboard.putNumber("top left speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationVelocity()));
-    SmartDashboard.putNumber("target top left speed", Math.abs(SmartDashboard.getNumber("Desired translation speed 0", 0.1)));
-    SmartDashboard.putNumber("top left kalman speed", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationLoop().getVelocity()));
-    SmartDashboard.putNumber("top left control effort", Math.abs(Drivetrain.getInstance().getTopLeft().getTranslationMotor().getMotorOutputVoltage()/10));
-    SmartDashboard.putNumber("climber pos", Climber.getInstance().getPositionLeft());
-    // SmartDashboard.putNumber("hood pos falcon", Hood.getInstance().getHood().getSelectedSensorPosition());
-    // SmartDashboard.putNumber("cur hood pid error", Hood.getInstance().getHood().getClosedLoopError());
-    // SmartDashboard.putNumber("current vel", Shooter.getInstance().getMaster().getSelectedSensorVelocity() * 10 / 2048 * 4 * Math.PI * 2.54 / 100);
-    SmartDashboard.putNumber("hood pos", Hood.getInstance().getHoodPos());
-    SmartDashboard.putNumber("indexer r", Indexer.getInstance().getColor().red);
-    SmartDashboard.putNumber("indexer g", Indexer.getInstance().getColor().green);
-    SmartDashboard.putNumber("indexer b", Indexer.getInstance().getColor().blue);
-    // SmartDashboard.putNumber("indexerWrongColor debounced", (Indexer.getInstance().intakeHasWrongColor()) ? 100 : 0);
-    // SmartDashboard.putNumber("indexerWrongColor", (Indexer.getInstance().intakeHasWrongColorNotDebounced()) ? 100 : 0);
-    SmartDashboard.putNumber("intake proximity", Indexer.getInstance().getIndexerProximity());
-    SmartDashboard.putBoolean("bottom occupied", Indexer.getInstance().bottomOccupied());
-    SmartDashboard.putBoolean("top occupied", Indexer.getInstance().topOccupied());
-    SmartDashboard.putNumber("ll tx", Limelight.getTx());
-    SmartDashboard.putNumber("ll distance", Limelight.getDistance());
-    SmartDashboard.putNumber("left climber hit", Climber.getInstance().leftLimitSwitchHit() ? 1 : -1);
-    SmartDashboard.putNumber("right climber hit", Climber.getInstance().rightLimitSwitchHit() ? 2 : 0);
   }
 
   @Override

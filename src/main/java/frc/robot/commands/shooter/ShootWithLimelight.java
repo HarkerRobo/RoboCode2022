@@ -1,6 +1,5 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.InterpolatedTreeMap;
 import frc.robot.util.Limelight;
@@ -50,12 +49,7 @@ public class ShootWithLimelight extends IndefiniteCommand {
     
     public void execute() {
         velocity = referencePoints.get(Limelight.getDistance());
-        SmartDashboard.putNumber("desired velocity", velocity+velocityOffset);
         Shooter.getInstance().setVelocity(velocity+velocityOffset);
-        SmartDashboard.putNumber("current vel", Shooter.getInstance().getWheelRPS());
-        SmartDashboard.putNumber("kalman output", Shooter.getInstance().getVelocitySystem().getVelocity());
-        SmartDashboard.putNumber("current output", Shooter.getInstance().getVelocitySystem().getOutput());
-        // SmartDashboard.putNumber("shooter control effort", Shooter.getInstance().getMaster().getMotorOutputVoltage()/10);
     }
 
     @Override

@@ -3,8 +3,8 @@ package frc.robot.commands.drivetrain;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -13,7 +13,7 @@ public class AlignWithLimelight extends IndefiniteCommand {
     public static final double LIMELIGHT_THRESHOLD = 1.5;
     public static final double LIMELIGHT_KP = SwerveManual.LIMELIGHT_KP*1.2;
     public static final double LIMELIGHT_KD = SwerveManual.LIMELIGHT_KD;
-    public static final double LIMELIGHT_IZONE = SwerveManual.LIMELIGHT_IZONE;
+    public static final double LIMELIGHT_IZONE = 3.0;
     public static final double LIMELIGHT_KI = SwerveManual.LIMELIGHT_KI*2;
     private ProfiledPIDController txController;
     private Timer minTime;
@@ -37,7 +37,6 @@ public class AlignWithLimelight extends IndefiniteCommand {
         double angularVelocity = -txController.calculate(Limelight.getTx(), 0);
         ChassisSpeeds chassis = new ChassisSpeeds(0, 0, -angularVelocity);
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), false);
-        SmartDashboard.putNumber("limelight align error", txController.getPositionError());
     }
 
     public boolean isFinished(){
@@ -45,10 +44,12 @@ public class AlignWithLimelight extends IndefiniteCommand {
     }
 
     public void end(boolean isFinished){
-        System.out.println("end");
         ChassisSpeeds chassis = new ChassisSpeeds(0,0,0);
-        // System.out.println()
-        // SwerveManual.pigeonAngle = Drivetrain.getInstance().getHeading();
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(chassis), true);
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Auton");
+        builder.addDoubleProperty("Limelight Align Error", txController::getPositionError, null);
     }
 }

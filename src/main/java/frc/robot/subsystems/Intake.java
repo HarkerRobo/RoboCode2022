@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -94,5 +95,12 @@ public class Intake extends SubsystemBase {
             intake = new Intake();
         }
         return intake;
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Intake");
+        builder.addBooleanProperty("Intake is Down", () -> doubleSolenoid.get() == DoubleSolenoid.Value.kReverse, null);
+        builder.addDoubleProperty("Intake State", () -> state, null);
+        builder.addDoubleProperty("Intake Speed", this::getCurrentRPS, null);
     }
 }

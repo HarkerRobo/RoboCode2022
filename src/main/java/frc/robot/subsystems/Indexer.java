@@ -6,10 +6,10 @@ import com.ctre.phoenix.motorcontrol.StatusFrame;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.util.PicoColorSensor;
@@ -87,8 +87,6 @@ public class Indexer extends SubsystemBase {
         // if(Timer.getFPGATimestamp() - lastBallRecorded >= 0.4)
         //     lastBallWrongColor = false;
         // return lastBallWrongColor;
-        SmartDashboard.putNumber("intake not debounced", intakeHasWrongColorNotDebounced() ? 1 : 0);
-        SmartDashboard.putNumber("intake debounced", debouncer.calculate(intakeHasWrongColorNotDebounced()) ? 1 : 0);
         return false;
         // return debouncer.calculate(intakeHasWrongColorNotDebounced());
     }
@@ -126,5 +124,14 @@ public class Indexer extends SubsystemBase {
         if(indexer == null)
             indexer = new Indexer();
         return indexer;
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Indexer");
+        builder.addBooleanProperty("Top Occupied", this::topOccupied, null);
+        builder.addBooleanProperty("Bottom Occupied", this::bottomOccupied, null);
+        builder.addDoubleProperty("Indexer Top Percent Output", top::getMotorOutputPercent, null);
+        builder.addDoubleProperty("Indexer Bottom Percent Output", bottom::getMotorOutputPercent, null);
+        builder.addBooleanProperty("Wrong Color Ball in Intake", this::intakeHasWrongColor, null);
     }
 }

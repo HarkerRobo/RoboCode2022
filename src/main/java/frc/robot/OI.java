@@ -46,8 +46,8 @@ public class OI {
             Drivetrain.getInstance().getPigeon().setYaw(0);
             SwerveManual.pigeonAngle = 0;
         }));
-        driverGamepad.getButtonSelect().whenPressed(new ZeroHood());
         
+        driverGamepad.getButtonSelect().whenPressed(new ZeroHood());        
         driverGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, ClimberManual.MAGNITUDE_UP));
         driverGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.6));
         // operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, ClimberManual.MAGNITUDE_UP));

@@ -16,7 +16,6 @@ public class IntakeManual extends IndefiniteCommand {
     }   
 
     public void execute() {
-        // speed = SmartDashboard.getNumber("intake RPS", 0.1);
         if(Math.max(OI.getInstance().getDriverGamepad().getRightTrigger(), OI.getInstance().getOperatorGamepad().getLeftTrigger()) > 0.5) {
             Intake.getInstance().setVelocity(SPEED * Intake.MAX_RPS); 
             Intake.getInstance().state = 1;

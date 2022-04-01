@@ -9,7 +9,6 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 
 /**
@@ -43,8 +42,6 @@ public class SwerveManualPercentOutput extends IndefiniteCommand {
                 angularVelocity = 0;//Drivetrain.getInstance().getPigeon().getYaw();
             }
         }
-    
-        SmartDashboard.putNumber("trans X", translationx);
 
         angularVelocity *= Drivetrain.MAX_ANGULAR_VEL * OUTPUT_MULTIPLIER;
         translationx *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
@@ -58,11 +55,9 @@ public class SwerveManualPercentOutput extends IndefiniteCommand {
         if(debouncer.calculate(
             Math.abs(MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND)) < Drivetrain.MIN_OUTPUT)) {
             angularVelocity = -PIGEON_KP * (pigeonAngle - Drivetrain.getInstance().getPigeon().getYaw());
-            SmartDashboard.putBoolean("holding pigeon angle", true);
         }
         else {
             pigeonAngle = Drivetrain.getInstance().getPigeon().getYaw();
-            SmartDashboard.putBoolean("holding pigeon angle", false);
         }
 
         // ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(translationx, translationy, -angularVelocity, new Rotation2d(Math.toRadians(Drivetrain.getInstance().getPigeon().getYaw())));

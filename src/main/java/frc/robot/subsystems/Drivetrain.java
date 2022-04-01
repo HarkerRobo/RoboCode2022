@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Units;
@@ -80,8 +80,6 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setAngleAndDriveVelocity(SwerveModuleState[] states, boolean isPercentOutput){
         for(int i = 0; i < 4; i++){
-            SmartDashboard.putNumber("Desired angle module " + i, states[i].angle.getDegrees());
-            SmartDashboard.putNumber("Desired translation speed " + i, states[i].speedMetersPerSecond);
             modules[i].setSwerveManual(states[i], isPercentOutput);
         }
     }
@@ -177,5 +175,63 @@ public class Drivetrain extends SubsystemBase {
     public void destroyCANCoders() {
         for(int i=0; i < 4; i++)
             modules[i].getCanCoder().DestroyObject();
+    }
+
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Drivetrain");
+        builder.addDoubleProperty("Heading", this::getHeading, null);
+
+        builder.addDoubleProperty("Top Left CAN Coder Pos", getTopLeft().getCanCoder()::getAbsolutePosition, null);
+        builder.addDoubleProperty("Top Right CAN Coder Pos", getTopRight().getCanCoder()::getAbsolutePosition, null);
+        builder.addDoubleProperty("Bottom Left CAN Coder Pos", getBottomLeft().getCanCoder()::getAbsolutePosition, null);
+        builder.addDoubleProperty("Bottom Right CAN Coder Pos", getBottomRight().getCanCoder()::getAbsolutePosition, null);
+
+        builder.addDoubleProperty("Top Left Angle", getTopLeft()::getRotationAngle, null);
+        builder.addDoubleProperty("Top Right Angle", getTopRight()::getRotationAngle, null);
+        builder.addDoubleProperty("Bottom Left Angle", getBottomLeft()::getRotationAngle, null);
+        builder.addDoubleProperty("Bottom Right Angle", getBottomRight()::getRotationAngle, null);
+
+        builder.addDoubleProperty("Top Left Target Angle", () -> getTopLeft().rotation.getClosedLoopTarget() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+        builder.addDoubleProperty("Top Right Target Angle", () -> getTopRight().rotation.getClosedLoopTarget() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+        builder.addDoubleProperty("Bottom Left Target Angle", () -> getBottomLeft().rotation.getClosedLoopTarget() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+        builder.addDoubleProperty("Bottom Right Target Angle", () -> getBottomRight().rotation.getClosedLoopTarget() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+
+        builder.addDoubleProperty("Top Left Angle Error", () -> getTopLeft().rotation.getClosedLoopError() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+        builder.addDoubleProperty("Top Right Angle Error", () -> getTopRight().rotation.getClosedLoopError() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+        builder.addDoubleProperty("Bottom Left Angle Error", () -> getBottomLeft().rotation.getClosedLoopError() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+        builder.addDoubleProperty("Bottom Right Angle Error", () -> getBottomRight().rotation.getClosedLoopError() * 
+            Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
+
+        builder.addDoubleProperty("Odometry X", getOdometry().getPoseMeters()::getX, null);
+        builder.addDoubleProperty("Odometry Y", getOdometry().getPoseMeters()::getY, null);
+        builder.addDoubleProperty("Odometry Theta Radians", getOdometry().getPoseMeters().getRotation()::getRadians, null);
+        builder.addDoubleProperty("Odometry Theta Degrees", getOdometry().getPoseMeters().getRotation()::getDegrees, null);
+
+        builder.addDoubleProperty("Top Left Kalman Speed", getTopLeft()::getTranslationVelocity, null);
+        builder.addDoubleProperty("Top Right Kalman Speed", getTopRight()::getTranslationVelocity, null);
+        builder.addDoubleProperty("Bottom Left Kalman Speed", getBottomLeft()::getTranslationVelocity, null);
+        builder.addDoubleProperty("Bottom Right Kalman Speed", getBottomRight()::getTranslationVelocity, null);
+
+        builder.addDoubleProperty("Top Left Target Speed",  () -> getTopLeft().getTranslationLoop().getLinearSystemLoop().getNextR(0), null);
+        builder.addDoubleProperty("Top Right Target Speed",  () -> getTopRight().getTranslationLoop().getLinearSystemLoop().getNextR(0), null);
+        builder.addDoubleProperty("Bottom Left Target Speed", () -> getBottomLeft().getTranslationLoop().getLinearSystemLoop().getNextR(0), null);
+        builder.addDoubleProperty("Bottom Right Target Speed", () -> getBottomRight().getTranslationLoop().getLinearSystemLoop().getNextR(0), null);
+
+        builder.addDoubleProperty("Top Left Percent Output", getTopLeft().getTranslationLoop()::getOutput, null);
+        builder.addDoubleProperty("Top Right Percent Output", getTopRight().getTranslationLoop()::getOutput, null);
+        builder.addDoubleProperty("Bottom Left Percent Output", getBottomLeft().getTranslationLoop()::getOutput, null);
+        builder.addDoubleProperty("Bottom Right Percent Output", getBottomRight().getTranslationLoop()::getOutput, null);
+
+        builder.addDoubleProperty("Top Left Error",  () -> getTopLeft().getTranslationLoop().getLinearSystemLoop().getError(0), null);
+        builder.addDoubleProperty("Top Right Error",  () -> getTopRight().getTranslationLoop().getLinearSystemLoop().getError(0), null);
+        builder.addDoubleProperty("Bottom Left Error", () -> getBottomLeft().getTranslationLoop().getLinearSystemLoop().getError(0), null);
+        builder.addDoubleProperty("Bottom Right Error", () -> getBottomRight().getTranslationLoop().getLinearSystemLoop().getError(0), null);
     }
 }

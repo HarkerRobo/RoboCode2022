@@ -3,7 +3,6 @@ package frc.robot.auto;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.drivetrain.HSSwerveDriveController;
 import frc.robot.subsystems.Drivetrain;
@@ -21,9 +20,6 @@ public class TurnInPlace extends CommandBase{
 
     }
     public void initialize() {
-        // thetaController.setP(SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP));
-        // thetaController.setI(SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI));
-        // thetaController.setD(SmartDashboard.getNumber("theta D", HSSwerveDriveController.THETA_KD));
         thetaController.setP(4.7);
         thetaController.setI(0.01);
         thetaController.setD(0);
@@ -34,11 +30,6 @@ public class TurnInPlace extends CommandBase{
     public void execute() {
         double angularVelocity = thetaController.calculate(Drivetrain.getInstance().getHeadingRotation().getRadians());
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(0,0, -angularVelocity, Drivetrain.getInstance().getHeadingRotation())));
-        // SmartDashboard.getNumber("theta P", HSSwerveDriveController.THETA_KP);
-        // SmartDashboard.getNumber("theta I", HSSwerveDriveController.THETA_KI);
-        // SmartDashboard.getNumber("theta D", HSSwerveDriveController.THETA_KD);
-        SmartDashboard.putNumber("theta error", thetaController.getPositionError());
-        SmartDashboard.putNumber("theta pos", thetaController.getGoal().position);  
     }
 
     public boolean isFinished() {

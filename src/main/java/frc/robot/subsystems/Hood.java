@@ -21,6 +21,8 @@ public class Hood extends SubsystemBase{
     private static final double HOOD_CURRENT_PEAK = 10;
     private static final double HOOD_CURRENT_PEAK_DUR = 0.05;
 
+    private static final double HOOD_LIMIT = RobotMap.IS_COMP ? 23552 : 22000;
+
     private HSFalcon hood;
 
     private static Hood instance;
@@ -35,7 +37,7 @@ public class Hood extends SubsystemBase{
         hood.setInverted(HOOD_INVERTED);
         hood.configVoltageCompSaturation(Units.MAX_CONTROL_EFFORT);
         hood.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, HOOD_CURRENT_CONTINUOUS, HOOD_CURRENT_PEAK, HOOD_CURRENT_PEAK_DUR));
-        hood.configForwardSoftLimitThreshold(23552);
+        hood.configForwardSoftLimitThreshold(HOOD_LIMIT);
         hood.configReverseSoftLimitThreshold(0);
         hood.configForwardSoftLimitEnable(true);
         hood.setNeutralMode(NeutralMode.Brake);

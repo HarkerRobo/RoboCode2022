@@ -12,6 +12,7 @@ import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.commands.intake.SetIntakeDown;
 import frc.robot.commands.shooter.RevShooter;
+import frc.robot.commands.shooter.ShootWithLimelight;
 import frc.robot.commands.shooter.ShooterManual;
 
 /**
@@ -63,7 +64,7 @@ public class Autons {
 
     private static class ShootAndIndex extends ParallelDeadlineGroup {
         public ShootAndIndex(double timeout) {
-            super(new WaitCommand(timeout), new ShooterManual(), new MoveBallsToShooter(), new HoodManual());
+            super(new WaitCommand(timeout), new ShooterManual(), new MoveBallsToShooter(true), new HoodManual());
         }
     }
 
@@ -93,14 +94,15 @@ public class Autons {
 
     public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
         new SetIntakeDown(),
-        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
+        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new ShootWithLimelight(), new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
         new ShootAndIndex(1),
         Trajectories.fiveBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
-        new Rotate(0.4, 2.5),
+        new Rotate(0.5, 2.5).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(0.7),
         new ShootAndIndex(1),
         Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
         Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
-        new RevAndAlign(1),
+        new RevAndAlign(0.7),
         new ShootAndIndex(5));
 
     // public static final SequentialCommandGroup TWO_BALL_AUTO = new SequentialCommandGroup(

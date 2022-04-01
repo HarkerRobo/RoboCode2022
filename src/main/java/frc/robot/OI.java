@@ -39,8 +39,8 @@ public class OI {
     }
 
     public void initBindings() {
-        operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter()));
-        operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter()));
+        operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter(false)));
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);

@@ -24,9 +24,9 @@ public class Drivetrain extends SubsystemBase {
     private SwerveModule[] modules;
 
     private static final boolean[] ROTATION_INVERT = (RobotMap.IS_COMP) ? new boolean[]{false, false, false, false} : new boolean[]{false, false, false, false};
-    private static final boolean[] TRANSLATION_INVERT =(RobotMap.IS_COMP) ? new boolean[]{false, true, true, false} : new boolean[]{true, true, true, true};
+    private static final boolean[] TRANSLATION_INVERT =(RobotMap.IS_COMP) ? new boolean[]{true, true, true, false} : new boolean[]{false, true, true, true};
 
-    public static final double[] OFFSETS = (RobotMap.IS_COMP) ? new double[]{263.935547, 178.330078, 109.951172, 32.255859} : new double[]{285.468750-90,270.175781+90,285.205078,331.699219};
+    public static final double[] OFFSETS = (RobotMap.IS_COMP) ? new double[]{285.468750-90, 178.330078, 109.951172, 32.255859} : new double[]{263.935547,270.175781+90,285.205078,331.699219};
 
     public static final boolean IS_PIGEON_UP = (RobotMap.IS_COMP) ? true : true;
 

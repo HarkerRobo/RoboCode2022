@@ -23,9 +23,11 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     public static final double LIMELIGHT_THRESHOLD = 5;
     public static final double HUB_RADIUS = 0.6096;
     private static Debouncer debouncer = new Debouncer(0.07, DebounceType.kFalling);
+    private boolean override;
     
-    public MoveBallsToShooter() {
+    public MoveBallsToShooter(boolean override) {
         addRequirements(Indexer.getInstance());
+        this.override = override;
     }
     
     public void execute() {
@@ -52,7 +54,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
         SmartDashboard.putBoolean("autoshot isTranslation", isTranslation);
         SmartDashboard.putBoolean("autoshot isRotation", isRotation);
         SmartDashboard.putBoolean("autoshot isShooter", isShooter);
-        if((isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
+        if((isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) || override || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

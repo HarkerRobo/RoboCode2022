@@ -32,7 +32,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     private static PIDController yController = new PIDController(Y_KP, Y_KI, Y_KD);
     private static ProfiledPIDController thetaController = 
         new ProfiledPIDController(THETA_KP, THETA_KI, THETA_KD, new Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION));
-    private static final double TURN_TIME = 0.3;
+    private static final double TURN_TIME = 0.2;
     
     private Rotation2d initHeading;
     Trajectory trajectory;

@@ -19,6 +19,7 @@ public class Rotate extends WaitCommand{
                 ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, speed, Drivetrain.getInstance().getHeadingRotation())));
     }
 
+    @Override
     public void end(boolean interrupted) {
         Drivetrain.getInstance().setAngleAndDriveVelocity(
             Drivetrain.getInstance().getKinematics().toSwerveModuleStates(

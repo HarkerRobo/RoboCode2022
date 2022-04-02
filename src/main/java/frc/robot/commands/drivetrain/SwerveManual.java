@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 
 /**
@@ -21,9 +22,10 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.08;
+    public static final double LIMELIGHT_KP = 0.05;
     public static final double LIMELIGHT_KI = 0.01;
-    public static final double LIMELIGHT_KD = 0.01;
+    public static final double LIMELIGHT_KD = 0.00;
+    public static final double LIMELIGHT_KS = 0.1;
     public static double limelightIZone = 3;
 
     private ProfiledPIDController txController;
@@ -47,6 +49,7 @@ public class SwerveManual extends IndefiniteCommand {
 
     @Override
     public void execute() {
+        SmartDashboard.putData(this);
         readJoySticks();
         squareOutputs();
         scaleOutputs();
@@ -100,8 +103,8 @@ public class SwerveManual extends IndefiniteCommand {
         aligningWithLimelight = OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible();
         if(aligningWithLimelight) {
             Limelight.update();
-            
             angularVel = -txController.calculate(Limelight.getTx());
+            angularVel += LIMELIGHT_KS * Math.signum(angularVel);
             pigeonAngle = Drivetrain.getInstance().getHeading();
         }
         else {

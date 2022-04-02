@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -13,17 +14,17 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.subsystems.Drivetrain;
 
 public class HSSwerveDriveController extends SwerveControllerCommand {
-    public static final double X_KP = 4;
+    public static final double X_KP = 2.5;
     public static final double X_KI = 0;
     public static final double X_KD = 0;
 
-    public static final double Y_KP = 4;
+    public static final double Y_KP = 2.5;
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
-    public static final double THETA_KP = 4.7;
+    public static final double THETA_KP = 3.7;
     public static final double THETA_KI = 0.01;
-    public static final double THETA_KD = 0;
+    public static final double THETA_KD = 0.0;
 
     public static final double MAX_ANGLE_VELOCITY = Math.PI/2;
     public static final double MAX_ANGLE_ACCELERATION = Math.PI/2;
@@ -70,6 +71,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
 
     @Override
     public void execute() {
+        SmartDashboard.putData(this);
         if(Timer.getFPGATimestamp() - startTime < TURN_TIME) {
             super.initialize();
             Pose2d initialState = trajectory.sample(0).poseMeters;
@@ -97,7 +99,9 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Auton");
         builder.addDoubleProperty("X Error", xController::getPositionError, null);
+        builder.addDoubleProperty("X Goal", xController::getSetpoint, null);
         builder.addDoubleProperty("Y Error", yController::getPositionError, null);
+        builder.addDoubleProperty("Y Goal", yController::getSetpoint, null);
         builder.addDoubleProperty("Theta Error", thetaController::getPositionError, null);
         builder.addDoubleProperty("Theta Target Position", () -> thetaController.getSetpoint().position, null);
         builder.addDoubleProperty("Theta Target Velocity", () -> thetaController.getSetpoint().velocity, null);

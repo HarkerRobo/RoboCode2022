@@ -12,6 +12,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -47,7 +49,7 @@ public class Robot extends TimedRobot {
   private Timer pitchVel;
   private boolean wasAuto = false;
 
-  private Command auto = Autons.TWO_BALL_AUTO;
+  private Command auto = Autons.FIVE_BALL_AUTO;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -63,6 +65,8 @@ public class Robot extends TimedRobot {
     pitchVel.reset();
     pitchVel.start();
     SmartDashboard.putData(field);
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
     // new Compressor(PneumaticsModuleType.REVPH).disable();
     // default commands are commands that are always running on the robot
     CommandScheduler.getInstance().setDefaultCommand(Drivetrain.getInstance(), new SwerveManual());
@@ -105,6 +109,11 @@ public class Robot extends TimedRobot {
       pitchVel.reset();
       Drivetrain.getInstance().updatePitchVel();
     }
+    SmartDashboard.putData(Drivetrain.getInstance());
+    SmartDashboard.putData(Climber.getInstance());
+    SmartDashboard.putData(Intake.getInstance());
+    SmartDashboard.putData(Indexer.getInstance());
+    SmartDashboard.putData(Shooter.getInstance());
   }
 
   @Override

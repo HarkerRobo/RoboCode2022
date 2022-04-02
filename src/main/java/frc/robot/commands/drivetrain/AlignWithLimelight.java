@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -33,6 +34,7 @@ public class AlignWithLimelight extends IndefiniteCommand {
     }
 
     public void execute() {
+        SmartDashboard.putData(this);
         // Limelight.update();
         double angularVelocity = -txController.calculate(Limelight.getTx(), 0);
         ChassisSpeeds chassis = new ChassisSpeeds(0, 0, -angularVelocity);

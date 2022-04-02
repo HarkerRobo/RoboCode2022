@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.commands.drivetrain.AlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
@@ -33,6 +34,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     }
     
     public void execute() {
+        SmartDashboard.putData(this);
         ChassisSpeeds speed = Drivetrain.getInstance().getKinematics().toChassisSpeeds(
             Drivetrain.getInstance().getTopLeft().getState(),
             Drivetrain.getInstance().getTopRight().getState(), 

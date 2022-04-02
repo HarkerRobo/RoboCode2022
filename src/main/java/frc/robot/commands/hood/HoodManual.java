@@ -7,7 +7,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
+import frc.robot.RobotMap;
 import frc.robot.Units;
 import frc.robot.subsystems.Hood;
 import frc.robot.util.InterpolatedTreeMap;
@@ -20,7 +22,7 @@ public class HoodManual extends IndefiniteCommand{
     public static final double HOOD_KI = 0.01;//0.004;
     public static final double HOOD_KD = 0;//0.0020817; 
     public static double hoodIZone = 0.2; 
-    public static final double HOOD_KS = 0.45;//0.7; 
+    public static final double HOOD_KS = RobotMap.IS_COMP ? 0.45 : 0.7; 
 
     public static final double HOOD_KV = 0.049112; 
     public static final double HOOD_KA = 0.0006622;
@@ -71,6 +73,7 @@ public class HoodManual extends IndefiniteCommand{
     }
     
     public void execute() {
+        SmartDashboard.putData(this);
         if(!Hood.isZeroed) return;
         hoodController.setIntegratorRange(-hoodIZone, hoodIZone);
 

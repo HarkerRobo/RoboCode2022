@@ -51,12 +51,12 @@ public class Trajectories {
     
     public static final List<HSSwerveDriveController> fiveBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
-            new Translation2d(7.656414, 1.865084), 
-            new Translation2d(7.645043, 0.741275), 
-            new Translation2d(5.5, 1.80),
-            new Translation2d(1.46, 1.72),
+            new Translation2d(7.461, 2.2), 
+            new Translation2d(7.645043, 1.0), 
+            new Translation2d(5.317, 2.03),
+            new Translation2d(1.78, 1.49),
             new Translation2d(5.5, 1.85)}, fiveconfig), Rotation2d.fromDegrees(-90),
-        List.of(Rotation2d.fromDegrees(-103),Rotation2d.fromDegrees(145),Rotation2d.fromDegrees(-150), Rotation2d.fromDegrees(-150)));
+        List.of(Rotation2d.fromDegrees(-100),Rotation2d.fromDegrees(143),Rotation2d.fromDegrees(-145), Rotation2d.fromDegrees(-150)));
     
 
     // public static final Trajectory moveForward = TrajectoryGenerator.generateTrajectory(List.of(
@@ -135,19 +135,19 @@ public class Trajectories {
         return generateDirectTrajectories(input, defaultConfig);
     }
 
-    public static List<Trajectory> generateDirectTrajectories(Translation2d[] input, TrajectoryConfig config){
-        TrajectoryConfig[] configs = new TrajectoryConfig[input.length-1];
-        Arrays.fill(configs, config);
-        return generateDirectTrajectories(input, configs);
-    }
+    // public static List<Trajectory> generateDirectTrajectories(Translation2d[] input, TrajectoryConfig config){
+    //     TrajectoryConfig[] configs = new TrajectoryConfig[input.length-1];
+    //     Arrays.fill(configs, config);
+    //     return generateDirectTrajectories(input, configs);
+    // }
    
-    public static List<Trajectory> generateDirectTrajectories(Translation2d[] input, TrajectoryConfig[] config){
+    public static List<Trajectory> generateDirectTrajectories(Translation2d[] input, TrajectoryConfig config){
         List<Trajectory> out = new ArrayList<Trajectory>();
         for(int i=0;i<input.length-1;i++) {
             out.add(TrajectoryGenerator.generateTrajectory(List.of(
                 new Pose2d(input[i].getX(),input[i].getY(),getYaw(input[i+1].minus(input[i]))),
                 new Pose2d(input[i+1].getX(),input[i+1].getY(),getYaw(input[i+1].minus(input[i])))
-            ), config[i]));
+            ), config));
         }
         return out;
     }

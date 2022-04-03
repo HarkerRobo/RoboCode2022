@@ -51,7 +51,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
         isRotation = Math.abs(speed.omegaRadiansPerSecond) <= 0.2;
         isShooter = debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
                             Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3);
-        if((isHood && isLimelight && isTx && isTranslation && isRotation&& isShooter) || override || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
+        if((((isHood && isLimelight && isTx && isTranslation && isRotation) || override) && isShooter) || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

@@ -10,6 +10,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.util.PicoColorSensor;
@@ -30,27 +31,26 @@ public class Indexer extends SubsystemBase {
     private static final int INDEXER_THRESHOLD = 20;
 
     private static final double INDEXER_CURRENT_CONTINUOUS = 30;
-    private static final double INDEXER_CURRENT_PEAK = 40;
+    private static final double INDEXER_CURRENT_PEAK = 60;
     private static final double INDEXER_CURRENT_PEAK_DUR = 0.2;
 
-    private boolean lastBallWrongColor;
-    private double lastBallRecorded;
-    private Debouncer debouncer;
-
-    private PicoColorSensor sensor;
     private DigitalInput topSensor;
     private DigitalInput bottomSensor;
-    private DigitalInput intakeColorSensor;
+    private DigitalInput indexerRed;
+    private DigitalInput indexerBlue;
+
+    private Debouncer wrong;
+    private Debouncer correct;
 
     private Indexer() {
         top = new HSFalcon(RobotMap.INDEXER_TOP, RobotMap.CANIVORE);
         bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM, RobotMap.CANIVORE);
-        sensor = new PicoColorSensor();
         topSensor = new DigitalInput(RobotMap.INDEXER_TOP_SENSOR);
         bottomSensor = new DigitalInput(RobotMap.INDEXER_BOTTOM_SENSOR);
-        lastBallWrongColor = false;
-        lastBallRecorded = Timer.getFPGATimestamp();
-        debouncer = new Debouncer(1, DebounceType.kFalling);
+        indexerRed = new DigitalInput(RobotMap.INDEXER_RED);
+        indexerBlue = new DigitalInput(RobotMap.INDEXER_BLUE);
+        wrong = new Debouncer(0.7, Debouncer.DebounceType.kFalling);
+        correct = new Debouncer(0.7, Debouncer.DebounceType.kFalling);
         init();
     }
 
@@ -78,38 +78,16 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean intakeHasWrongColor() {
-
-        // if(getIndexerProximity() >= INDEXER_THRESHOLD)
-        // {
-        //     lastBallWrongColor = intakeHasWrongColorNotDebounced();   
-        //     lastBallRecorded = Timer.getFPGATimestamp();
-        // }
-        // if(Timer.getFPGATimestamp() - lastBallRecorded >= 0.4)
-        //     lastBallWrongColor = false;
-        // return lastBallWrongColor;
-        return false;
-        // return debouncer.calculate(intakeHasWrongColorNotDebounced());
+        if(DriverStation.getAlliance() == Alliance.Blue)
+            return wrong.calculate(indexerRed.get());
+        return wrong.calculate(indexerBlue.get());
     }
 
-    public boolean intakeHasWrongColorNotDebounced() {
-        if(getIndexerProximity() >= INDEXER_THRESHOLD) 
-            return false;
-        if(DriverStation.getAlliance() == DriverStation.Alliance.Red)
-            return getColor().blue > getColor().red;
-        else 
-            return getColor().red > getColor().blue;
-    }
-
-    public RawColor getColor() {
-        if(INDEXER_SENSOR_IS_0)
-            return sensor.getRawColor0();
-        return sensor.getRawColor1();
-    }
-
-    public int getIndexerProximity() {
-        if(INDEXER_SENSOR_IS_0)
-            return sensor.getProximity0();
-        return sensor.getProximity1();
+    public boolean intakeHasRightColor() {
+        return true;
+        // if(DriverStation.getAlliance() == Alliance.Red)
+        //     return correct.calculate(indexerRed.get());
+        // return correct.calculate(indexerBlue.get());
     }
 
     public void setPercentOutputBottom(double output) {
@@ -133,5 +111,7 @@ public class Indexer extends SubsystemBase {
         builder.addDoubleProperty("Indexer Top Percent Output", top::getMotorOutputPercent, null);
         builder.addDoubleProperty("Indexer Bottom Percent Output", bottom::getMotorOutputPercent, null);
         builder.addBooleanProperty("Wrong Color Ball in Intake", this::intakeHasWrongColor, null);
+        builder.addBooleanProperty("Red Input On", indexerRed::get, null);
+        builder.addBooleanProperty("Blue Input On", indexerBlue::get, null);
     }
 }

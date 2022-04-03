@@ -22,9 +22,9 @@ public class HoodManual extends IndefiniteCommand{
     public static final double HOOD_KI = 0.01;//0.004;
     public static final double HOOD_KD = 0;//0.0020817; 
     public static double hoodIZone = 0.2; 
-    public static final double HOOD_KS = RobotMap.IS_COMP ? 0.45 : 0.7; 
+    public static final double HOOD_KS = RobotMap.IS_COMP ? 0.6 : 0.7; 
 
-    public static final double HOOD_KV = 0.049112; 
+    public static final double HOOD_KV = 0.055112; 
     public static final double HOOD_KA = 0.0006622;
     public static final double HOOD_KG = 0.087132;
     
@@ -34,7 +34,7 @@ public class HoodManual extends IndefiniteCommand{
     private double output;
     public static boolean downMode = false;
 
-    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(10, 15));
+    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(20, 15));
     private InterpolatedTreeMap referencePoints;
     private SimpleMotorFeedforward feedforward;
     

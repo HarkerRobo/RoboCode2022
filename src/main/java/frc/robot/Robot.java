@@ -137,8 +137,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(wasAuto) {
       wasAuto = false;
+      Drivetrain.getInstance().getPigeon().setYaw(-Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
       if(auto == Autons.THREE_BALL_AUTO) {
-        // Drivetrain.getInstance().getPigeon().setYaw() 
       }
     }
     Limelight.setLEDS(true);
@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     pd.setSwitchableChannel(true);
-    Limelight.update();
+    // Limelight.update();
     // if(Math.random() < 1.0/3000)
     //   CommandScheduler.getInstance().schedule(new ToggleIntake());
   }

@@ -8,6 +8,7 @@ import frc.robot.commands.climber.MoveClimbToNextBar;
 import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
+import frc.robot.commands.hood.SetHoodFast;
 import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.ToggleIntake;
@@ -41,13 +42,17 @@ public class OI {
     public void initBindings() {
         operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter(false)));
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
+        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
+
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);
             SwerveManual.pigeonAngle = 0;
         }));
+        operatorGamepad.getButtonY().whenPressed(new SetHoodFast(20));
         
         driverGamepad.getButtonSelect().whenPressed(new ZeroHood());        
+        operatorGamepad.getButtonSelect().whenPressed(new ZeroHood());   
         driverGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, ClimberManual.MAGNITUDE_UP));
         driverGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.6));
         // operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, ClimberManual.MAGNITUDE_UP));
@@ -74,6 +79,7 @@ public class OI {
 
     public static OI getInstance(){
         if(oi == null)
+
             oi = new OI();
         return oi;
     }

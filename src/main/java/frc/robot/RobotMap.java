@@ -4,7 +4,7 @@ package frc.robot;
  * Defines robot-wide constants
  */
 public class RobotMap {
-    public static final boolean IS_COMP = false;
+    public static final boolean IS_COMP = true;
 
     public static final int LOOP_INDEX = 0;
 
@@ -42,6 +42,8 @@ public class RobotMap {
     public static final int INDEXER_BOTTOM = 9;
     public static final int INDEXER_TOP_SENSOR = 7;
     public static final int INDEXER_BOTTOM_SENSOR = 6;
+    public static final int INDEXER_RED = 2;
+    public static final int INDEXER_BLUE = 3;
 
     public static final double LOOP_TIME = 0.02; // 20ms
 }

@@ -71,7 +71,7 @@ public class Drivetrain extends SubsystemBase {
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(0, 0, new Rotation2d()));
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(7.65, 1.86, Rotation2d.fromDegrees(-90)));
         lastPigeonPitch = pigeon.getPitch();
     }
 

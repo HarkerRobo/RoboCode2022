@@ -27,7 +27,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Trajectories {
     public static TrajectoryConfig defaultConfig = new TrajectoryConfig(2,1.5).setKinematics(Drivetrain.getInstance().getKinematics());
 
-    public static TrajectoryConfig fiveconfig = new TrajectoryConfig(2.5,1.7).setKinematics(Drivetrain.getInstance().getKinematics());
+    public static TrajectoryConfig fiveconfig = new TrajectoryConfig(2.8,1.9).setKinematics(Drivetrain.getInstance().getKinematics());
     
 
     public static final List<HSSwerveDriveController> oneBallBackUp = getDrivetrainCommands(generateDirectTrajectories(
@@ -51,12 +51,12 @@ public class Trajectories {
     
     public static final List<HSSwerveDriveController> fiveBallAuto = getDrivetrainCommands(generateDirectTrajectories(
         new Translation2d[] {
-            new Translation2d(7.461, 2.2), 
-            new Translation2d(7.645043, 1.0), 
-            new Translation2d(5.317, 2.03),
-            new Translation2d(1.78, 1.49),
-            new Translation2d(5.5, 1.85)}, fiveconfig), Rotation2d.fromDegrees(-90),
-        List.of(Rotation2d.fromDegrees(-100),Rotation2d.fromDegrees(143),Rotation2d.fromDegrees(-145), Rotation2d.fromDegrees(-150)));
+            new Translation2d(7.65, 1.86), 
+            new Translation2d(7.555903,0.817200), 
+            new Translation2d(5.579598,1.860370),
+            new Translation2d(1.613902,1.421351),
+            new Translation2d(5.620987,1.956299)}, fiveconfig), Rotation2d.fromDegrees(-90),
+        List.of(Rotation2d.fromDegrees(-102),Rotation2d.fromDegrees(156),Rotation2d.fromDegrees(-164), Rotation2d.fromDegrees(-137)));
     
 
     // public static final Trajectory moveForward = TrajectoryGenerator.generateTrajectory(List.of(

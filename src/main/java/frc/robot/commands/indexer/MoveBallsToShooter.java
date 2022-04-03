@@ -2,17 +2,12 @@ package frc.robot.commands.indexer;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
-import frc.robot.commands.drivetrain.AlignWithLimelight;
-import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
@@ -26,11 +21,21 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     private double limelightThreshold;
     private static Debouncer debouncer = new Debouncer(0.07, DebounceType.kFalling);
     private boolean override;
+    private boolean limelightOverride;
     private boolean isHood, isLimelight, isTx, isTranslation, isRotation, isShooter;
     
-    public MoveBallsToShooter(boolean override) {
+    public MoveBallsToShooter(boolean override, boolean limelightOverride) {
         addRequirements(Indexer.getInstance());
         this.override = override;
+        this.limelightOverride = limelightOverride;
+    }
+
+    public MoveBallsToShooter(boolean override) {
+        this(override, false);
+    }
+
+    public MoveBallsToShooter() {
+        this(false, false);
     }
     
     public void execute() {
@@ -51,7 +56,8 @@ public class MoveBallsToShooter extends IndefiniteCommand {
         isRotation = Math.abs(speed.omegaRadiansPerSecond) <= 0.2;
         isShooter = debouncer.calculate(Math.abs(Shooter.getInstance().getWheelRPS() - 
                             Shooter.getInstance().getVelocitySystem().getLinearSystemLoop().getNextR(0)) <= 3);
-        if((((isHood && isLimelight && isTx && isTranslation && isRotation) || override) && isShooter) || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
+        if((((isHood && ((isLimelight && isTx) || limelightOverride) && isTranslation && isRotation) || override)
+             && isShooter) || OI.getInstance().getOperatorGamepad().getRightTrigger() > 0.5){
             Indexer.getInstance().setPercentOutputBottom(SPEED);
             Indexer.getInstance().setPercentOutputTop(SPEED);
         }

@@ -14,6 +14,7 @@ import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.shooter.ShootAgainstHub;
 import frc.robot.commands.shooter.ShootWithLimelight;
+import frc.robot.commands.shooter.ShootWithOdometry;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.HSGamepad;
@@ -40,9 +41,10 @@ public class OI {
     }
 
     public void initBindings() {
-        operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter(false)));
-        operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
-        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
+        operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter()));
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter()));
+        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter()));
+        driverGamepad.getButtonB().whilePressed(new ParallelCommandGroup(new ShootWithOdometry(), new MoveBallsToShooter(false, true)));
 
         driverGamepad.getButtonY().whenPressed(new ToggleIntake());
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
@@ -65,7 +67,6 @@ public class OI {
         operatorGamepad.getRightDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset += 0.2));
         operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset -= 0.2));
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
-        driverGamepad.getButtonB().whilePressed(Autons.FIVE_BALL_AUTO);
         driverGamepad.getButtonX().whenPressed(Drivetrain.getInstance()::toggleFieldCentric);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }

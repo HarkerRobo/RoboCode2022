@@ -10,8 +10,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -151,9 +149,21 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     pd.setSwitchableChannel(true);
+    updateOdometryFromLimelight();
     // Limelight.update();
     // if(Math.random() < 1.0/3000)
     //   CommandScheduler.getInstance().schedule(new ToggleIntake());
+  }
+
+  public void updateOdometryFromLimelight() {
+    if(Limelight.isTargetVisible()) {
+      Limelight.update();
+      double angle = Drivetrain.getInstance().getHeading() + Limelight.getTx();
+      double distance = Limelight.getDistance();
+      Pose2d newPos = new Pose2d(SwerveManual.HUB.getX() - Math.cos(Math.toRadians(angle)) * distance, 
+        SwerveManual.HUB.getY() - Math.sin(Math.toRadians(angle)) * distance, Drivetrain.getInstance().getHeadingRotation());
+      Drivetrain.getInstance().getOdometry().resetPosition(newPos, Drivetrain.getInstance().getHeadingRotation());
+    }
   }
 
   /**

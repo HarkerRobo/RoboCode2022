@@ -143,7 +143,6 @@ public class Climber extends SubsystemBase {
         builder.addDoubleProperty("Climber Left Position", this::getPositionLeft, null);
         builder.addDoubleProperty("Climber Right Position", this::getPositionRight, null);
         builder.addDoubleProperty("Climber Motor Percent Output", left::getMotorOutputPercent, null);
-        builder.addDoubleProperty("Current Pitch", Drivetrain.getInstance().getPigeon()::getPitch, null);
         builder.addDoubleProperty("Current Pitch Vel", Drivetrain.getInstance()::getPitchVel, null);
         builder.addBooleanProperty("Ready to Traverse", () -> Drivetrain.getInstance().getPitchVel() > 0 && 
             Drivetrain.getInstance().getPrevPitchVel() < 0, null);

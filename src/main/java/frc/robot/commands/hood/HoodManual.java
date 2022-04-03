@@ -5,12 +5,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.Units;
+import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.util.InterpolatedTreeMap;
 import frc.robot.util.Limelight;
@@ -80,6 +83,12 @@ public class HoodManual extends IndefiniteCommand{
         hoodPosition = referencePoints.get(Limelight.getDistance());
         if(OI.getInstance().getOperatorGamepad().getButtonBumperRightState())
             hoodPosition = 1;
+        if(OI.getInstance().getDriverGamepad().getButtonBState())
+        {
+            Translation2d subtracted = SwerveManual.HUB.minus(Drivetrain.getInstance().getOdometry().getPoseMeters().getTranslation());
+            double distance = Math.sqrt(subtracted.getX() * subtracted.getX() + subtracted.getY() * subtracted.getY());
+            hoodPosition = referencePoints.get(distance);
+        }
         if(downMode)
             hoodPosition = 0;
         calculateMotorOutput();

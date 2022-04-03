@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -35,6 +36,7 @@ public class SwerveManual extends IndefiniteCommand {
     
     public static double pigeonAngle;
     private static final double PIGEON_DELAY = 0.3;
+    public static final Translation2d HUB = new Translation2d(8.2296, 4.1148);
     private Debouncer debouncer = new Debouncer(PIGEON_DELAY, DebounceType.kRising);
     private double translationXVel, translationYVel, angularVel, translationXAcc, translationYAcc;
     private boolean holdingPigeonAngle, aligningWithLimelight;
@@ -55,6 +57,7 @@ public class SwerveManual extends IndefiniteCommand {
         scaleOutputs();
         pigeonKP();
         limelightAlign();
+        secondaryAlign();
         generateOutputChassisSpeeds();
         clampAcceleration();
 
@@ -103,12 +106,24 @@ public class SwerveManual extends IndefiniteCommand {
         aligningWithLimelight = OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible();
         if(aligningWithLimelight) {
             Limelight.update();
+            txController.setGoal(0);
             angularVel = -txController.calculate(Limelight.getTx());
             angularVel += LIMELIGHT_KS * Math.signum(angularVel);
             pigeonAngle = Drivetrain.getInstance().getHeading();
         }
         else {
             txController.reset(0);
+        }
+    }
+
+    private void secondaryAlign() {
+        Translation2d subtracted = HUB.minus(Drivetrain.getInstance().getOdometry().getPoseMeters().getTranslation());
+        double rotation = Math.toDegrees(Math.atan2(subtracted.getY(), subtracted.getX()));
+        if(OI.getInstance().getDriverGamepad().getButtonBState() && !aligningWithLimelight) {
+            txController.setGoal(rotation);
+            angularVel = -txController.calculate(Drivetrain.getInstance().getHeading());
+            angularVel += LIMELIGHT_KS * Math.signum(angularVel);
+            pigeonAngle = Drivetrain.getInstance().getHeading();
         }
     }
 

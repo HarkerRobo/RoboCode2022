@@ -6,10 +6,10 @@ import com.ctre.phoenix.motorcontrol.StatusFrame;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -33,8 +33,8 @@ public class Indexer extends SubsystemBase {
     private DigitalInput bottomSensor;
     // private DigitalInput indexerRed;
     // private DigitalInput indexerBlue;
-    private DutyCycleEncoder indexerRed;
-    private DutyCycleEncoder indexerBlue;
+    private Counter indexerRed;
+    private Counter indexerBlue;
 
     private Debouncer wrong;
     private Debouncer correct;
@@ -46,8 +46,10 @@ public class Indexer extends SubsystemBase {
         bottomSensor = new DigitalInput(RobotMap.INDEXER_BOTTOM_SENSOR);
         // indexerRed = new DigitalInput(RobotMap.INDEXER_RED);
         // indexerBlue = new DigitalInput(RobotMap.INDEXER_BLUE);
-        indexerRed = new DutyCycleEncoder(RobotMap.INDEXER_RED);
-        indexerBlue = new DutyCycleEncoder(RobotMap.INDEXER_BLUE);
+        indexerRed = new Counter(RobotMap.INDEXER_RED);
+        indexerBlue = new Counter(RobotMap.INDEXER_BLUE);
+        indexerRed.setSemiPeriodMode(true);
+        indexerBlue.setSemiPeriodMode(true);
         wrong = new Debouncer(0.7, Debouncer.DebounceType.kFalling);
         correct = new Debouncer(0.7, Debouncer.DebounceType.kFalling);
         init();
@@ -113,7 +115,7 @@ public class Indexer extends SubsystemBase {
         builder.addBooleanProperty("Wrong Color Ball in Intake", this::intakeHasWrongColor, null);
         // builder.addBooleanProperty("Red Input On", indexerRed::get, null);
         // builder.addBooleanProperty("Blue Input On", indexerBlue::get, null);
-        builder.addDoubleProperty("Red Input PWM", indexerRed::getFrequency, null);
-        builder.addDoubleProperty("Blue Input PWM", indexerBlue::getFrequency, null);
+        builder.addDoubleProperty("Red Input PWM", indexerRed::getPeriod, null);
+        builder.addDoubleProperty("Blue Input PWM", indexerBlue::getPeriod, null);
     }
 }

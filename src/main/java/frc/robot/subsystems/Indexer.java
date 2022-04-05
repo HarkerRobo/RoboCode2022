@@ -5,16 +5,14 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 
 import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.util.PicoColorSensor;
-import frc.robot.util.PicoColorSensor.RawColor;
 import harkerrobolib.wrappers.HSFalcon;
 
 public class Indexer extends SubsystemBase {
@@ -27,17 +25,16 @@ public class Indexer extends SubsystemBase {
     private static final boolean TOP_INVERT = (RobotMap.IS_COMP) ? true : true;
     private static final boolean BOTTOM_INVERT = (RobotMap.IS_COMP) ? false : false;
 
-    private static final boolean INDEXER_SENSOR_IS_0 = (RobotMap.IS_COMP) ? true : true;
-    private static final int INDEXER_THRESHOLD = 20;
-
     private static final double INDEXER_CURRENT_CONTINUOUS = 30;
     private static final double INDEXER_CURRENT_PEAK = 60;
     private static final double INDEXER_CURRENT_PEAK_DUR = 0.2;
 
     private DigitalInput topSensor;
     private DigitalInput bottomSensor;
-    private DigitalInput indexerRed;
-    private DigitalInput indexerBlue;
+    // private DigitalInput indexerRed;
+    // private DigitalInput indexerBlue;
+    private DutyCycleEncoder indexerRed;
+    private DutyCycleEncoder indexerBlue;
 
     private Debouncer wrong;
     private Debouncer correct;
@@ -47,8 +44,10 @@ public class Indexer extends SubsystemBase {
         bottom = new HSFalcon(RobotMap.INDEXER_BOTTOM, RobotMap.CANIVORE);
         topSensor = new DigitalInput(RobotMap.INDEXER_TOP_SENSOR);
         bottomSensor = new DigitalInput(RobotMap.INDEXER_BOTTOM_SENSOR);
-        indexerRed = new DigitalInput(RobotMap.INDEXER_RED);
-        indexerBlue = new DigitalInput(RobotMap.INDEXER_BLUE);
+        // indexerRed = new DigitalInput(RobotMap.INDEXER_RED);
+        // indexerBlue = new DigitalInput(RobotMap.INDEXER_BLUE);
+        indexerRed = new DutyCycleEncoder(RobotMap.INDEXER_RED);
+        indexerBlue = new DutyCycleEncoder(RobotMap.INDEXER_BLUE);
         wrong = new Debouncer(0.7, Debouncer.DebounceType.kFalling);
         correct = new Debouncer(0.7, Debouncer.DebounceType.kFalling);
         init();
@@ -78,9 +77,10 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean intakeHasWrongColor() {
-        if(DriverStation.getAlliance() == Alliance.Blue)
-            return wrong.calculate(indexerRed.get());
-        return wrong.calculate(indexerBlue.get());
+        return false;
+        // if(DriverStation.getAlliance() == Alliance.Blue)
+        //     return wrong.calculate(indexerRed.get());
+        // return wrong.calculate(indexerBlue.get());
     }
 
     public boolean intakeHasRightColor() {
@@ -111,7 +111,9 @@ public class Indexer extends SubsystemBase {
         builder.addDoubleProperty("Indexer Top Percent Output", top::getMotorOutputPercent, null);
         builder.addDoubleProperty("Indexer Bottom Percent Output", bottom::getMotorOutputPercent, null);
         builder.addBooleanProperty("Wrong Color Ball in Intake", this::intakeHasWrongColor, null);
-        builder.addBooleanProperty("Red Input On", indexerRed::get, null);
-        builder.addBooleanProperty("Blue Input On", indexerBlue::get, null);
+        // builder.addBooleanProperty("Red Input On", indexerRed::get, null);
+        // builder.addBooleanProperty("Blue Input On", indexerBlue::get, null);
+        builder.addDoubleProperty("Red Input PWM", indexerRed::getFrequency, null);
+        builder.addDoubleProperty("Blue Input PWM", indexerBlue::getFrequency, null);
     }
 }

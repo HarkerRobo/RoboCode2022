@@ -8,8 +8,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -27,6 +31,7 @@ import frc.robot.commands.climber.ClimberManual;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
 import frc.robot.commands.indexer.IndexerManual;
+import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.IntakeManual;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -77,6 +82,11 @@ public class Robot extends TimedRobot {
 
     Drivetrain.getInstance().readCANCoders();
     new Notifier(()->Drivetrain.getInstance().readCANCoders()).startSingle(5);
+    UsbCamera cam = CameraServer.startAutomaticCapture();
+    System.out.println(cam.setResolution(80, 60));
+    cam.setFPS(10);
+    // CameraServer.getServer().setConfigJson("{ \"fps\": 30, \"height\": 120, \"pixel format\": \"mjpeg\", \"properties\": [ { \"name\": \"connect_verbose\", \"value\": 1 }, { \"name\": \"raw_brightness\", \"value\": 0 }, { \"name\": \"brightness\", \"value\": 50 }, { \"name\": \"raw_contrast\", \"value\": 32 }, { \"name\": \"contrast\", \"value\": 50 }, { \"name\": \"raw_saturation\", \"value\": 60 }, { \"name\": \"saturation\", \"value\": 46 }, { \"name\": \"raw_hue\", \"value\": 0 }, { \"name\": \"hue\", \"value\": 50 }, { \"name\": \"white_balance_temperature_auto\", \"value\": true }, { \"name\": \"gamma\", \"value\": 100 }, { \"name\": \"raw_gain\", \"value\": 0 }, { \"name\": \"gain\", \"value\": 0 }, { \"name\": \"power_line_frequency\", \"value\": 1 }, { \"name\": \"white_balance_temperature\", \"value\": 4600 }, { \"name\": \"raw_sharpness\", \"value\": 2 }, { \"name\": \"sharpness\", \"value\": 33 }, { \"name\": \"backlight_compensation\", \"value\": 1 }, { \"name\": \"exposure_auto\", \"value\": 3 }, { \"name\": \"raw_exposure_absolute\", \"value\": 157 }, { \"name\": \"exposure_absolute\", \"value\": 3 }, { \"name\": \"exposure_auto_priority\", \"value\": true } ], \"width\": 160 }");
+
     // CommandScheduler.getInstance().setDefaultCommand(Shooter.getInstance(), new ShooterManual());
     // OI.getInstance();
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
@@ -103,8 +113,30 @@ public class Robot extends TimedRobot {
       Drivetrain.getInstance().getBottomLeft().getState(), 
       Drivetrain.getInstance().getBottomRight().getState()
     );
-    Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
-    field.setRobotPose(new Pose2d(robotPose.getX(), robotPose.getY(), robotPose.getRotation()));
+
+    Drivetrain.getInstance().getPoseEstimator().update(
+      Drivetrain.getInstance().getHeadingRotation(), 
+      Drivetrain.getInstance().getTopLeft().getState(),
+      Drivetrain.getInstance().getTopRight().getState(), 
+      Drivetrain.getInstance().getBottomLeft().getState(), 
+      Drivetrain.getInstance().getBottomRight().getState()
+    );
+    // Pose2d robotPose = Drivetrain.getInstance().getOdometry().getPoseMeters();
+
+    if(Limelight.isTargetVisible()) {
+      Limelight.update();
+      Translation2d HUB = new Translation2d(8.2296, 4.1148);
+
+      double angle = Drivetrain.getInstance().getHeading() - Limelight.getTx();
+      double distance = MoveBallsToShooter.HUB_RADIUS + Limelight.getDistance();
+      Pose2d newPos = new Pose2d(HUB.getX() - Math.cos(Math.toRadians(angle)) * distance, 
+        HUB.getY() - Math.sin(Math.toRadians(angle)) * distance, Drivetrain.getInstance().getHeadingRotation());
+      // Drivetrain.getInstance().getOdometry().resetPosition(newPos, Drivetrain.getInstance().getHeadingRotation());
+      Drivetrain.getInstance().getPoseEstimator().addVisionMeasurement(newPos, Timer.getFPGATimestamp() - Limelight.getTl()/1000 - 0.02*2.5);
+      // Limelight.getTl()/1000.0;
+      // field.setRobotPose(Drivetrain.getInstance().getPoseEstimator().getEstimatedPosition());
+    }
+    field.setRobotPose(Drivetrain.getInstance().getOdometry().getPoseMeters());
     if(pitchVel.hasElapsed(0.06)) {
       pitchVel.reset();
       Drivetrain.getInstance().updatePitchVel();
@@ -137,7 +169,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(wasAuto) {
       wasAuto = false;
-      Drivetrain.getInstance().getPigeon().setYaw(-Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
+      Drivetrain.getInstance().getPigeon().setYaw(Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
+      Drivetrain.getInstance().getOdometry().resetPosition(Drivetrain.getInstance().getOdometry().getPoseMeters(), Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation());
+      SwerveManual.pigeonAngle = 0;
       if(auto == Autons.THREE_BALL_AUTO) {
       }
     }

@@ -40,9 +40,9 @@ public class ShootWithLimelight extends IndefiniteCommand {
         referencePoints.put(2.4, 30.2);
         referencePoints.put(2.62, 31.7);
         referencePoints.put(2.84, 32.7);
-        referencePoints.put(3.11, 35.2);
+        referencePoints.put(3.11, 36.2);
         referencePoints.put(3.43, 38.2);
-        referencePoints.put(3.73, 41.7);
+        referencePoints.put(3.73, 43.7);
         referencePoints.put(4.25, 61.7);
         referencePoints.put(4.52, 64.7);
     }

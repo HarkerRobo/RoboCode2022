@@ -8,9 +8,11 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 
@@ -22,19 +24,20 @@ import frc.robot.OI;
 public class SwerveManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final double PIGEON_KP = 0.03;
-    public static final double LIMELIGHT_KP = 0.05;
+    public static final double LIMELIGHT_KP = 0.08;
     public static final double LIMELIGHT_KI = 0.01;
-    public static final double LIMELIGHT_KD = 0.00;
-    public static final double LIMELIGHT_KS = 0.1;
+    public static final double LIMELIGHT_KD = 0.00000;
+    public static final double LIMELIGHT_KS = 0.01;
     public static double limelightIZone = 3;
 
+    private TimeInterpolatableBuffer<Rotation2d> pigBuffer;
     private ProfiledPIDController txController;
 
     // private double lastXVel = 0;
     // private double lastYVel = 0;
     
     public static double pigeonAngle;
-    private static final double PIGEON_DELAY = 0.3;
+    private static final double PIGEON_DELAY = 0.4;
     private Debouncer debouncer = new Debouncer(PIGEON_DELAY, DebounceType.kRising);
     private double translationXVel, translationYVel, angularVel, translationXAcc, translationYAcc;
     private boolean holdingPigeonAngle, aligningWithLimelight;
@@ -45,6 +48,8 @@ public class SwerveManual extends IndefiniteCommand {
         txController = new ProfiledPIDController(LIMELIGHT_KP, LIMELIGHT_KI, LIMELIGHT_KD, new Constraints(4, 4));
         txController.setGoal(0);
         txController.setIntegratorRange(-limelightIZone, limelightIZone);
+
+        pigBuffer = TimeInterpolatableBuffer.createBuffer(1.5);
     }
 
     @Override
@@ -101,10 +106,19 @@ public class SwerveManual extends IndefiniteCommand {
     private void limelightAlign() {
         txController.setIntegratorRange(-limelightIZone, limelightIZone);
         aligningWithLimelight = OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible();
+        pigBuffer.addSample(Timer.getFPGATimestamp(), Drivetrain.getInstance().getHeadingRotation());
         if(aligningWithLimelight) {
             Limelight.update();
+            double laggyTx = Limelight.getTx();
+            double laggyRotation = pigBuffer.getSample(Timer.getFPGATimestamp() - Limelight.getTl()/1000.0 - 0.02*4).getDegrees();
+            double estimatedCurrentTx = pigBuffer.getSample(Timer.getFPGATimestamp()).getDegrees() - laggyRotation + laggyTx;
+            SmartDashboard.putNumber("lat comp tx", estimatedCurrentTx);
+            SmartDashboard.putNumber("laggy  tx", laggyTx);
             angularVel = -txController.calculate(Limelight.getTx());
             angularVel += LIMELIGHT_KS * Math.signum(angularVel);
+            // if(Math.abs(estimatedCurrentTx) < 0.3) {
+            //     angularVel = 0;
+            // }
             pigeonAngle = Drivetrain.getInstance().getHeading();
         }
         else {

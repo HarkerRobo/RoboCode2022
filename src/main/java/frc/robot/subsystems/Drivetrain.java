@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -42,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double MIN_OUTPUT = 0.01;
     public static final double MAX_DRIVE_VEL = 3; // theoretical 4.1148 m / s
-    public static final double MAX_DRIVE_ACC = 30;
+    public static final double MAX_DRIVE_ACC = 25;
 
     public static final double MAX_ANGULAR_VEL = Math.PI*1.7;
 
@@ -55,6 +58,7 @@ public class Drivetrain extends SubsystemBase {
 
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
+    private SwerveDrivePoseEstimator estimator;
 
     private Drivetrain() {
         modules = new SwerveModule[4];
@@ -71,7 +75,11 @@ public class Drivetrain extends SubsystemBase {
         
         kinematics = new SwerveDriveKinematics(new Translation2d(DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(DT_LENGTH / 2, -DT_WIDTH / 2), 
         new Translation2d(-DT_LENGTH / 2, DT_WIDTH / 2), new Translation2d(-DT_LENGTH / 2, -DT_WIDTH / 2));
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(7.65, 1.86, Rotation2d.fromDegrees(-90)));
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+        estimator = new SwerveDrivePoseEstimator(Rotation2d.fromDegrees(pigeon.getYaw()), new Pose2d(0, 0, Rotation2d.fromDegrees(0)), kinematics, 
+            new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01), 
+            new MatBuilder<>(Nat.N1(), Nat.N1()).fill(0.005), 
+            new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.1, 0.1, 0.1));
         lastPigeonPitch = pigeon.getPitch();
     }
 
@@ -132,6 +140,10 @@ public class Drivetrain extends SubsystemBase {
 
     public SwerveDriveOdometry getOdometry() {
         return odometry;
+    }
+
+    public SwerveDrivePoseEstimator getPoseEstimator() {
+        return estimator;
     }
 
     public SwerveDriveKinematics getKinematics(){

@@ -23,8 +23,10 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.Autons;
 import frc.robot.commands.climber.ClimberManual;
@@ -53,8 +55,8 @@ public class Robot extends TimedRobot {
   private PowerDistribution pd;
   private Timer pitchVel;
   private boolean wasAuto = false;
+  private SendableChooser<CommandBase> autonChooser;
 
-  private Command auto = Autons.FIVE_BALL_AUTO;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code. It corrects the starting rotation motors
@@ -91,8 +93,13 @@ public class Robot extends TimedRobot {
     // OI.getInstance();
     // DoubleSolenoid pressure = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 4);
     // pressure.set(DoubleSolenoid.Value.kForward);
+    autonChooser = new SendableChooser<>();
+    autonChooser.setDefaultOption("Five Ball Auton", Autons.FIVE_BALL_AUTO);
+    autonChooser.addOption("Three Ball Auton", Autons.THREE_BALL_AUTO);
+    autonChooser.addOption("Two Ball Auton", Autons.TWO_BALL_AUTO);
+    autonChooser.addOption("One Ball Auton", Autons.ONE_BALL_AUTO);
+    SmartDashboard.putData("Auton Selector", autonChooser);
     NetworkTableInstance.getDefault().setUpdateRate(0.02);
-    
   }
 
   /**
@@ -152,7 +159,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Limelight.setLEDS(true);
     Limelight.update();
-    auto.schedule();
+    autonChooser.getSelected().schedule();
   }
 
   @Override
@@ -172,8 +179,6 @@ public class Robot extends TimedRobot {
       Drivetrain.getInstance().getPigeon().setYaw(Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation().getDegrees());
       Drivetrain.getInstance().getOdometry().resetPosition(Drivetrain.getInstance().getOdometry().getPoseMeters(), Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation());
       SwerveManual.pigeonAngle = 0;
-      if(auto == Autons.THREE_BALL_AUTO) {
-      }
     }
     Limelight.setLEDS(true);
   }

@@ -84,23 +84,23 @@ public class Autons {
     
     public static final SequentialCommandGroup THREE_BALL_AUTO = new SequentialCommandGroup(
         new SetIntakeDown(),
-        Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new SequentialCommandGroup(new ZeroHood(), new SetHoodFast(20), new HoodManual())),
-        new RevAndAlign(1),
+        Trajectories.threeBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new ShootWithLimelight(), new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
+        new RevAndAlign(0.5),
         new ShootAndIndex(1.5),
         Trajectories.threeBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
-        new Rotate(0.5, 2.5),
-        new RevAndAlign(1),
-        new ShootAndIndex(5));
+        new Rotate(0.35, 2.5).deadlineWith(new IntakeAndIndex()),
+        new RevAndAlign(0.5),
+        new ShootAndIndex(1.5));
 
     public static final SequentialCommandGroup FIVE_BALL_AUTO = new SequentialCommandGroup(
         new SetIntakeDown(),
-        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new ShootWithLimelight(), new SequentialCommandGroup(new ZeroHood(), new HoodManual())),
+        Trajectories.fiveBallAuto.get(0).deadlineWith(new IntakeAndIndex()).deadlineWith(new RevShooter(), new SequentialCommandGroup(new ZeroHood(), new SetHoodFast(20), new HoodManual())),
         new RevAndAlign(0.4),
         new ShootAndIndex(1.1),
         Trajectories.fiveBallAuto.get(1).deadlineWith(new IntakeAndIndex()),
         new Rotate(0.35, 2.5).deadlineWith(new IntakeAndIndex()),
         new RevAndAlign(0.4),
-        new ShootAndIndex(0.8),
+        new ShootAndIndex(0.7),
         Trajectories.fiveBallAuto.get(2).deadlineWith(new IntakeAndIndex()),
         Trajectories.fiveBallAuto.get(3).deadlineWith(new IntakeAndIndex()),
         new RevAndAlign(0.4),

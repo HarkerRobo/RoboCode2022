@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
     autonChooser.addOption("Two Ball Auton", Autons.TWO_BALL_AUTO);
     autonChooser.addOption("One Ball Auton", Autons.ONE_BALL_AUTO);
     SmartDashboard.putData("Auton Selector", autonChooser);
-    NetworkTableInstance.getDefault().setUpdateRate(0.02);
+    // NetworkTableInstance.getDefault().setUpdateRate(0.02);
   }
 
   /**

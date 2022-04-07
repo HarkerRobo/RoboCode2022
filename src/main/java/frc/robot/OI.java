@@ -65,7 +65,6 @@ public class OI {
         operatorGamepad.getRightDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset += 0.2));
         operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset -= 0.2));
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
-        driverGamepad.getButtonB().whilePressed(Autons.FIVE_BALL_AUTO);
         driverGamepad.getButtonX().whenPressed(Drivetrain.getInstance()::toggleFieldCentric);
         // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
     }

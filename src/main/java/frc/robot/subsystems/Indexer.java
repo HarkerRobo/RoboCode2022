@@ -115,7 +115,8 @@ public class Indexer extends SubsystemBase {
         builder.addBooleanProperty("Wrong Color Ball in Intake", this::intakeHasWrongColor, null);
         // builder.addBooleanProperty("Red Input On", indexerRed::get, null);
         // builder.addBooleanProperty("Blue Input On", indexerBlue::get, null);
-        builder.addDoubleProperty("Red Input PWM", indexerRed::getPeriod, null);
-        builder.addDoubleProperty("Blue Input PWM", indexerBlue::getPeriod, null);
+        builder.addDoubleProperty("Red Input PWM", () -> 1000000000 * indexerRed.getPeriod(), null);
+        builder.addDoubleProperty("Blue Input PWM", () -> 1000000000 * indexerBlue.getPeriod(), null);
+        builder.addDoubleProperty("Color Diff", () -> 1000000000 * (indexerBlue.getPeriod() - indexerRed.getPeriod()), null);
     }
 }

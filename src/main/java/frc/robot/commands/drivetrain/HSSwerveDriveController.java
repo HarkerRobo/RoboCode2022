@@ -26,7 +26,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public static final double THETA_KI = 0.01;
     public static final double THETA_KD = 0.0;
 
-    public static final double MAX_ANGLE_VELOCITY = Math.PI/2;
+    public static final double MAX_ANGLE_VELOCITY = Math.PI/2+0.2;
     public static final double MAX_ANGLE_ACCELERATION = Math.PI/2;
 
     private static PIDController xController = new PIDController(X_KP, X_KI, X_KD);

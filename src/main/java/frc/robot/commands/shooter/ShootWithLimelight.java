@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import frc.robot.Robot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.InterpolatedTreeMap;
 import frc.robot.util.Limelight;
@@ -49,6 +50,7 @@ public class ShootWithLimelight extends IndefiniteCommand {
     
     public void execute() {
         velocity = referencePoints.get(Limelight.getDistance());
+        if(Robot.thirdPoint) velocity += 0.4;
         Shooter.getInstance().setVelocity(velocity+velocityOffset);
     }
 

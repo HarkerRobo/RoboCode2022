@@ -12,10 +12,10 @@ import harkerrobolib.commands.IndefiniteCommand;
 
 public class AlignWithLimelight extends IndefiniteCommand {
     public static final double LIMELIGHT_THRESHOLD = 1.5;
-    public static final double LIMELIGHT_KP = SwerveManual.LIMELIGHT_KP*1.2;
+    public static final double LIMELIGHT_KP = SwerveManual.LIMELIGHT_KP*1;
     public static final double LIMELIGHT_KD = SwerveManual.LIMELIGHT_KD;
     public static final double LIMELIGHT_IZONE = 3.0;
-    public static final double LIMELIGHT_KI = SwerveManual.LIMELIGHT_KI*2;
+    public static final double LIMELIGHT_KI = SwerveManual.LIMELIGHT_KI*1;
     private ProfiledPIDController txController;
     private Timer minTime;
 
@@ -52,6 +52,6 @@ public class AlignWithLimelight extends IndefiniteCommand {
 
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Auton");
-        builder.addDoubleProperty("Limelight Align Error", txController::getPositionError, null);
+        builder.addDoubleProperty("Limelight Align Error", () -> txController.getPositionError(), null);
     }
 }

@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
   private Timer pitchVel;
   private boolean wasAuto = false;
   private SendableChooser<CommandBase> autonChooser;
+  public static boolean thirdPoint = false;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -95,9 +96,9 @@ public class Robot extends TimedRobot {
     // pressure.set(DoubleSolenoid.Value.kForward);
     autonChooser = new SendableChooser<>();
     autonChooser.setDefaultOption("Five Ball Auton", Autons.FIVE_BALL_AUTO);
-    autonChooser.addOption("Three Ball Auton", Autons.THREE_BALL_AUTO);
+    // autonChooser.addOption("Three Ball Auton", Autons.THREE_BALL_AUTO);
     autonChooser.addOption("Two Ball Auton", Autons.TWO_BALL_AUTO);
-    autonChooser.addOption("One Ball Auton", Autons.ONE_BALL_AUTO);
+    // autonChooser.addOption("One Ball Auton", Autons.ONE_BALL_AUTO);
     SmartDashboard.putData("Auton Selector", autonChooser);
     // NetworkTableInstance.getDefault().setUpdateRate(0.02);
   }

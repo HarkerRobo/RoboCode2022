@@ -163,11 +163,11 @@ public class SwerveManual extends IndefiniteCommand {
         builder.addDoubleProperty("Translation Y Acc", () -> translationYAcc, null);
         builder.addBooleanProperty("Holding Pigeon Angle", () -> holdingPigeonAngle, null);
         builder.addBooleanProperty("Aligning With Limelight", () -> aligningWithLimelight, null);
-        builder.addDoubleProperty("Limelight Align P", txController::getP, txController::setP);
-        builder.addDoubleProperty("Limelight Align I", txController::getI, txController::setI);
-        builder.addDoubleProperty("Limelight Align D", txController::getD, txController::setD);
+        builder.addDoubleProperty("Limelight Align P", () -> txController.getP(), (double a) -> txController.setP(a));
+        builder.addDoubleProperty("Limelight Align I", () -> txController.getI(), (double a) -> txController.setI(a));
+        builder.addDoubleProperty("Limelight Align D", () -> txController.getD(), (double a) -> txController.setD(a));
         builder.addDoubleProperty("Limelight Align I Zone", () -> limelightIZone, (double a) -> limelightIZone = a);
-        builder.addDoubleProperty("Limelight Error", txController::getPositionError, null);
+        builder.addDoubleProperty("Limelight Error", () -> txController.getPositionError(), null);
         builder.addDoubleProperty("Limelight Goal", () -> txController.getGoal().position, null);
         builder.addDoubleProperty("Limelight Setpoint", () -> txController.getSetpoint().position, null);
     }

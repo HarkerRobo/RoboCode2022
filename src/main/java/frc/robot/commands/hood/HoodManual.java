@@ -34,7 +34,7 @@ public class HoodManual extends IndefiniteCommand{
     private double output;
     public static boolean downMode = false;
 
-    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(20, 15));
+    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(15, 10));
     private InterpolatedTreeMap referencePoints;
     private SimpleMotorFeedforward feedforward;
     
@@ -101,17 +101,17 @@ public class HoodManual extends IndefiniteCommand{
 
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Hood");
-        builder.addDoubleProperty("Hood P", hoodController::getP, hoodController::setP);
-        builder.addDoubleProperty("Hood I", hoodController::getI, hoodController::setI);
-        builder.addDoubleProperty("Hood D", hoodController::getD, hoodController::setD);
+        builder.addDoubleProperty("Hood P", () -> hoodController.getP(), (double a) -> hoodController.setP(a));
+        builder.addDoubleProperty("Hood I", () -> hoodController.getI(), (double a) -> hoodController.setI(a));
+        builder.addDoubleProperty("Hood D", () -> hoodController.getD(), (double a) -> hoodController.setD(a));
         builder.addDoubleProperty("Hood I Zone", () -> hoodIZone, (double a) -> hoodIZone = a);
-        builder.addDoubleProperty("Hood PID Error", hoodController::getPositionError, null);
+        builder.addDoubleProperty("Hood PID Error", () -> hoodController.getPositionError(), null);
         builder.addDoubleProperty("Hood PID Goal", () -> hoodController.getGoal().position, null);
         builder.addDoubleProperty("Hood PID Setpoint", () -> hoodController.getSetpoint().position, null);
         builder.addDoubleProperty("Hood PID Control Effort", () -> controlEffort, null);
         builder.addDoubleProperty("Hood Feedforward", () -> feedforwardAmount, null);
         builder.addDoubleProperty("Hood Output", () -> output, null);
-        builder.addDoubleProperty("Hood Position", Hood.getInstance()::getHoodPos, null);
+        builder.addDoubleProperty("Hood Position", () -> Hood.getInstance().getHoodPos(), null);
         builder.addBooleanProperty("Hood Zeroed", () -> Hood.isZeroed, null);
     }
 }

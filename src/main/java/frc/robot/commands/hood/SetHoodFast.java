@@ -34,7 +34,7 @@ public class SetHoodFast extends IndefiniteCommand{
     private double output;
     public static boolean downMode = false;
 
-    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(40, 60));
+    public static ProfiledPIDController hoodController = new ProfiledPIDController(HOOD_KP, HOOD_KI, HOOD_KD, new Constraints(60, 60));
     private InterpolatedTreeMap referencePoints;
     private SimpleMotorFeedforward feedforward;
     private double pos;

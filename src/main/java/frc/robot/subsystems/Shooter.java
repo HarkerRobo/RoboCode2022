@@ -124,11 +124,11 @@ public class Shooter extends SubsystemBase {
 
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Shooter");
-        builder.addDoubleProperty("Current Velocity", this::getWheelRPS, null);
+        builder.addDoubleProperty("Current Velocity", () -> getWheelRPS(), null);
         builder.addDoubleProperty("Target Velocity", () -> velocitySystem.getLinearSystemLoop().getNextR(0), null);
-        builder.addDoubleProperty("Kalman Velocity", velocitySystem::getVelocity, null);
-        builder.addDoubleProperty("Current Output", velocitySystem::getOutput, null);
-        builder.addDoubleProperty("Limelight tx", Limelight::getTx, null);
-        builder.addDoubleProperty("Limelight Distance", Limelight::getDistance, null);
+        builder.addDoubleProperty("Kalman Velocity", () -> velocitySystem.getVelocity(), null);
+        builder.addDoubleProperty("Current Output", () -> velocitySystem.getOutput(), null);
+        builder.addDoubleProperty("Limelight tx", () -> Limelight.getTx(), null);
+        builder.addDoubleProperty("Limelight Distance", () -> Limelight.getDistance(), null);
     }
 }

@@ -44,7 +44,7 @@ public class OI {
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
         driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
 
-        driverGamepad.getButtonY().whenPressed(new ToggleIntake());
+        driverGamepad.getButtonY().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.15));
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);
             SwerveManual.pigeonAngle = 0;

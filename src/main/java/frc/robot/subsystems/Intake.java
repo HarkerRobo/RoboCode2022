@@ -101,6 +101,6 @@ public class Intake extends SubsystemBase {
         builder.setSmartDashboardType("Intake");
         builder.addBooleanProperty("Intake is Down", () -> doubleSolenoid.get() == DoubleSolenoid.Value.kReverse, null);
         builder.addDoubleProperty("Intake State", () -> state, null);
-        builder.addDoubleProperty("Intake Speed", this::getCurrentRPS, null);
+        builder.addDoubleProperty("Intake Speed", () -> getCurrentRPS(), null);
     }
 }

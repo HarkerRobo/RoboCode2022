@@ -18,16 +18,16 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     public static final double X_KI = 0;
     public static final double X_KD = 0;
 
-    public static final double Y_KP = 2.5;
+    public static final double Y_KP = 3;
     public static final double Y_KI = 0;
     public static final double Y_KD = 0;
 
-    public static final double THETA_KP = 3.7;
-    public static final double THETA_KI = 0.01;
+    public static final double THETA_KP = 4.7;
+    public static final double THETA_KI = 0.00;
     public static final double THETA_KD = 0.0;
 
-    public static final double MAX_ANGLE_VELOCITY = Math.PI/2+0.2;
-    public static final double MAX_ANGLE_ACCELERATION = Math.PI/2;
+    public static  double MAX_ANGLE_VELOCITY = Math.PI;
+    public static  double MAX_ANGLE_ACCELERATION = Math.PI/2;
 
     private static PIDController xController = new PIDController(X_KP, X_KI, X_KD);
     private static PIDController yController = new PIDController(Y_KP, Y_KI, Y_KD);
@@ -58,6 +58,7 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
     @Override
     public void initialize() {
         super.initialize();
+        thetaController.setConstraints(new Constraints(MAX_ANGLE_ACCELERATION, MAX_ANGLE_VELOCITY));
         if(isFirst && initHeading != null) {
             // Drivetrain.getInstance().getPigeon().setYaw(-initHeading.getDegrees()-90);
             Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(trajectory.getInitialPose().getTranslation(), 
@@ -98,11 +99,11 @@ public class HSSwerveDriveController extends SwerveControllerCommand {
 
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Auton");
-        builder.addDoubleProperty("X Error", xController::getPositionError, null);
-        builder.addDoubleProperty("X Goal", xController::getSetpoint, null);
-        builder.addDoubleProperty("Y Error", yController::getPositionError, null);
-        builder.addDoubleProperty("Y Goal", yController::getSetpoint, null);
-        builder.addDoubleProperty("Theta Error", thetaController::getPositionError, null);
+        builder.addDoubleProperty("X Error", () -> xController.getPositionError(), null);
+        builder.addDoubleProperty("X Goal", () -> xController.getSetpoint(), null);
+        builder.addDoubleProperty("Y Error", () -> yController.getPositionError(), null);
+        builder.addDoubleProperty("Y Goal", () -> yController.getSetpoint(), null);
+        builder.addDoubleProperty("Theta Error", () -> thetaController.getPositionError(), null);
         builder.addDoubleProperty("Theta Target Position", () -> thetaController.getSetpoint().position, null);
         builder.addDoubleProperty("Theta Target Velocity", () -> thetaController.getSetpoint().velocity, null);
     }

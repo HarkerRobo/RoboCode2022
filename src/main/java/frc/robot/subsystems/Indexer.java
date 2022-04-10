@@ -108,11 +108,11 @@ public class Indexer extends SubsystemBase {
 
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Indexer");
-        builder.addBooleanProperty("Top Occupied", this::topOccupied, null);
-        builder.addBooleanProperty("Bottom Occupied", this::bottomOccupied, null);
-        builder.addDoubleProperty("Indexer Top Percent Output", top::getMotorOutputPercent, null);
-        builder.addDoubleProperty("Indexer Bottom Percent Output", bottom::getMotorOutputPercent, null);
-        builder.addBooleanProperty("Wrong Color Ball in Intake", this::intakeHasWrongColor, null);
+        builder.addBooleanProperty("Top Occupied", () -> topOccupied(), null);
+        builder.addBooleanProperty("Bottom Occupied", () -> bottomOccupied(), null);
+        builder.addDoubleProperty("Indexer Top Percent Output", () -> top.getMotorOutputPercent(), null);
+        builder.addDoubleProperty("Indexer Bottom Percent Output", () -> bottom.getMotorOutputPercent(), null);
+        builder.addBooleanProperty("Wrong Color Ball in Intake", () -> intakeHasWrongColor(), null);
         // builder.addBooleanProperty("Red Input On", indexerRed::get, null);
         // builder.addBooleanProperty("Blue Input On", indexerBlue::get, null);
         builder.addDoubleProperty("Red Input PWM", () -> 1000000000 * indexerRed.getPeriod(), null);

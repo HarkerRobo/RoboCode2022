@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.Autons;
@@ -48,6 +49,9 @@ public class OI {
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setYaw(0);
             SwerveManual.pigeonAngle = 0;
+            if (RobotMap.DEMO_MODE) {
+                Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(0, 0, Drivetrain.getInstance().getHeadingRotation()), Drivetrain.getInstance().getHeadingRotation());
+            }
         }));
         operatorGamepad.getButtonY().whenPressed(new SetHoodFast(20));
         

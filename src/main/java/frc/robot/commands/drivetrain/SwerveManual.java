@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -29,6 +30,10 @@ public class SwerveManual extends IndefiniteCommand {
     public static final double LIMELIGHT_KI = 0.01;
     public static final double LIMELIGHT_KD = 0.00000;
     public static final double LIMELIGHT_KS = 0.01;
+    public static final double REGION_MIN_X = 0;
+    public static final double REGION_MIN_Y = 0;
+    public static final double REGION_MAX_X = 0;
+    public static final double REGION_MAX_Y= 0;
     public static double limelightIZone = 3;
 
     private TimeInterpolatableBuffer<Rotation2d> pigBuffer;
@@ -63,6 +68,7 @@ public class SwerveManual extends IndefiniteCommand {
         limelightAlign();
         generateOutputChassisSpeeds();
         clampAcceleration();
+        limitRegion();
 
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(output), false);
     }
@@ -150,8 +156,20 @@ public class SwerveManual extends IndefiniteCommand {
             translationYAcc = translationYAcc /mag * Drivetrain.MAX_DRIVE_ACC;
         }
         
-        output.vxMetersPerSecond = prevX + translationXAcc * 0.02;
-        output.vyMetersPerSecond = prevY + translationYAcc * 0.02;
+        output.vxMetersPerSecond = prevSpeed.vxMetersPerSecond + translationXAcc * 0.02;
+        output.vyMetersPerSecond = prevSpeed.vyMetersPerSecond + translationYAcc * 0.02;
+    }
+
+    private void limitRegion(){
+        Translation2d currentPosition = Drivetrain.getInstance().getOdometry().getPoseMeters().getTranslation();
+        if(currentPosition.getX() > REGION_MAX_X)
+            output.vxMetersPerSecond = Math.min(output.vxMetersPerSecond, 0);
+        else if(currentPosition.getX() < REGION_MIN_X)
+            output.vxMetersPerSecond = Math.max(output.vxMetersPerSecond, 0);
+        if(currentPosition.getY() < REGION_MAX_X)
+            output.vyMetersPerSecond = Math.min(output.vyMetersPerSecond, 0);
+        else if(currentPosition.getY() < REGION_MIN_X)
+            output.vyMetersPerSecond = Math.max(output.vyMetersPerSecond, 0);
     }
 
     public void initSendable(SendableBuilder builder)

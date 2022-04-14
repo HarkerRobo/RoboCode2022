@@ -15,6 +15,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
+import frc.robot.RobotMap;
 
 /**
  * Command for SwerveModules that uses joystick inputs to drive.
@@ -88,7 +89,7 @@ public class SwerveManual extends IndefiniteCommand {
         angularVel *= Drivetrain.MAX_ANGULAR_VEL * OUTPUT_MULTIPLIER;
         translationXVel *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
         translationYVel *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
-        if(OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
+        if(RobotMap.DEMO_MODE || OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
             translationYVel *= 0.6;
             translationXVel *= 0.6;
         }

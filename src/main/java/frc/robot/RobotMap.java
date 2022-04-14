@@ -5,6 +5,7 @@ package frc.robot;
  */
 public class RobotMap {
     public static final boolean IS_COMP = true;
+    public static final boolean DEMO_MODE = true;
 
     public static final int LOOP_INDEX = 0;
 

@@ -42,7 +42,7 @@ public class OI {
     public void initBindings() {
         operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter(false)));
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
-        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
+        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(!RobotMap.DEMO_MODE)));
 
         driverGamepad.getButtonY().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.15));
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
@@ -55,18 +55,15 @@ public class OI {
         operatorGamepad.getButtonSelect().whenPressed(new ZeroHood());   
         driverGamepad.getUpDPadButton().whenPressed(new SetClimberPosition(Climber.UP_HEIGHT, ClimberManual.MAGNITUDE_UP));
         driverGamepad.getDownDPadButton().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.6));
-        // operatorGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.ON_BAR_HEIGHT, ClimberManual.MAGNITUDE_UP));
         driverGamepad.getRightDPadButton().whenPressed(new MoveClimbToNextBar());
-        // operatorGamepad.getRightDPadButton().whenPressed(new MoveClimbToNextBar());
         driverGamepad.getButtonA().whenPressed(new InstantCommand(Climber.getInstance()::toggleClimber));
-        // operatorGamepad.getLeftDPadButton().whenPressed(new PigeonPitchTraversal());
         driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(2*Climber.UP_HEIGHT / 3 , 0.6));
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> HoodManual.downMode = !HoodManual.downMode));
         operatorGamepad.getRightDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset += 0.2));
         operatorGamepad.getLeftDPadButton().whenPressed(new InstantCommand(()->ShootWithLimelight.velocityOffset -= 0.2));
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
-        driverGamepad.getButtonX().whenPressed(Drivetrain.getInstance()::toggleFieldCentric);
-        // operatorGamepad.getButtonB().whenPressed(Trajectories.threeBallAuto.get(0));
+        if(!RobotMap.DEMO_MODE)
+            driverGamepad.getButtonX().whenPressed(Drivetrain.getInstance()::toggleFieldCentric);
     }
 
     public HSGamepad getDriverGamepad(){

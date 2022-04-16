@@ -68,15 +68,26 @@ public class SwerveManual extends IndefiniteCommand {
         limelightAlign();
         generateOutputChassisSpeeds();
         clampAcceleration();
-        limitRegion();
+        if(RobotMap.DEMO_MODE)
+            limitRegion();
 
         Drivetrain.getInstance().setAngleAndDriveVelocity(Drivetrain.getInstance().getKinematics().toSwerveModuleStates(output), false);
     }
 
     private void readJoySticks() {
-        angularVel = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
-        translationYVel = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
-        translationXVel = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
+        if(RobotMap.DEMO_MODE) {
+            angularVel = (OI.getInstance().getDriverGamepad().getRawButton(7) ? 1.0 : 0.0) - 
+                (OI.getInstance().getDriverGamepad().getRawButton(8)  ? 1.0 : 0.0);
+            translationXVel = (OI.getInstance().getDriverGamepad().getRawButton(4) ? 1.0 : 0.0) - 
+                (OI.getInstance().getDriverGamepad().getRawButton(3)  ? 1.0 : 0.0);
+            translationYVel = (OI.getInstance().getDriverGamepad().getRawButton(2) ? 1.0 : 0.0) - 
+                (OI.getInstance().getDriverGamepad().getRawButton(1)  ? 1.0 : 0.0);
+        }
+        else {
+            angularVel = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.DEADBAND);
+            translationYVel = -MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.DEADBAND);
+            translationXVel = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.DEADBAND);
+        }
     }
 
     private void squareOutputs() {
@@ -95,7 +106,12 @@ public class SwerveManual extends IndefiniteCommand {
         angularVel *= Drivetrain.MAX_ANGULAR_VEL * OUTPUT_MULTIPLIER;
         translationXVel *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
         translationYVel *= Drivetrain.MAX_DRIVE_VEL * OUTPUT_MULTIPLIER;
-        if(RobotMap.DEMO_MODE || OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
+        if(RobotMap.DEMO_MODE) {
+            translationXVel *= 0.4;
+            translationYVel *= 0.4;
+            angularVel *= 0.5;
+        }
+        else if(OI.getInstance().getDriverGamepad().getButtonBumperLeft().get()) {
             translationYVel *= 0.6;
             translationXVel *= 0.6;
         }
@@ -112,7 +128,9 @@ public class SwerveManual extends IndefiniteCommand {
 
     private void limelightAlign() {
         txController.setIntegratorRange(-limelightIZone, limelightIZone);
-        aligningWithLimelight = OI.getInstance().getDriverGamepad().getButtonBumperRightState() && Limelight.isTargetVisible();
+        aligningWithLimelight = (OI.getInstance().getDriverGamepad().getButtonBumperRightState() || 
+            (RobotMap.DEMO_MODE && translationXVel < 0.01 && translationYVel < 0.01 && angularVel < 0.01)) && 
+            Limelight.isTargetVisible();
         pigBuffer.addSample(Timer.getFPGATimestamp(), Drivetrain.getInstance().getHeadingRotation());
         if(aligningWithLimelight) {
             Limelight.update();

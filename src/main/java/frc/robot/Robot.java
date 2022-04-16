@@ -28,13 +28,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.auto.Autons;
 import frc.robot.commands.climber.ClimberManual;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.hood.HoodManual;
+import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.indexer.IndexerManual;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.intake.IntakeManual;
+import frc.robot.commands.shooter.ShootWithLimelight;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -56,6 +59,7 @@ public class Robot extends TimedRobot {
   private Timer pitchVel;
   private boolean wasAuto = false;
   private SendableChooser<CommandBase> autonChooser;
+  private ParallelCommandGroup autoShooter;
   public static boolean thirdPoint = false;
 
   /**
@@ -181,6 +185,9 @@ public class Robot extends TimedRobot {
       Drivetrain.getInstance().getOdometry().resetPosition(Drivetrain.getInstance().getOdometry().getPoseMeters(), Drivetrain.getInstance().getOdometry().getPoseMeters().getRotation());
       SwerveManual.pigeonAngle = 0;
     }
+    if(RobotMap.DEMO_MODE) {
+      (new ZeroHood()).schedule();
+    }
     Limelight.setLEDS(true);
   }
 
@@ -191,6 +198,24 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     pd.setSwitchableChannel(true);
+    if(RobotMap.DEMO_MODE) {
+      boolean isInput = OI.getInstance().getDriverGamepad().getRawButton(1) ||
+      OI.getInstance().getDriverGamepad().getRawButton(2) ||
+      OI.getInstance().getDriverGamepad().getRawButton(3) ||
+      OI.getInstance().getDriverGamepad().getRawButton(4) ||
+      OI.getInstance().getDriverGamepad().getRawButton(5) ||
+      OI.getInstance().getDriverGamepad().getRawButton(7) ||
+      OI.getInstance().getDriverGamepad().getRawButton(8) ||
+      OI.getInstance().getDriverGamepad().getRawButton(9) ||
+      OI.getInstance().getDriverGamepad().getRawButton(10);
+      if(CommandScheduler.getInstance().isScheduled(autoShooter) && isInput) {
+          CommandScheduler.getInstance().cancel(autoShooter);
+      }
+      if(Limelight.isTargetVisible() && !isInput){
+        autoShooter = new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false));
+        autoShooter.schedule();
+      }
+    }
     // Limelight.update();
     // if(Math.random() < 1.0/3000)
     //   CommandScheduler.getInstance().schedule(new ToggleIntake());

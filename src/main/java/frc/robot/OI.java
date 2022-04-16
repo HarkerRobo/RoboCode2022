@@ -41,9 +41,11 @@ public class OI {
     }
 
     public void initBindings() {
-        operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter(false)));
+        if(!RobotMap.DEMO_MODE)
+        {
+            operatorGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootAgainstHub(), new MoveBallsToShooter(false)));
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
-        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(!RobotMap.DEMO_MODE)));
+        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(new ShootWithLimelight(), new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonY().whenPressed(new SetClimberPosition(Climber.DOWN_HEIGHT, 0.15));
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
@@ -68,6 +70,7 @@ public class OI {
         // operatorGamepad.getButtonX().whilePressed(new TurnInPlace(90));
         if(!RobotMap.DEMO_MODE)
             driverGamepad.getButtonX().whenPressed(Drivetrain.getInstance()::toggleFieldCentric);
+        }
     }
 
     public HSGamepad getDriverGamepad(){

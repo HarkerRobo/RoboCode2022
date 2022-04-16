@@ -221,8 +221,8 @@ public class Drivetrain extends SubsystemBase {
         builder.addDoubleProperty("Bottom Right Angle Error", () -> getBottomRight().rotation.getClosedLoopError() * 
             Units.FALCON_ENCODER_TO_DEGREE / Drivetrain.ROTATION_GEAR_RATIO, null);
 
-        builder.addDoubleProperty("Odometry X", () -> getOdometry().getPoseMeters().getX(), null);
-        builder.addDoubleProperty("Odometry Y", () -> getOdometry().getPoseMeters().getY(), null);
+        builder.addDoubleProperty("Odometry X", () -> getOdometry().getPoseMeters().getX(), (double a) -> getOdometry().resetPosition(new Pose2d(a, getOdometry().getPoseMeters().getY(), getHeadingRotation()), getHeadingRotation()));
+        builder.addDoubleProperty("Odometry Y", () -> getOdometry().getPoseMeters().getY(), (double a) -> getOdometry().resetPosition(new Pose2d(getOdometry().getPoseMeters().getX(), a, getHeadingRotation()), getHeadingRotation()));
         builder.addDoubleProperty("Odometry Theta Radians", () -> getOdometry().getPoseMeters().getRotation().getRadians(), null);
         builder.addDoubleProperty("Odometry Theta Degrees", () -> getOdometry().getPoseMeters().getRotation().getDegrees(), null);
 

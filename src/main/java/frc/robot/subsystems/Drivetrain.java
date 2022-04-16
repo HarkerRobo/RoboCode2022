@@ -16,6 +16,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.Units;
+import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.util.SwerveModule;
 
 /**
@@ -191,7 +192,13 @@ public class Drivetrain extends SubsystemBase {
 
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Drivetrain");
-        builder.addDoubleProperty("Heading", () -> getHeading(), null);
+        builder.addDoubleProperty("Heading", () -> getHeading(), (double a) -> {
+            Drivetrain.getInstance().getPigeon().setYaw(a);
+            SwerveManual.pigeonAngle = -a;
+            if (RobotMap.DEMO_MODE) {
+                Drivetrain.getInstance().getOdometry().resetPosition(new Pose2d(0, 0, Drivetrain.getInstance().getHeadingRotation()), Drivetrain.getInstance().getHeadingRotation());
+            }
+        });
 
         builder.addDoubleProperty("Top Left CAN Coder Pos", () -> getTopLeft().getCanCoder().getAbsolutePosition(), null);
         builder.addDoubleProperty("Top Right CAN Coder Pos", () -> getTopRight().getCanCoder().getAbsolutePosition(), null);
